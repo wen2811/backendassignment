@@ -1,8 +1,13 @@
 package com.wendy.backendassignment.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 import java.time.LocalDate;
 
+@Entity
 public class User {
+    @Id
     private long id;
     private String userName;
 
