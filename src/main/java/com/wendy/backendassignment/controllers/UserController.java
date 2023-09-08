@@ -1,6 +1,8 @@
 package com.wendy.backendassignment.controllers;
 
+import com.wendy.backendassignment.dtos.UserDto;
 import com.wendy.backendassignment.models.User;
+import com.wendy.backendassignment.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +16,14 @@ import java.util.concurrent.atomic.AtomicLong;
 @RequestMapping(value = "/users")
 public class UserController {
 
+    private final UserService userService;
 
-    @GetMapping(value = "")
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+
+    /*@GetMapping(value = "")
     public List<User> getUsers() {
         User user = new User();
         user.setUserName("Wendy");
@@ -25,5 +33,14 @@ public class UserController {
         List<User> list = new ArrayList<User>();
         list.add(user);
         return list;
+    }*/
+
+    @GetMapping("/users")
+    public ResponseEntity<List<UserDto>> getUsers() {
+
+        List<UserDto> userDtos = userService.getUsers();
+
+        return ResponseEntity.ok().body(userDtos);
     }
+
 }
