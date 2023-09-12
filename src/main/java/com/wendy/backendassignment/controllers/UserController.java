@@ -1,17 +1,13 @@
 package com.wendy.backendassignment.controllers;
 
 import com.wendy.backendassignment.dtos.UserDto;
-import com.wendy.backendassignment.models.User;
 import com.wendy.backendassignment.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.ArrayList;
+import java.net.URI;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -36,12 +32,31 @@ public class UserController {
         return list;
     }*/
 
-    @GetMapping("/users")
+    @GetMapping
     public ResponseEntity<List<UserDto>> getUsers() {
 
         List<UserDto> userDtos = userService.getUsers();
 
         return ResponseEntity.ok().body(userDtos);
     }
+
+    @GetMapping(value = "/{username}")
+    public ResponseEntity<UserDto> getUser(@PathVariable("username") String username) {
+
+        UserDto optionalUser = userService.getUser(username);
+
+
+        return ResponseEntity.ok().body(optionalUser);
+
+    }
+
+    @PostMapping
+    public ResponseEntity<Long> createUser(@RequestBody UserDto userDto) {
+        Long newId = userService.createUser(userDto);
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + newId).toUriString());
+        return ResponseEntity.created(uri).body(newId);
+    }
+
+
 
 }

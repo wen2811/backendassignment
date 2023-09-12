@@ -8,13 +8,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
 
-    @Autowired
+    @Autowired //constructor
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -40,5 +41,25 @@ public class UserService {
        // dto.authorities = user.getAuthorities();
 
         return dto;
+    }
+
+    public UserDto getUser(String username) {
+        UserDto dto = new UserDto();
+        Optional<User> user = userRepository.findById(username);
+        if (user.isPresent()){
+            dto = fromUser(user.get());
+        }
+        return dto;
+    }
+    //voor om te testen als mn create controller werkt
+    public long createUser(UserDto userDto) {
+        User user = new User();
+        user.setFirstName(userDto.firstName);
+        user.setLastName(userDto.lastName);
+        user.setUserName(userDto.userName);
+
+        userRepository.save(user);
+
+        return user.getId();
     }
 }

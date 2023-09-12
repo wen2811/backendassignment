@@ -1,16 +1,19 @@
 package com.wendy.backendassignment.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "users")
 public class User {
     @Id
-    private long id;
+    @GeneratedValue //dit is erby
+    private Long id; //Long met hoofdletter
+    @Column(name = "username") //dit is erbij
     private String userName;
 
+    @Column(name = "first_name") //dit is erbij, is optioneel voor beinvloeding in db
     private String firstName;
     private String lastName;
 

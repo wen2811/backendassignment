@@ -3,16 +3,23 @@ package com.wendy.backendassignment.dtos;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+import java.time.LocalDate;
 
 public class UserDto {
     @NotBlank(message = "Username should not be blank")
     public String userName;
+    public String firstName;
+    public String lastName;
+
+    private LocalDate dateOfBirth;
     @NotBlank(message = "Password should not be blank")
+    @Size(min=6, max=20)
     public String password;
     @NotNull
     public Boolean enabled;
     public String apikey;
-
     @NotBlank
     @Email
     public String email;
@@ -59,6 +66,29 @@ public class UserDto {
         this.email = email;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
     /*public Set<Authority> getAuthorities() {
         return authorities;
     }

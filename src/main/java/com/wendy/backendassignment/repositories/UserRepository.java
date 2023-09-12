@@ -6,3 +6,5 @@ import org.springframework.stereotype.Service;
 
 public interface UserRepository extends CrudRepository<User, String> {
 }
+//repos is altijd <entity class, type ID-field>
+//repos queries kunnen worden aangemaakt les 11
