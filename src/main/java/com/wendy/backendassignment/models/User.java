@@ -15,12 +15,13 @@ public class User {
 
     @Column(name = "first_name") //dit is erbij, is optioneel voor beinvloeding in db
     private String firstName;
+    @Column(name = "last_name")
     private String lastName;
-
+    @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
-
+    @Column(name = "email")
     private String email;
-
+    @Column(name = "password")
     private String password;
 
     public long getId() {

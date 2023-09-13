@@ -2,7 +2,10 @@ package com.wendy.backendassignment.controllers;
 
 import com.wendy.backendassignment.dtos.UserDto;
 import com.wendy.backendassignment.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -39,7 +42,8 @@ public class UserController {
 
         return ResponseEntity.ok().body(userDtos);
     }
-
+//Path variable gebruike je wanneer je maar een variabele kunt ontvangen - om een pad op te zoeken.
+    //netter om bij een identificatie een variable een path variable te gebruiken.
     @GetMapping(value = "/{username}")
     public ResponseEntity<UserDto> getUser(@PathVariable("username") String username) {
 
@@ -51,11 +55,15 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> createUser(@RequestBody UserDto userDto) {
-        Long newId = userService.createUser(userDto);
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + newId).toUriString());
-        return ResponseEntity.created(uri).body(newId);
-    }
+    public ResponseEntity<Long> createUser(@Valid @RequestBody UserDto userDto, BindingResult br) {
+        if (br.hasFieldErrors()) {
+            for (FieldError fe : br.getFieldErrors()) {
+            }
+            Long newId = userService.createUser(userDto);
+            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + newId).toUriString());
+            userDto.id = newId;
+            return ResponseEntity.created(uri).body(newId);
+        }
 
 
 

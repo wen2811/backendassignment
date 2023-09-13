@@ -8,10 +8,12 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 
 public class UserDto {
+    public Long id;
     @NotBlank(message = "Username should not be blank")
     public String userName;
     public String firstName;
     public String lastName;
+
 
     private LocalDate dateOfBirth;
     @NotBlank(message = "Password should not be blank")
@@ -31,7 +33,7 @@ public class UserDto {
     }
 
     public void setUserName(String username) {
-        this.userName = userName;
+        this.userName = username;
     }
 
     public String getPassword() {
@@ -88,6 +90,14 @@ public class UserDto {
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
     /*public Set<Authority> getAuthorities() {
         return authorities;
