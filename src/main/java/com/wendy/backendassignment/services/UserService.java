@@ -15,7 +15,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    @Autowired //constructor
+    //constructor
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -33,7 +33,7 @@ public class UserService {
 
         var dto = new UserDto();
 
-        dto.userName = user.getUserName();
+        dto.username = user.getUsername();
         dto.password = user.getPassword();
        // dto.enabled = user.isEnabled();
         //dto.apikey = user.getApikey();
@@ -54,9 +54,9 @@ public class UserService {
     //voor om te testen als mn create controller werkt
     public Long createUser(UserDto userDto) {
         User user = new User();
-        user.setFirstName(userDto.firstName);
-        user.setLastName(userDto.lastName);
-        user.setUserName(userDto.userName);
+        user.setFirstname(userDto.firstname);
+        user.setLastname(userDto.lastname);
+        user.setUsername(userDto.username);
 
         userRepository.save(user);
 

@@ -8,59 +8,64 @@ import java.time.LocalDate;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue //dit is erby
-    private Long id; //Long met hoofdletter
-    @Column(name = "username") //dit is erbij
-    private String userName;
-    @Column(name = "first_name") //dit is erbij, is optioneel voor beinvloeding in db
-    private String firstName;
-    @Column(name = "last_name")
-    private String lastName;
-    @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "firstname")
+    private String firstname;
+
+    @Column(name = "lastname")
+    private String lastname;
+
+    @Column(name = "dateofbirth")
+    private LocalDate dateofbirth;
+
     @Column(name = "email")
     private String email;
+
     @Column(name = "password")
     private String password;
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
+    public LocalDate getDateofbirth() {
+        return dateofbirth;
     }
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setDateofbirth(LocalDate dateofbirth) {
+        this.dateofbirth = dateofbirth;
     }
 
     public String getEmail() {
