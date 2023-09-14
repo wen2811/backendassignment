@@ -55,13 +55,20 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> createUser(@Valid @RequestBody UserDto userDto, BindingResult br) {
+    public ResponseEntity<Object> createUser(@Valid @RequestBody UserDto userDto, BindingResult br) {
         if (br.hasFieldErrors()) {
+            StringBuilder sb = new StringBuilder();
             for (FieldError fe : br.getFieldErrors()) {
+                sb.append(fe.getField() + ": ");
+                sb.append(fe.getDefaultMessage());
+                sb.append("\n");
+            }
+            return ResponseEntity.badRequest().body(sb.toString());
             }
             Long newId = userService.createUser(userDto);
             URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + newId).toUriString());
             userDto.id = newId;
+
             return ResponseEntity.created(uri).body(newId);
         }
 

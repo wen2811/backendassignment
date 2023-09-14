@@ -1,9 +1,6 @@
 package com.wendy.backendassignment.dtos;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
@@ -13,8 +10,7 @@ public class UserDto {
     public String userName;
     public String firstName;
     public String lastName;
-
-
+    @Past
     private LocalDate dateOfBirth;
     @NotBlank(message = "Password should not be blank")
     @Size(min=6, max=20)

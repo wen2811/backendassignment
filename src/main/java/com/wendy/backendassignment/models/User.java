@@ -12,7 +12,6 @@ public class User {
     private Long id; //Long met hoofdletter
     @Column(name = "username") //dit is erbij
     private String userName;
-
     @Column(name = "first_name") //dit is erbij, is optioneel voor beinvloeding in db
     private String firstName;
     @Column(name = "last_name")

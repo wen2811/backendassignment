@@ -52,7 +52,7 @@ public class UserService {
         return dto;
     }
     //voor om te testen als mn create controller werkt
-    public long createUser(UserDto userDto) {
+    public Long createUser(UserDto userDto) {
         User user = new User();
         user.setFirstName(userDto.firstName);
         user.setLastName(userDto.lastName);
