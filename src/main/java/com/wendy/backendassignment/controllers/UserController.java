@@ -22,20 +22,7 @@ public class UserController {
         this.userService = userService;
     }
 
-
-   /* @GetMapping(value = "")
-    public List<User> getUsers() {
-        User user = new User();
-        user.setUserName("Wendy");
-        user.setEmail("info@gmail.com");
-        user.setLastName("Martina");
-
-        List<User> list = new ArrayList<User>();
-        list.add(user);
-        return list;
-    }*/
-
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<List<UserDto>> getUsers() {
 
         List<UserDto> userDtos = userService.getUsers();
