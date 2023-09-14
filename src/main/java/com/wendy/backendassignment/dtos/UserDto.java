@@ -8,6 +8,7 @@ public class UserDto {
     public Long id;
     @NotBlank(message = "Username should not be blank")
     public String username;
+    @NotBlank
     public String firstname;
     public String lastname;
     @Past

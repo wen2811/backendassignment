@@ -28,6 +28,16 @@ public class UserService {
         }
         return collection;
     }
+    /*public UserDto transferUserToDto(User user){
+        dto.username = user.getUsername();
+        dto.password = user.getPassword();
+        // dto.enabled = user.isEnabled();
+        //dto.apikey = user.getApikey();
+        dto.email = user.getEmail();
+        // dto.authorities = user.getAuthorities();
+
+        return userDto;
+    }*/
 
     public static UserDto fromUser(User user){
 
@@ -62,4 +72,5 @@ public class UserService {
 
         return user.getId();
     }
+
 }
