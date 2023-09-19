@@ -3,65 +3,77 @@ package com.wendy.backendassignment.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue //dit is erby
-    private Long id; //Long met hoofdletter
-    @Column(name = "username") //dit is erbij
-    private String userName;
+    @Column(name = "username")
+    private String username;
 
-    @Column(name = "first_name") //dit is erbij, is optioneel voor beinvloeding in db
-    private String firstName;
-    @Column(name = "last_name")
-    private String lastName;
-    @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth;
+    @Column(name = "firstname")
+    private String firstname;
+
+    @Column(name = "lastname")
+    private String lastname;
+
+    @Column(name = "dateofbirth")
+    private LocalDate dob;
+
     @Column(name = "email")
     private String email;
+
     @Column(name = "password")
     private String password;
 
-    public long getId() {
-        return id;
+    @Column(nullable = false)
+    private boolean enabled = true;
+
+    @Column
+    private String apikey;
+
+    @OneToMany(
+            targetEntity = Authority.class,
+            mappedBy = "username",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
+    private Set<Authority> authorities = new HashSet<>();
+
+
+    public String getUsername() {
+        return username;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
-    public String getLastName() {
-        return lastName;
+    public LocalDate getDob() {
+        return dob;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
     }
 
     public String getEmail() {
@@ -79,4 +91,30 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getApikey() {
+        return apikey;
+    }
+
+    public void setApikey(String apikey) {
+        this.apikey = apikey;
+    }
+
+
+    public Set<Authority> getAuthorities() { return authorities; }
+    public void addAuthority(Authority authority) {
+        this.authorities.add(authority);
+    }
+    public void removeAuthority(Authority authority) {
+        this.authorities.remove(authority);
+    }
+
 }

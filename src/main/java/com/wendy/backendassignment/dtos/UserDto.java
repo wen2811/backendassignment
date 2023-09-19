@@ -1,113 +1,69 @@
 package com.wendy.backendassignment.dtos;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import com.wendy.backendassignment.models.Authority;
+
 
 import java.time.LocalDate;
+import java.util.Set;
 
 public class UserDto {
-    public Long id;
-    @NotBlank(message = "Username should not be blank")
-    public String userName;
-    public String firstName;
-    public String lastName;
 
 
-    private LocalDate dateOfBirth;
-    @NotBlank(message = "Password should not be blank")
-    @Size(min=6, max=20)
+    public String username;
     public String password;
-    @NotNull
+    public String firstname;
+    public String lastname;
+    private LocalDate dob;
     public Boolean enabled;
     public String apikey;
-    @NotBlank
-    @Email
     public String email;
- //   public Set<Authority> authorities;
+    public Set<Authority> authorities;
 //    public List<Treatment> order;
 
-    public String getUserName() {
-        return userName;
-    }
+    //public Long getId() {return id;}
 
-    public void setUserName(String username) {
-        this.userName = username;
-    }
+   // public void setId(Long id) {this.id = id;}
 
-    public String getPassword() {
-        return password;
-    }
+    public String getUsername() {return username;}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public void setUsername(String username) {this.username = username;}
 
-    public Boolean getEnabled() {
-        return enabled;
-    }
+    public String getFirstname() {return firstname;}
 
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
+    public void setFirstname(String firstname) {this.firstname = firstname;}
 
-    public String getApikey() {
-        return apikey;
-    }
+    public String getLastname() {return lastname;}
 
-    public void setApikey(String apikey) {
-        this.apikey = apikey;
-    }
+    public void setLastname(String lastname) {this.lastname = lastname;}
 
-    public String getEmail() {
-        return email;
-    }
+    public LocalDate getDob() {return dob;}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public void setDob(LocalDate dob) {this.dob = dob;}
 
-    public String getFirstName() {
-        return firstName;
-    }
+    public String getPassword() {return password;}
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+    public void setPassword(String password) {this.password = password;}
 
-    public String getLastName() {
-        return lastName;
-    }
+    public Boolean getEnabled() {return enabled;}
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+    public void setEnabled(Boolean enabled) {this.enabled = enabled;}
 
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
+    public String getApikey() {return apikey;}
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
+    public void setApikey(String apikey) {this.apikey = apikey;}
 
-    public Long getId() {
-        return id;
-    }
+    public String getEmail() {return email;}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-    /*public Set<Authority> getAuthorities() {
+    public void setEmail(String email) {this.email = email;}
+
+    public void setAuthorities(Set<Authority> authorities) {this.authorities = authorities;}
+    public Set<Authority> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
-    }
 
-    public List<Order> getOrder() {
+
+  /*  public List<Order> getOrder() {
         return order;
     }
 
