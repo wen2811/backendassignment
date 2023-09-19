@@ -18,7 +18,6 @@ import java.util.Set;
 public class CustomUserDetailsService implements UserDetailsService {
 
    private final UserService userService;
-   //private AuthorityService authorityService; deze moet waarschijnlijk ook erin
 
     public CustomUserDetailsService(UserService userService) {
         this.userService = userService;
@@ -26,8 +25,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) {
-        UserDto userDto = userService.getUser(username);
+    public UserDetails loadUserByUsername(String email) {
+        UserDto userDto = userService.getUser(email);
 
         String password = userDto.getPassword();
 
@@ -37,7 +36,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             grantedAuthorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
         }
 
-        return new org.springframework.security.core.userdetails.User(username, password, grantedAuthorities);
+        return new org.springframework.security.core.userdetails.User(email, password, grantedAuthorities);
     }
 
 }
