@@ -60,11 +60,11 @@ public class SpringSecurityConfig {
 //                .requestMatchers("/**").permitAll()
 
                 //User
-                .requestMatchers(HttpMethod.GET, "/users").permitAll()
+                .requestMatchers(HttpMethod.GET, "/users").hasAnyRole("ADMIN","EMPLOYEE")
                 .requestMatchers(HttpMethod.GET,"/{username}").hasAnyRole("ADMIN","EMPLOYEE")
-                .requestMatchers(HttpMethod.POST,"/users/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST,"/users/**").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/{username}").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/{username}").hasAnyRole("ADMIN","EMPLOYEE")
+                .requestMatchers(HttpMethod.DELETE, "/{username}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/{username}/authorities").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/{username}/authorities").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "{username}/authorities/{authority}").hasRole("ADMIN")
