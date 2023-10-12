@@ -18,7 +18,7 @@ import java.util.Set;
 public class CustomUserDetailsService implements UserDetailsService {
 
    private final UserService userService;
-   //private AuthorityService authorityService; deze moet waarschijnlijk ook erin
+
 
     public CustomUserDetailsService(UserService userService) {
         this.userService = userService;
