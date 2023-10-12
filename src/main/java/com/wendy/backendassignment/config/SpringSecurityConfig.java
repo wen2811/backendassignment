@@ -28,13 +28,6 @@ public class SpringSecurityConfig {
         this.jwtRequestFilter = jwtRequestFilter;
     }
 
-    // PasswordEncoderBean. Deze kun je overal in je applicatie injecteren waar nodig.
-    // Je kunt dit ook in een aparte configuratie klasse zetten.
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 
     // Authenticatie met customUserDetailsService en passwordEncoder
     @Bean
@@ -46,6 +39,12 @@ public class SpringSecurityConfig {
                 .build();
     }
 
+    // PasswordEncoderBean. Deze kun je overal in je applicatie injecteren waar nodig.
+    // Je kunt dit ook in een aparte configuratie klasse zetten.
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
 
     // Authorizatie met jwt
@@ -59,25 +58,25 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests()
                 // Wanneer je deze uncomments, staat je hele security open. Je hebt dan alleen nog een jwt nodig.
 //                .requestMatchers("/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                .requestMatchers(HttpMethod.GET,"/users").hasRole("ADMIN")
+
+                //User
+                .requestMatchers(HttpMethod.GET, "/users").permitAll()
+                .requestMatchers(HttpMethod.GET,"/{username}").hasAnyRole("ADMIN","EMPLOYEE")
                 .requestMatchers(HttpMethod.POST,"/users/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
-               // .requestMatchers(HttpMethod.POST, "/cimodules").hasRole("ADMIN")
-               // .requestMatchers(HttpMethod.DELETE, "/cimodules/**").hasRole("ADMIN")
-               // .requestMatchers(HttpMethod.POST, "/remotecontrollers").hasRole("ADMIN")
-                //.requestMatchers(HttpMethod.DELETE, "/remotecontrollers/**").hasRole("ADMIN")
-               // .requestMatchers(HttpMethod.POST, "/televisions").hasRole("ADMIN")
-               // .requestMatchers(HttpMethod.DELETE, "/televisions/**").hasRole("ADMIN")
-               // .requestMatchers(HttpMethod.POST, "/wallbrackets").hasRole("ADMIN")
-               // .requestMatchers(HttpMethod.DELETE, "/wallbrackets/**").hasRole("ADMIN")
-                // Je mag meerdere paths tegelijk definieren
-               // .requestMatchers("/cimodules", "/remotecontrollers", "/televisions", "/wallbrackets").hasAnyRole("ADMIN", "USER")
+                .requestMatchers(HttpMethod.PUT, "/{username}").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/{username}").hasAnyRole("ADMIN","EMPLOYEE")
+                .requestMatchers(HttpMethod.GET, "/{username}/authorities").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/{username}/authorities").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "{username}/authorities/{authority}").hasRole("ADMIN")
+
+
+
                 .requestMatchers("/authenticated").authenticated()
                 .requestMatchers("/authenticate").permitAll()
                 .anyRequest().denyAll()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
             http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

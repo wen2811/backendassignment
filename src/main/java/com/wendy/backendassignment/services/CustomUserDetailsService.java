@@ -19,14 +19,15 @@ public class CustomUserDetailsService implements UserDetailsService {
 
    private final UserService userService;
 
+
     public CustomUserDetailsService(UserService userService) {
         this.userService = userService;
     }
 
 
     @Override
-    public UserDetails loadUserByUsername(String email) {
-        UserDto userDto = userService.getUser(email);
+    public UserDetails loadUserByUsername(String username) {
+        UserDto userDto = userService.getUser(username);
 
         String password = userDto.getPassword();
 
@@ -36,7 +37,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             grantedAuthorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
         }
 
-        return new org.springframework.security.core.userdetails.User(email, password, grantedAuthorities);
+        return new org.springframework.security.core.userdetails.User(username, password, grantedAuthorities);
     }
 
 }
