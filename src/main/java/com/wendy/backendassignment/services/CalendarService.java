@@ -48,7 +48,25 @@ public class CalendarService {
         return transferCalenderToDto(calendar);
     }
 
+    //update
+    public void updateCalendar(Long id, CalendarDto calendarDto) {
+        if(!calendarRepository.existsById(id)) {
+            throw new RecordNotFoundException("There's no Calendar-timeslot found");
+        }
+        Calendar updatedCalendar = calendarRepository.findById(id).orElse(null);
+        updatedCalendar.setId(calendarDto.getId());
+        updatedCalendar.setDate(calendarDto.getDate());
+        updatedCalendar.setStartTime(calendarDto.getStartTime());
+        updatedCalendar.setEndTime(calendarDto.getEndTime());
+        updatedCalendar.setAvailableTime(calendarDto.isAvailableTime());
+        calendarRepository.save(updatedCalendar);
 
+    }
+
+    //Delete
+    public void deleteCalendar(Long id) {
+        calendarRepository.deleteById(id);
+    }
 
 
     public CalendarDto transferCalenderToDto(Calendar calendar) {

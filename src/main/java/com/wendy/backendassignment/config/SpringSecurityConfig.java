@@ -70,11 +70,12 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "{username}/authorities/{authority}").hasRole("ADMIN")
 
                 //Calendars
-               // .requestMatchers(HttpMethod.GET, "/calendars/**").hasAnyRole("ADMIN", "EMPLOYEE")
-               // .requestMatchers(HttpMethod.GET, "/calendars/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
-               // .requestMatchers(HttpMethod.POST, "/calendars/**").hasAnyRole("ADMIN", "EMPLOYEE")
-                //.requestMatchers(HttpMethod.GET, "/calendars/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/calendars").authenticated()
+                .requestMatchers(HttpMethod.GET, "/calendars").permitAll()
+                .requestMatchers(HttpMethod.GET, "/calendars/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers(HttpMethod.POST, "/calendars").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers(HttpMethod.PUT, "/calendars/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers(HttpMethod.DELETE, "/calendars/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
+
 
                 .requestMatchers("/authenticated").authenticated()
                 .requestMatchers("/authenticate").permitAll()

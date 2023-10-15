@@ -1,4 +1,5 @@
 INSERT INTO users (username, firstname, lastname, dateofbirth, email, password, enabled)
+--password User1 = hallo
 VALUES ('User1', 'Maria', 'Cruz', '2000-02-02', 'user1@test.nl', '$2a$12$3pyLBM0VogqgM0XfcbUXTeKnK2FtqndUvVEO4KKV5wkMnbl9Ceq8O', true),
        ('User2', 'Donald', 'Duck', '1970-08-08', 'user2@test.nl', '$2a$12$JVoz.a3j1AzPMfqnoFNQNupVOLxU.6a8BB3vX.MOfrSySPoX/IXLW', true);
 

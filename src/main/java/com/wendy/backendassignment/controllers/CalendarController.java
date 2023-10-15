@@ -52,6 +52,19 @@ public class CalendarController {
 
     }
 
+    //Update
+    @PutMapping("/calendars/{id}")
+    public ResponseEntity<Object> updateCalendar(@PathVariable("id") Long id, @RequestBody CalendarDto calendarDto) {
+        calendarService.updateCalendar(id, calendarDto);
+        return ResponseEntity.ok(calendarDto);
+    }
+
+    //Delete
+    @DeleteMapping("/calendars/{id}")
+    public ResponseEntity<Object>deleteCalendar(@PathVariable Long id) {
+        calendarService.deleteCalendar(id);
+        return ResponseEntity.noContent().build();
+    }
 
   /*  @PostMapping("{booking_id}")
     public ResponseEntity<CalendarDto> createCalendarEvent(@Valid @RequestBody CalendarDto calendarDto) {
