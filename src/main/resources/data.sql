@@ -7,6 +7,15 @@ INSERT INTO authorities (authority, username)
 VALUES ('ROLE_EMPLOYEE', 'User1'),
         ('ROLE_ADMIN', 'User2');
 
+/*INSERT INTO bookings (id, date, total_amount, booking_status, treatment_id, customer_id, user_id)
+VALUES (1, '2023-09-30', 90, 'NEW', 1, 1, 1);
+INSERT INTO bookings (id, date, total_amount, booking_status, treatment_id, customer_id, user_id)
+VALUES (2, '2023-10-15', 120, 'CONFIRMED', 2, 2, 2);*/
+
+INSERT INTO bookings (id, date, total_amount)
+VALUES (1, '2023-11-01', 90),
+       (2, '2023-10-30', 120);
+
 INSERT INTO calendars (date, start_time, end_time, available_time)
 VALUES ('2023-10-10', '10:00:00', '11:00:00', true),
        ('2021-10-11', '11:30:00', '12:30:00', false);
