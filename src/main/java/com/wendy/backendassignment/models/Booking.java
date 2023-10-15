@@ -21,7 +21,6 @@ public class Booking {
     private LocalDate date;
     private double totalAmount;
 
-
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
 
