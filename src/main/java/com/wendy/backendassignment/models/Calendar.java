@@ -1,4 +1,4 @@
-/*
+
 package com.wendy.backendassignment.models;
 
 import jakarta.persistence.*;
@@ -25,7 +25,8 @@ public class Calendar {
     private LocalTime endTime;
     private boolean availableTime;
 
-   */
+}
+
 /* @ManyToOne
     public void setId(Long id) {
         this.id = id;
