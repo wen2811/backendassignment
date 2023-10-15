@@ -16,6 +16,16 @@ INSERT INTO bookings (id, date, total_amount)
 VALUES (1, '2023-11-01', 90),
        (2, '2023-10-30', 120);
 
+INSERT INTO treatments (id, name, type, description, duration, price)
+VALUES (1, 'Kobido Facial Massage', 'FACIAL_TREATMENT', 'Kobido is a traditional Japanese facial massage that utilizes gentle, rhythmic hand movements and acupressure points to improve blood circulation and rejuvenate the skin. It is known for its relaxing and invigorating effects, helping to reduce tension and promote a radiant complexion.', 60, 100),
+       (2, 'Carboxy Treatment', 'FACIAL_TREATMENT', 'A carboxy facial treatment utilizes carbon dioxide gas to boost skin circulation, enhancing collagen production for improved skin texture and tone, offering rejuvenating and renewing benefits.', 45, 80),
+       (3, 'Hydrafacial Treatment', 'FACIAL_TREATMENT', 'The hydrafacial is a five-step facial treatment that cleanses, hydrates, and rejuvenates the skin, providing a dewy glow by extracting debris, moisturizing, and exfoliating with a suction device.', 60, 110),
+       (4, 'LED Light Therapy', 'FACIAL_TREATMENT', 'LED light therapy rejuvenates skin with targeted light wavelengths, effectively addressing various concerns without downtime or discomfort.', 30, 45),
+       (5, 'Carboxy Treatment', 'BODY_TREATMENT', 'A carboxy body treatment utilizes carbon dioxide gas to boost skin circulation, enhancing collagen production for improved skin texture and tone, offering rejuvenating and renewing benefits.', 45, 100),
+       (6, 'Massage Treatment', 'BODY_TREATMENT', 'A carboxy facial treatment utilizes carbon dioxide gas to boost skin circulation, enhancing collagen production for improved skin texture and tone, offering rejuvenating and renewing benefits.', 60, 85),
+       (7, 'Detox Treatment', 'BODY_TREATMENT', 'A carboxy facial treatment utilizes carbon dioxide gas to boost skin circulation, enhancing collagen production for improved skin texture and tone, offering rejuvenating and renewing benefits.', 60, 125),
+       (8, 'Body mask Treatment', 'BODY_TREATMENT', 'A carboxy facial treatment utilizes carbon dioxide gas to boost skin circulation, enhancing collagen production for improved skin texture and tone, offering rejuvenating and renewing benefits.', 45, 115);
+
 INSERT INTO calendars (date, start_time, end_time, available_time)
 VALUES ('2023-10-10', '10:00:00', '11:00:00', true),
        ('2021-10-11', '11:30:00', '12:30:00', false);
