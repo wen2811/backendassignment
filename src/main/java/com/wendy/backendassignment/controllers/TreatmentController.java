@@ -1,6 +1,7 @@
 package com.wendy.backendassignment.controllers;
 
 import com.wendy.backendassignment.dtos.BookingTreatmentDto;
+import com.wendy.backendassignment.dtos.CalendarDto;
 import com.wendy.backendassignment.dtos.TreatmentDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
 import com.wendy.backendassignment.models.TreatmentType;
@@ -69,6 +70,18 @@ public class TreatmentController {
     }
 
     //Methods for relation
+    @PutMapping("/{id}/updatewithcalendar")
+    public ResponseEntity<Object> updateTreatmentWithCalendar(@PathVariable Long id, @RequestBody TreatmentDto treatmentDto, @RequestBody CalendarDto calendarDto) throws RecordNotFoundException {
+        treatmentService.updateTreatmentWithCalendar(id, treatmentDto, calendarDto);
+        return ResponseEntity.ok("Behandeling met kalendergegevens is succesvol bijgewerkt.");
+    }
+
+    @GetMapping("/{id}/with-calendar")
+    public ResponseEntity<TreatmentDto> getTreatmentWithCalendar(@PathVariable Long id) throws RecordNotFoundException {
+        TreatmentDto treatmentDto = treatmentService.getTreatmentWithCalendar(id);
+        return ResponseEntity.ok(treatmentDto);
+    }
+
     @PostMapping("/{treatmentId}/bookingtreatments")
     public ResponseEntity<BookingTreatmentDto> addBookingTreatmentToTreatment(@PathVariable Long treatmentId, @RequestBody BookingTreatmentDto bookingTreatmentDto) {
         BookingTreatmentDto addedBookingTreatment = treatmentService.addBookingTreatmentToTreatment(treatmentId, bookingTreatmentDto);
