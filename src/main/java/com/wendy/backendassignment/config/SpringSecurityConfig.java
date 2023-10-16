@@ -76,6 +76,13 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/bookings/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.DELETE, "/bookings/{id}").hasAnyRole("ADMIN","EMPLOYEE")
 
+                //Treatments
+                .requestMatchers(HttpMethod.GET, "/treatments").permitAll()
+                .requestMatchers(HttpMethod.GET, "/{type}").permitAll()
+                .requestMatchers(HttpMethod.POST, "/treatments").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers(HttpMethod.PUT, "/treatments/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers(HttpMethod.DELETE, "/treatments/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
+
                 //Calendars
                 .requestMatchers(HttpMethod.GET, "/calendars").permitAll()
                 .requestMatchers(HttpMethod.GET, "/calendars/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
@@ -83,6 +90,12 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/calendars/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.DELETE, "/calendars/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
 
+                //Customers
+                .requestMatchers(HttpMethod.GET, "/customers").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers(HttpMethod.GET, "/customers/{id}").hasAnyRole("hasRole('ADMIN') or hasRole('EMPLOYEE') or hasPermission(#id, 'UserCredential')")
+                .requestMatchers(HttpMethod.POST, "/customers").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers(HttpMethod.PUT, "/customers/{id}").hasAnyRole("hasRole('ADMIN') or hasRole('EMPLOYEE') or hasPermission(#id, 'UserCredential')")
+                .requestMatchers(HttpMethod.DELETE, "/customers/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
 
                 .requestMatchers("/authenticated").authenticated()
                 .requestMatchers("/authenticate").permitAll()
