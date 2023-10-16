@@ -31,9 +31,8 @@ public class Booking {
    @OneToMany(mappedBy = "booking")
    private List<BookingTreatment> bookingTreatments;
 
-
-   // @ManyToOne
-    //private Customer customer;
+    @ManyToOne
+    private Customer customer;
 
 
     //@ManyToOne

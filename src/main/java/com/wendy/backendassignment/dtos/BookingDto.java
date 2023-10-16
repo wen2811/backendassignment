@@ -1,12 +1,11 @@
 package com.wendy.backendassignment.dtos;
 
-import com.wendy.backendassignment.models.BookingStatus;
-import com.wendy.backendassignment.models.Invoice;
-import com.wendy.backendassignment.models.User;
+import com.wendy.backendassignment.models.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,5 +16,7 @@ public class BookingDto {
     public User employee;
     public BookingStatus bookingStatus;
     public Invoice invoice;
+    public List<BookingTreatment> bookingTreatments;
+    public Customer customer;
 
 }

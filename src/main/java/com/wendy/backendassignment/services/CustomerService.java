@@ -47,16 +47,6 @@ public class CustomerService {
         return transferCustomerToDto(customer);
     }
 
-    public CustomerDto transferCustomerToDto(Customer customer) {
-        CustomerDto customerDto = new CustomerDto();
-
-        customerDto.id = customer.getId();
-        customerDto.firstName = customer.getFirstName();
-        customerDto.lastName = customer.getLastName();
-        customerDto.email = customer.getEmail();
-        customerDto.phoneNumber = customer.getPhoneNumber();
-        return customerDto;
-    }
 
     //Update
     public void updateCustomer(Long id, CustomerDto customerDto) {
@@ -83,14 +73,56 @@ public class CustomerService {
     }
 
 
+    public Customer getCustomerById(Long customerId) {
+        return customerRepository.findById(customerId).orElse(null);
+    }
+
+    public Customer registerCustomer(CustomerDto customerDto) {
+        Customer newCustomer = new Customer();
+        newCustomer.setEmail(customerDto.getEmail());
+        newCustomer.setPassword(customerDto.getPassword());
+
+        return customerRepository.save(newCustomer);
+    }
+
+    public CustomerDto transferCustomerToDto(Customer customer) {
+        CustomerDto customerDto = new CustomerDto();
+
+        customerDto.id = customer.getId();
+        customerDto.firstName = customer.getFirstName();
+        customerDto.lastName = customer.getLastName();
+        customerDto.email = customer.getEmail();
+        customerDto.phoneNumber = customer.getPhoneNumber();
+        customerDto.bookingList = customer.getBookingList();
+        //customerDto.invoice = customer.getInvoice();
+        return customerDto;
+    }
+
+
+
     public Customer transferDtoToCustomer(CustomerDto customerDto) {
-        Customer customer = new Customer();
+        Customer customer = new Customer() {
+            @Override
+            public boolean isPasswordValid(String password) {
+                return false;
+            }
+
+            @Override
+            public void changePassword(String newPassword) {
+
+            }
+        };
         customer.setId(customerDto.id);
         customer.setFirstName(customerDto.firstName);
         customer.setLastName(customerDto.lastName);
-        customer.setEmail(customerDto.email);
-        customer.setPhoneNumber(customerDto.phoneNumber);
+        customerDto.setEmail(customerDto.email);
+        customerDto.setPhoneNumber(customerDto.phoneNumber);
+        customerDto.setBookingList(customerDto.bookingList);
+        //customerDto.setInvoice(customerDto.invoice);
         return customer;
     }
-    
+
+
+
     }
+
