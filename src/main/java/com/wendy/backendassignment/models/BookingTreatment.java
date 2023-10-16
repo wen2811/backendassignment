@@ -15,4 +15,10 @@ public class BookingTreatment {
     private int quantity;
     private String customerName;
     private String customerEmail;
+
+    @ManyToOne
+    private Booking booking;
+
+    @ManyToOne
+    private Treatment treatment;
 }
