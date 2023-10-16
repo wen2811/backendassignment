@@ -25,18 +25,8 @@ public class Calendar {
     private LocalTime endTime;
     private boolean availableTime;
 
-}
-
-/* @ManyToOne
-    public void setId(Long id) {
-        this.id = id;
-    }*//*
-
-
-   */
-/* @OneToOne(mappedBy = "calendar")
-    private Booking booking;
-*//*
+    @OneToOne(mappedBy = "calendar")
+    private Treatment treatment;
 
 
     public boolean isAvailableTime() {
@@ -47,4 +37,4 @@ public class Calendar {
         this.availableTime = availableTime;
     }
 }
-*/
+

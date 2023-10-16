@@ -1,5 +1,6 @@
 package com.wendy.backendassignment.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,4 +21,11 @@ public class Invoice {
     private Long id;
     private double amount;
     private Date invoicedate;
+
+    @OneToOne
+    @JsonIgnore
+    private Booking booking;
+
+    @ManyToOne
+    private Customer customer;
 }

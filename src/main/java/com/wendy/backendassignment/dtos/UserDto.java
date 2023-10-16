@@ -1,11 +1,16 @@
 package com.wendy.backendassignment.dtos;
 
 import com.wendy.backendassignment.models.Authority;
-
+import com.wendy.backendassignment.models.Booking;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
+@Getter
+@Setter
 public class UserDto {
 
 
@@ -18,11 +23,9 @@ public class UserDto {
     public String apikey;
     public String email;
     public Set<Authority> authorities;
-//    public List<Treatment> order;
+    public List<Booking> bookingList;
 
-    //public Long getId() {return id;}
 
-   // public void setId(Long id) {this.id = id;}
 
     public String getUsername() {return username;}
 
@@ -62,12 +65,4 @@ public class UserDto {
     }
 
 
-
-  /*  public List<Order> getOrder() {
-        return order;
-    }
-
-    public void setOrder(List<Order> order) {
-        this.order = order;
-    }*/
 }

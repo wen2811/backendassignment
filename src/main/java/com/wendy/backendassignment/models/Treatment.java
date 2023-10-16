@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,4 +28,19 @@ public class Treatment {
     private String description;
     private double duration;
     private double price;
+
+    @OneToOne
+    private Calendar calendar;
+
+    @OneToMany
+    private List<BookingTreatment> bookingTreatments;
+
+    public Treatment(String name, TreatmentType type, String description, double duration, double price) {
+        this.name = name;
+        this.type = type;
+        this.description = description;
+        this.duration = duration;
+        this.price = price;
+    }
+
 }

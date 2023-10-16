@@ -1,9 +1,14 @@
 package com.wendy.backendassignment.controllers;
 
 import com.wendy.backendassignment.dtos.BookingDto;
+import com.wendy.backendassignment.dtos.CustomerDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
+import com.wendy.backendassignment.models.Booking;
+import com.wendy.backendassignment.models.Customer;
 import com.wendy.backendassignment.services.BookingService;
+import com.wendy.backendassignment.services.CustomerService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -17,9 +22,11 @@ import java.util.List;
 @RequestMapping("/bookings")
 public class BookingController {
     private final BookingService bookingService;
+    private final CustomerService customerService;
 
-    public BookingController(BookingService bookingService) {
+    public BookingController(BookingService bookingService, CustomerService customerService) {
         this.bookingService = bookingService;
+        this.customerService = customerService;
     }
 
     //Read
@@ -66,5 +73,44 @@ public class BookingController {
         return ResponseEntity.noContent().build();
     }
 
+    //Relationships methods
+    //update
+    @PutMapping("/updateTreatments/{id}")
+    public ResponseEntity<BookingDto> updateBookingTreatments(@PathVariable Long id, @RequestBody List<Long> treatmentIds) throws RecordNotFoundException {
+        BookingDto updatedBookingDto = bookingService.updateBookingTreatments(id, treatmentIds);
+        return new ResponseEntity<>(updatedBookingDto, HttpStatus.OK);
+    }
 
+    @PostMapping("/registerbookings/")
+    public ResponseEntity<Object> createBooking(@RequestParam Long customerId, @RequestParam List<Long> bookingTreatmentIds, @RequestBody CustomerDto customerDto) {
+        Customer existingCustomer = customerService.getCustomerById(customerId);
+
+        if (existingCustomer == null) {
+
+            existingCustomer = customerService.registerCustomer(customerDto);
+        }
+        Booking booking = bookingService.createBooking(customerId, bookingTreatmentIds, customerDto);
+
+        if (booking == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(booking, HttpStatus.CREATED);
+    }
+
+    //Read
+    @GetMapping("/{customerId}/bookings")
+    public ResponseEntity<List<BookingDto>> getBookingsForCustomer(@PathVariable Long customerId) throws RecordNotFoundException {
+        List<BookingDto> bookingDtos = bookingService.getBookingsForCustomer(customerId);
+        return ResponseEntity.ok().body(bookingDtos);
+    }
+
+    //create
+    @PostMapping("/createWithoutRegistration")
+    public ResponseEntity<BookingDto> createBookingWithoutRegistration(@RequestParam Long customerId, @RequestParam List<Long> bookingTreatmentIds, @RequestBody(required = false) CustomerDto customerDto) {
+        BookingDto createdBooking = bookingService.createBookingWithoutRegistration(customerId, bookingTreatmentIds, customerDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdBooking);
+    }
 }
+
+

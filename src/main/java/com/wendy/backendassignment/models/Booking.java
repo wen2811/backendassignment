@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,19 +25,17 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
 
-    ///@OneToOne(mappedBy = "booking")
-    //private Invoice invoice;
+    @OneToOne(mappedBy = "booking")
+    private Invoice invoice;
 
-   // @OneToMany(mappedBy = "booking")
-   // private List<BookingTreatment> bookingTreatments;
+   @OneToMany(mappedBy = "booking")
+   private List<BookingTreatment> bookingTreatments;
 
+    @ManyToOne
+    private Customer customer;
 
-   // @ManyToOne
-    //private Customer customer;
-
-
-    //@ManyToOne
-   // private User user;
+    @ManyToOne
+    private User user;
 
     public Booking(LocalDate date, double totalAmount ){
         this.date = date;
