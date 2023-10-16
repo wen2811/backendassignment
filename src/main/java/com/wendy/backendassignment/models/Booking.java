@@ -24,8 +24,8 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
 
-    ///@OneToOne(mappedBy = "booking")
-    //private Invoice invoice;
+    @OneToOne(mappedBy = "booking")
+    private Invoice invoice;
 
    // @OneToMany(mappedBy = "booking")
    // private List<BookingTreatment> bookingTreatments;
