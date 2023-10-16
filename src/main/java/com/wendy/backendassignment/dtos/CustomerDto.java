@@ -15,6 +15,7 @@ public class CustomerDto {
     public String phoneNumber;
     public String email;
     public List<Booking> bookingList;
+    public String password;
 
     public String getPassword() {
         return password;

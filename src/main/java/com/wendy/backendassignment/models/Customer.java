@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "customers")
-public abstract class Customer {
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,9 +23,13 @@ public abstract class Customer {
     @JsonIgnore
     private List<Booking> bookingList;
 
-    public abstract boolean isPasswordValid(String password);
+    public boolean isPasswordValid(String password) {
+        return false;
+    }
 
-    public abstract void changePassword(String newPassword);
+    public void changePassword(String newPassword) {
+
+    }
 
     public void setPassword(String password) {
     }
