@@ -30,6 +30,12 @@ INSERT INTO calendars (date, start_time, end_time, available_time)
 VALUES ('2023-10-10', '10:00:00', '11:00:00', true),
        ('2021-10-11', '11:30:00', '12:30:00', false);
 
+INSERT INTO customers (first_name, last_name, email, phone_number)
+VALUES ('Joelle', 'Pedro', 'user1@test.nl', '1234567890'),
+       ('Kim', 'Boss', 'user2@test.nl', '3456789012'),
+       ('Mischa', 'Peters', 'user3@test.nl', '5678901234'),
+       ('Jeanine', 'Jean', 'user4@test.nl', '6789012345');
+
 
 
 
