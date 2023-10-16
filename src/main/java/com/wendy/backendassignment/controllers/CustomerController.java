@@ -66,4 +66,11 @@ public class CustomerController {
         customerService.deleteCustomer(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/customers/{customerId}/invoices")
+    public ResponseEntity<CustomerDto> getCustomerWithInvoices(@PathVariable Long customerId) throws RecordNotFoundException {
+        CustomerDto customerDto = customerService.getCustomerWithInvoices(customerId);
+        return ResponseEntity.ok().body(customerDto);
+    }
+
 }

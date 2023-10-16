@@ -19,9 +19,13 @@ public class Customer {
     private String lastName;
     private String phoneNumber;
     private String email;
+
     @OneToMany(mappedBy = "customer")
     @JsonIgnore
     private List<Booking> bookingList;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Invoice> invoice;
 
     public boolean isPasswordValid(String password) {
         return false;
@@ -32,5 +36,9 @@ public class Customer {
     }
 
     public void setPassword(String password) {
+    }
+
+    public List<Invoice> getInvoice() {
+        return invoice;
     }
 }

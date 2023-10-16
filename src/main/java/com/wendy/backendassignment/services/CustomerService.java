@@ -3,7 +3,9 @@ package com.wendy.backendassignment.services;
 import com.wendy.backendassignment.dtos.CustomerDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
 import com.wendy.backendassignment.models.Customer;
+import com.wendy.backendassignment.models.Invoice;
 import com.wendy.backendassignment.repositories.CustomerRepository;
+import com.wendy.backendassignment.repositories.InvoiceRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,9 +15,11 @@ import java.util.Optional;
 @Service
 public class CustomerService {
     private final CustomerRepository customerRepository;
+    private final InvoiceRepository invoiceRepository;
 
-    public CustomerService(CustomerRepository customerRepository) {
+    public CustomerService(CustomerRepository customerRepository, InvoiceRepository invoiceRepository) {
         this.customerRepository = customerRepository;
+        this.invoiceRepository = invoiceRepository;
     }
 
     //Read
@@ -59,6 +63,7 @@ public class CustomerService {
         updateCustomer.setLastName(customerDto.getLastName());
         updateCustomer.setEmail(customerDto.getEmail());
         updateCustomer.setPhoneNumber(customerDto.getPhoneNumber());
+        //updateCustomer.setBookingList(customerDto.getBookingList());
         customerRepository.save(updateCustomer);
     }
 
@@ -70,6 +75,16 @@ public class CustomerService {
         }
         Customer customer = optionalCustomer.get();
         customerRepository.delete(customer);
+    }
+
+    //relations methods
+    public CustomerDto getCustomerWithInvoices(Long customerId) throws RecordNotFoundException {
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new RecordNotFoundException("Customer not found with ID: " + customerId));
+
+        List<Invoice> invoices = invoiceRepository.findByCustomerId(customerId);
+        customer.setInvoice(invoices);
+
+        return transferCustomerToDto(customer);
     }
 
 
@@ -94,7 +109,7 @@ public class CustomerService {
         customerDto.email = customer.getEmail();
         customerDto.phoneNumber = customer.getPhoneNumber();
         customerDto.bookingList = customer.getBookingList();
-        //customerDto.invoice = customer.getInvoice();
+        customerDto.invoice = customer.getInvoice();
         return customerDto;
     }
 
@@ -118,7 +133,7 @@ public class CustomerService {
         customerDto.setEmail(customerDto.email);
         customerDto.setPhoneNumber(customerDto.phoneNumber);
         customerDto.setBookingList(customerDto.bookingList);
-        //customerDto.setInvoice(customerDto.invoice);
+        customerDto.setInvoice(customerDto.invoice);
         return customer;
     }
 

@@ -152,6 +152,30 @@ public class BookingService {
         return bookingDtos;
     }
 
+    //create without registration
+    public BookingDto createBookingWithoutRegistration(Long customerId, List<Long> bookingTreatmentIds, CustomerDto customerDto) {
+        Booking booking = new Booking();
+
+        if (customerDto != null) {
+            Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
+            if (optionalCustomer.isEmpty()) {
+                throw new RecordNotFoundException("Customer doesn't exist.");
+            }
+            Customer existingCustomer = optionalCustomer.get();
+            booking.setCustomer(existingCustomer);
+        }
+        List<BookingTreatment> bookingTreatments = new ArrayList<>();
+        for (Long bookingTreatmentId : bookingTreatmentIds) {
+            BookingTreatment bookingTreatment = bookingTreatmentRepository.findById(bookingTreatmentId)
+                    .orElseThrow(() -> new RecordNotFoundException("BookingTreatment doesn't exist."));
+            bookingTreatments.add(bookingTreatment);
+        }
+        booking.setBookingTreatments(bookingTreatments);
+        bookingRepository.save(booking);
+
+        return transferBookingToDto(booking);
+    }
+
 
     public BookingDto transferBookingToDto(Booking booking) {
         BookingDto bookingDto = new BookingDto();

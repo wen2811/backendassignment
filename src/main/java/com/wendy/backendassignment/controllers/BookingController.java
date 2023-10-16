@@ -77,7 +77,7 @@ public class BookingController {
     //update
     @PutMapping("/updateTreatments/{id}")
     public ResponseEntity<BookingDto> updateBookingTreatments(@PathVariable Long id, @RequestBody List<Long> treatmentIds) throws RecordNotFoundException {
-        BookingDto updatedBookingDto = bookingService.updateBookingTreatments(id,treatmentIds );
+        BookingDto updatedBookingDto = bookingService.updateBookingTreatments(id, treatmentIds);
         return new ResponseEntity<>(updatedBookingDto, HttpStatus.OK);
     }
 
@@ -105,7 +105,12 @@ public class BookingController {
         return ResponseEntity.ok().body(bookingDtos);
     }
 
-
-
-
+    //create
+    @PostMapping("/createWithoutRegistration")
+    public ResponseEntity<BookingDto> createBookingWithoutRegistration(@RequestParam Long customerId, @RequestParam List<Long> bookingTreatmentIds, @RequestBody(required = false) CustomerDto customerDto) {
+        BookingDto createdBooking = bookingService.createBookingWithoutRegistration(customerId, bookingTreatmentIds, customerDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdBooking);
+    }
 }
+
+

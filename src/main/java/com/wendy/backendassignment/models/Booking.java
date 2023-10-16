@@ -34,9 +34,8 @@ public class Booking {
     @ManyToOne
     private Customer customer;
 
-
-    //@ManyToOne
-   // private User user;
+    @ManyToOne
+    private User user;
 
     public Booking(LocalDate date, double totalAmount ){
         this.date = date;
