@@ -36,6 +36,10 @@ VALUES ('Joelle', 'Pedro', 'user1@test.nl', '1234567890'),
        ('Mischa', 'Peters', 'user3@test.nl', '5678901234'),
        ('Jeanine', 'Jean', 'user4@test.nl', '6789012345');
 
+/*INSERT INTO invoices (amount, invoicedate, booking_id)
+VALUES (90, '2023-11-01', 1),
+       (120, '2023-10-30', 2);
+*/
 
 
 
