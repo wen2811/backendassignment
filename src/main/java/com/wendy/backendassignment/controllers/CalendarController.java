@@ -66,13 +66,6 @@ public class CalendarController {
         return ResponseEntity.noContent().build();
     }
 
-  /*  @PostMapping("{booking_id}")
-    public ResponseEntity<CalendarDto> createCalendarEvent(@Valid @RequestBody CalendarDto calendarDto) {
-        CalendarDto createdCalendar = calendarService.createCalendarEvent(calendarDto);
-        URI uri = URI.create(String.valueOf(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + createdCalendar.getId())));
-        return ResponseEntity.created(uri).body(createdCalendar);
-    }*/
-
     
 }
 

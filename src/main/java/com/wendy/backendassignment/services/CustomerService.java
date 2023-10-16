@@ -63,7 +63,7 @@ public class CustomerService {
         updateCustomer.setLastName(customerDto.getLastName());
         updateCustomer.setEmail(customerDto.getEmail());
         updateCustomer.setPhoneNumber(customerDto.getPhoneNumber());
-        //updateCustomer.setBookingList(customerDto.getBookingList());
+        updateCustomer.setBookingList(customerDto.getBookingList());
         customerRepository.save(updateCustomer);
     }
 

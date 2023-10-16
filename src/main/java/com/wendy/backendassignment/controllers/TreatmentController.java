@@ -1,10 +1,12 @@
 package com.wendy.backendassignment.controllers;
 
+import com.wendy.backendassignment.dtos.BookingTreatmentDto;
 import com.wendy.backendassignment.dtos.TreatmentDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
 import com.wendy.backendassignment.models.TreatmentType;
 import com.wendy.backendassignment.services.TreatmentService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -65,6 +67,26 @@ public class TreatmentController {
         treatmentService.deleteTreatment(id);
         return ResponseEntity.noContent().build();
     }
+
+    //Methods for relation
+    @PostMapping("/{treatmentId}/bookingtreatments")
+    public ResponseEntity<BookingTreatmentDto> addBookingTreatmentToTreatment(@PathVariable Long treatmentId, @RequestBody BookingTreatmentDto bookingTreatmentDto) {
+        BookingTreatmentDto addedBookingTreatment = treatmentService.addBookingTreatmentToTreatment(treatmentId, bookingTreatmentDto);
+        return new ResponseEntity<>(addedBookingTreatment, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/update-booking-treatment/{id}")
+    public ResponseEntity<BookingTreatmentDto> updateBookingTreatment(@PathVariable Long id, @RequestBody BookingTreatmentDto bookingTreatmentDto) throws RecordNotFoundException {
+        BookingTreatmentDto updatedBookingTreatment = treatmentService.updateBookingTreatment(id, bookingTreatmentDto);
+        return ResponseEntity.ok(updatedBookingTreatment);
+    }
+
+    @GetMapping("/bookingtreatments/{id}")
+    public ResponseEntity<BookingTreatmentDto> getBookingTreatmentById(@PathVariable Long id) throws RecordNotFoundException {
+        BookingTreatmentDto bookingTreatment = treatmentService.getBookingTreatmentById(id);
+        return ResponseEntity.ok(bookingTreatment);
+    }
+
 
 
 }
