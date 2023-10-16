@@ -40,7 +40,28 @@ public class InvoiceService {
         return transferInvoiceToDto(invoice);
     }
 
+    //Create
+    public InvoiceDto addInvoice(InvoiceDto invoiceDto) {
+        Invoice invoice = transferDtoToInvoice(invoiceDto);
+        invoiceRepository.save(invoice);
 
+        return transferInvoiceToDto(invoice);
+    }
+
+    public void updateInvoice(Long id, InvoiceDto invoiceDto) {
+        if (!invoiceRepository.existsById(id)) {
+            throw new RecordNotFoundException("There's no Invoice found");
+        }
+        Invoice updatedInvoice = invoiceRepository.findById(id).orElse(null);
+        updatedInvoice.setId(invoiceDto.getId());
+        updatedInvoice.setAmount(invoiceDto.getAmount());
+        updatedInvoice.setInvoicedate(invoiceDto.getInvoicedate());
+        invoiceRepository.save(updatedInvoice);
+    }
+
+    //Delete
+    public void deleteInvoice(Long id) {invoiceRepository.deleteById(id);
+    }
 
 
     public InvoiceDto transferInvoiceToDto(Invoice invoice) {
