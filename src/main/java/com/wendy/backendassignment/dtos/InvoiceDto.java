@@ -1,5 +1,6 @@
 package com.wendy.backendassignment.dtos;
 
+import com.wendy.backendassignment.models.Booking;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,4 +13,5 @@ public class InvoiceDto {
     public double amount;
     public Date invoicedate;
 
+    public Booking booking;
 }

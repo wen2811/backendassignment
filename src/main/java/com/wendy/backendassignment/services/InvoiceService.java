@@ -2,20 +2,25 @@ package com.wendy.backendassignment.services;
 
 import com.wendy.backendassignment.dtos.InvoiceDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
+import com.wendy.backendassignment.models.Booking;
 import com.wendy.backendassignment.models.Invoice;
+import com.wendy.backendassignment.repositories.BookingRepository;
 import com.wendy.backendassignment.repositories.InvoiceRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class InvoiceService {
     private final InvoiceRepository invoiceRepository;
+    private final BookingRepository bookingRepository;
 
-    public InvoiceService(InvoiceRepository invoiceRepository) {
+    public InvoiceService(InvoiceRepository invoiceRepository, BookingRepository bookingRepository) {
         this.invoiceRepository = invoiceRepository;
+        this.bookingRepository = bookingRepository;
     }
 
     //Read
@@ -63,6 +68,26 @@ public class InvoiceService {
     public void deleteInvoice(Long id) {invoiceRepository.deleteById(id);
     }
 
+    public List<InvoiceDto> getInvoicesForBooking(Long bookingId) {
+        Optional<Booking> bookingOptional = bookingRepository.findById(bookingId);
+        if (bookingOptional.isEmpty()) {
+            return Collections.emptyList();
+        }
+        Booking booking = bookingOptional.get();
+        List<Invoice> invoices = invoiceRepository.findByBookingId(bookingId);
+        List<InvoiceDto> invoiceDtos = new ArrayList<>();
+
+        for (Invoice invoice : invoices) {
+            InvoiceDto invoiceDto = new InvoiceDto();
+            invoiceDto.setId(invoice.getId());
+            invoiceDto.setAmount(invoice.getAmount());
+
+            invoiceDtos.add(invoiceDto);
+        }
+        return invoiceDtos;
+    }
+
+
 
     public InvoiceDto transferInvoiceToDto(Invoice invoice) {
         InvoiceDto invoiceDto = new InvoiceDto();
@@ -70,6 +95,7 @@ public class InvoiceService {
         invoiceDto.id = invoice.getId();
         invoiceDto.amount = invoice.getAmount();
         invoiceDto.invoicedate = invoice.getInvoicedate();
+        invoiceDto.booking = invoice.getBooking();
         return invoiceDto;
     }
 
@@ -79,6 +105,7 @@ public class InvoiceService {
         invoice.setId(invoiceDto.id);
         invoice.setAmount(invoiceDto.amount);
         invoice.setInvoicedate(invoiceDto.invoicedate);
+        invoice.setBooking(invoiceDto.booking);
         return invoice;
     }
 }

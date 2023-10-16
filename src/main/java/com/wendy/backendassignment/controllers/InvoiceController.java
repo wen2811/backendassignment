@@ -67,6 +67,14 @@ public class InvoiceController {
         return ResponseEntity.noContent().build();
     }
 
+    //Relationship booking and invoice
+    @GetMapping("/{bookingId}/invoices")
+    public ResponseEntity<List<InvoiceDto>> getInvoicesForBooking(@PathVariable Long bookingId) {
+        List<InvoiceDto> invoiceDtos = invoiceService.getInvoicesForBooking(bookingId);
+        return ResponseEntity.ok(invoiceDtos);
+    }
+
+
 
 
 }
