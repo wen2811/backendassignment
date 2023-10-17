@@ -7,9 +7,6 @@ import com.wendy.backendassignment.models.Authority;
 import com.wendy.backendassignment.models.User;
 import com.wendy.backendassignment.repositories.UserRepository;
 import com.wendy.backendassignment.utils.RandomStringGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,9 +18,6 @@ import java.util.Set;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    @Lazy
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;

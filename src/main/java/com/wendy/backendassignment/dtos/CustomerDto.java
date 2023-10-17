@@ -1,6 +1,7 @@
 package com.wendy.backendassignment.dtos;
 
 import com.wendy.backendassignment.models.Booking;
+import com.wendy.backendassignment.models.File;
 import com.wendy.backendassignment.models.Invoice;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class CustomerDto {
     public List<Booking> bookingList;
     public String password;
     public List<Invoice> invoice;
+    public List<File> fileList;
 
     public String getPassword() {
         return password;
