@@ -30,7 +30,7 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     private List<File> fileList;
 
-    public boolean isPasswordValid(String password) {
+   /* public boolean isPasswordValid(String password) {
         return false;
     }
 
@@ -39,7 +39,7 @@ public class Customer {
     }
 
     public void setPassword(String password) {
-    }
+    }*/
 
     public List<Invoice> getInvoice() {
         return invoice;
