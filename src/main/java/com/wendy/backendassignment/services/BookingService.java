@@ -114,7 +114,8 @@ public class BookingService {
                         }
                     };
                     newCustomer.setEmail(customerDto.getEmail());
-                    newCustomer.setPassword(customerDto.getPassword());
+                    newCustomer.setFirstName(customerDto.getFirstName());
+                    newCustomer.setLastName(customerDto.getLastName());
 
                     customerRepository.save(newCustomer);
 
