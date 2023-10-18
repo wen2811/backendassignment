@@ -44,4 +44,7 @@ public class Customer {
     public List<Invoice> getInvoice() {
         return invoice;
     }
+
+    public void setUser(User newUser) {
+    }
 }

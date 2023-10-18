@@ -150,17 +150,25 @@ public class BookingService {
     }
 
     //create without registration
-    public BookingDto createBookingWithoutRegistration(Long customerId, List<Long> bookingTreatmentIds, CustomerDto customerDto) {
+    public BookingDto createBookingWithoutRegistration(String email, List<Long> bookingTreatmentIds, CustomerDto customerDto, UserDto userDto) {
         Booking booking = new Booking();
+        Customer excistingCustomer = customerRepository.findByEmail(email);
 
-        if (customerDto != null) {
-            Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
-            if (optionalCustomer.isEmpty()) {
-                throw new RecordNotFoundException("Customer doesn't exist.");
-            }
-            Customer existingCustomer = optionalCustomer.get();
-            booking.setCustomer(existingCustomer);
+        if (excistingCustomer == null) {
+            excistingCustomer = new Customer();
+            excistingCustomer.setEmail(email);
+            excistingCustomer.setFirstName(customerDto.firstName);
+            excistingCustomer.setLastName(customerDto.lastName);
+            excistingCustomer.setPhoneNumber(customerDto.phoneNumber);
+
+            User newUser = new User();
+            newUser.setUserRole(userDto.getUserRole());
+            excistingCustomer.setUser(newUser);
+
+            customerRepository.save(excistingCustomer);
         }
+        booking.setCustomer(excistingCustomer);
+
         List<BookingTreatment> bookingTreatments = new ArrayList<>();
         for (Long bookingTreatmentId : bookingTreatmentIds) {
             BookingTreatment bookingTreatment = bookingTreatmentRepository.findById(bookingTreatmentId)

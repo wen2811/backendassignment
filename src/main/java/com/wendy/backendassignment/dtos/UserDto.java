@@ -2,6 +2,7 @@ package com.wendy.backendassignment.dtos;
 
 import com.wendy.backendassignment.models.Authority;
 import com.wendy.backendassignment.models.Booking;
+import com.wendy.backendassignment.models.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,6 +25,9 @@ public class UserDto {
     public String email;
     public Set<Authority> authorities;
     public List<Booking> bookingList;
+
+    //@Enumerated
+    private UserRole userRole;
 
 
 
@@ -64,5 +68,5 @@ public class UserDto {
         return authorities;
     }
 
-
+    public UserRole getUserRole() {return userRole;}
 }
