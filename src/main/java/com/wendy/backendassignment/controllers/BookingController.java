@@ -2,11 +2,13 @@ package com.wendy.backendassignment.controllers;
 
 import com.wendy.backendassignment.dtos.BookingDto;
 import com.wendy.backendassignment.dtos.CustomerDto;
+import com.wendy.backendassignment.dtos.UserDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
 import com.wendy.backendassignment.models.Booking;
-import com.wendy.backendassignment.models.Customer;
+import com.wendy.backendassignment.models.User;
 import com.wendy.backendassignment.services.BookingService;
 import com.wendy.backendassignment.services.CustomerService;
+import com.wendy.backendassignment.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +25,12 @@ import java.util.List;
 public class BookingController {
     private final BookingService bookingService;
     private final CustomerService customerService;
+    private final UserService userService;
 
-    public BookingController(BookingService bookingService, CustomerService customerService) {
+    public BookingController(BookingService bookingService, CustomerService customerService, UserService userService) {
         this.bookingService = bookingService;
         this.customerService = customerService;
+        this.userService = userService;
     }
 
     //Read
@@ -82,20 +86,18 @@ public class BookingController {
     }
 
     @PostMapping("/registerbookings/")
-    public ResponseEntity<Object> createBooking(@RequestParam Long customerId, @RequestParam List<Long> bookingTreatmentIds, @RequestBody CustomerDto customerDto) {
-        Customer existingCustomer = customerService.getCustomerById(customerId);
+    public ResponseEntity<Object> createBooking(@RequestParam Long userId, @RequestParam List<Long> bookingTreatmentIds, @RequestBody UserDto userDto) {
+        User existingUser = userService.getCustomerById(userId);
 
-        if (existingCustomer == null) {
-
-            existingCustomer = customerService.registerCustomer(customerDto);
+        if (existingUser == null) {
+            existingUser = userService.registerUser(userDto);
         }
-        Booking booking = bookingService.createBooking(customerId, bookingTreatmentIds, customerDto);
+        Booking booking = bookingService.createBooking(userId, bookingTreatmentIds, userDto);
 
         if (booking == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
-
-        return new ResponseEntity<>(booking, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(booking);
     }
 
     //Read
@@ -107,9 +109,19 @@ public class BookingController {
 
     //create
     @PostMapping("/createWithoutRegistration")
-    public ResponseEntity<BookingDto> createBookingWithoutRegistration(@RequestParam Long customerId, @RequestParam List<Long> bookingTreatmentIds, @RequestBody(required = false) CustomerDto customerDto) {
-        BookingDto createdBooking = bookingService.createBookingWithoutRegistration(customerId, bookingTreatmentIds, customerDto);
+    public ResponseEntity<BookingDto> createBookingWithoutRegistration(@RequestParam(required = false)String email, @RequestParam List<Long> bookingTreatmentIds,@RequestBody(required = false) CustomerDto customerDto, UserDto userDto) {
+        BookingDto createdBooking = bookingService.createBookingWithoutRegistration(email, bookingTreatmentIds, customerDto, userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBooking);
+    }
+
+    @PostMapping("/createinvoices")
+    public ResponseEntity<String> createBookingWithInvoice() {
+      try {
+          bookingService.createBookingWithInvoice();
+          return new ResponseEntity<>("Booking with invoice is created successfully", HttpStatus.CREATED);
+      } catch (Exception e)  {
+          return new ResponseEntity<>("There's an error with creating the invoice", HttpStatus.INTERNAL_SERVER_ERROR);
+      }
     }
 }
 

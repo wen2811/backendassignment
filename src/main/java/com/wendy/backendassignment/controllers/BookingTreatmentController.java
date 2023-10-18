@@ -65,4 +65,7 @@ public class BookingTreatmentController {
         return ResponseEntity.noContent().build();
     }
 
+  /*  @PutMapping("/updatecustomer/{id}")
+    public ResponseEntity<Object> updateCustomerInformation(@PathVariable Long id, @)
+*/
 }

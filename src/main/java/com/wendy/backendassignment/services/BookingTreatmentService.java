@@ -69,6 +69,18 @@ public class BookingTreatmentService {
         bookingTreatmentRepository.deleteById(id);
     }
 
+   /* public BookingTreatment updateCustomerInformation(Long id, String customerName, String customerEmail) {
+        BookingTreatment bookingTreatment = bookingTreatmentRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("BookingTreatment not found with id: " + id));
+
+        bookingTreatment.setCustomerName(customerName);
+        bookingTreatment.setCustomerEmail(customerEmail);
+
+        return bookingTreatmentRepository.save(bookingTreatment);
+    }*/
+
+
+
 
     public BookingTreatmentDto transferBookingTreatmentToDto(BookingTreatment bookingTreatment) {
         BookingTreatmentDto bookingTreatmentDto = new BookingTreatmentDto();

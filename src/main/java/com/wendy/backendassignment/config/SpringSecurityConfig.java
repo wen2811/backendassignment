@@ -75,6 +75,10 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/bookings/").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/bookings/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.DELETE, "/bookings/{id}").hasAnyRole("ADMIN","EMPLOYEE")
+                .requestMatchers(HttpMethod.PUT, "/bookings/updateTreatments/{id}").hasAnyRole("hasRole('ADMIN') or hasRole('EMPLOYEE') or (principal.username == #booking.customer.username)")
+                .requestMatchers(HttpMethod.POST, "/registerbookings/").permitAll()
+                .requestMatchers(HttpMethod.GET, "/bookings/{customerId}/bookings").hasAnyRole("ADMIN","EMPLOYEE")
+                .requestMatchers(HttpMethod.POST, "/createWithoutRegistration\"").permitAll()
 
                 // BookingTreatments
                 .requestMatchers(HttpMethod.GET, "/bookingtreatments").hasAnyRole("ADMIN", "EMPLOYEE")
@@ -89,6 +93,11 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/treatments").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.PUT, "/treatments/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.DELETE, "/treatments/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers(HttpMethod.PUT, "/{id}/updatewithcalendar").permitAll()
+                .requestMatchers(HttpMethod.GET, "//treatments/{id}/with-calendar").permitAll()
+                .requestMatchers(HttpMethod.POST, "/treatments/{treatmentId}/bookingtreatments").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/treatments/updateBookingTreatment/{id}").permitAll()
+                .requestMatchers(HttpMethod.GET, "/treatments/bookingtreatment/{id}").permitAll()
 
                 //Calendars
                 .requestMatchers(HttpMethod.GET, "/calendars").permitAll()
@@ -103,6 +112,7 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/customers").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.PUT, "/customers/{id}").hasAnyRole("hasRole('ADMIN') or hasRole('EMPLOYEE') or hasPermission(#id, 'UserCredential')")
                 .requestMatchers(HttpMethod.DELETE, "/customers/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers(HttpMethod.GET, "/customers/{customerId}/invoices").hasAnyRole("ADMIN", "EMPLOYEE")
 
                 //Invoices
                 .requestMatchers(HttpMethod.GET, "/invoices").hasAnyRole("ADMIN", "EMPLOYEE")
@@ -110,6 +120,16 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/invoices").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.PUT, "/invoices/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.DELETE, "/invoices/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers(HttpMethod.GET, "/{bookingId}/invoices").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers(HttpMethod.GET, "/{customerId}/invoices").hasAnyRole("ADMIN", "EMPLOYEE")
+
+                //Files
+                .requestMatchers(HttpMethod.POST, "/upload").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers(HttpMethod.POST, "/store").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers(HttpMethod.GET, "/get/{fileId}").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers(HttpMethod.POST, "/assign/{fileId}/to-customer/{customerId}").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers(HttpMethod.GET, "/download/{fileId}").hasAnyRole("hasRole('ADMIN') or hasRole('EMPLOYEE') or hasPermission(#id, 'UserCredential')")
+                .requestMatchers(HttpMethod.DELETE, "/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
 
                 .requestMatchers("/authenticated").authenticated()
                 .requestMatchers("/authenticate").permitAll()

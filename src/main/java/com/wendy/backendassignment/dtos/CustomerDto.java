@@ -17,15 +17,15 @@ public class CustomerDto {
     public String phoneNumber;
     public String email;
     public List<Booking> bookingList;
-    public String password;
+    //public String password;
     public List<Invoice> invoice;
     public List<File> fileList;
 
-    public String getPassword() {
+    /*public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
-    }
+    }*/
 }

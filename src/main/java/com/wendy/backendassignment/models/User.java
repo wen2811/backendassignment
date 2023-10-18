@@ -42,6 +42,9 @@ public class User {
     @Column
     private String apikey;
 
+    @Enumerated
+    private UserRole userRole;
+
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<Booking> bookingList;
@@ -73,5 +76,6 @@ public class User {
     public void removeAuthority(Authority authority) {
         this.authorities.remove(authority);
     }
+
 
 }

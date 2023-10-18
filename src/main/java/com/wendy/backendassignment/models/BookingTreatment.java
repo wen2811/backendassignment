@@ -21,4 +21,9 @@ public class BookingTreatment {
 
     @ManyToOne
     private Treatment treatment;
+
+   /* public void updateCustomerInformation(String customerName, String customerEmail){
+        this.customerName = customerName;
+        this.customerEmail = customerEmail;
+    }*/
 }
