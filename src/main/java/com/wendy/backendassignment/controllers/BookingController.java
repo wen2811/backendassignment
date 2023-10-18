@@ -113,6 +113,16 @@ public class BookingController {
         BookingDto createdBooking = bookingService.createBookingWithoutRegistration(email, bookingTreatmentIds, customerDto, userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBooking);
     }
+
+    @PostMapping("/createinvoices")
+    public ResponseEntity<String> createBookingWithInvoice() {
+      try {
+          bookingService.createBookingWithInvoice();
+          return new ResponseEntity<>("Booking with invoice is created successfully", HttpStatus.CREATED);
+      } catch (Exception e)  {
+          return new ResponseEntity<>("There's an error with creating the invoice", HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
 }
 
 

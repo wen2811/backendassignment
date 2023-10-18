@@ -5,10 +5,7 @@ import com.wendy.backendassignment.dtos.CustomerDto;
 import com.wendy.backendassignment.dtos.UserDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
 import com.wendy.backendassignment.models.*;
-import com.wendy.backendassignment.repositories.BookingRepository;
-import com.wendy.backendassignment.repositories.BookingTreatmentRepository;
-import com.wendy.backendassignment.repositories.CustomerRepository;
-import com.wendy.backendassignment.repositories.UserRepository;
+import com.wendy.backendassignment.repositories.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,12 +18,14 @@ public class BookingService {
     private final BookingTreatmentRepository bookingTreatmentRepository;
     private final CustomerRepository customerRepository;
     private final UserRepository userRepository;
+    private final InvoiceRepository invoiceRepository;
 
-    public BookingService(BookingRepository bookingRepository, BookingTreatmentRepository bookingTreatmentRepository, CustomerRepository customerRepository, UserRepository userRepository) {
+    public BookingService(BookingRepository bookingRepository, BookingTreatmentRepository bookingTreatmentRepository, CustomerRepository customerRepository, UserRepository userRepository, InvoiceRepository invoiceRepository) {
         this.bookingRepository = bookingRepository;
         this.bookingTreatmentRepository = bookingTreatmentRepository;
         this.customerRepository = customerRepository;
         this.userRepository = userRepository;
+        this.invoiceRepository = invoiceRepository;
     }
 
     //Read
@@ -43,7 +42,7 @@ public class BookingService {
     public BookingDto getBooking(Long id) {
         Optional<Booking> bookingOptional = bookingRepository.findById(id);
 
-        if (bookingOptional.isEmpty()){
+        if (bookingOptional.isEmpty()) {
             throw new RecordNotFoundException("There is no booking found with id: " + id);
         }
         Booking booking = bookingOptional.get();
@@ -59,9 +58,9 @@ public class BookingService {
     }
 
     //Update
-    public BookingDto updateBooking(Long id, BookingDto bookingDto)throws RecordNotFoundException {
+    public BookingDto updateBooking(Long id, BookingDto bookingDto) throws RecordNotFoundException {
         Optional<Booking> bookingOptional = bookingRepository.findById(id);
-        if(bookingOptional.isEmpty()) {
+        if (bookingOptional.isEmpty()) {
             throw new RecordNotFoundException("Booking did not find with this id: " + id);
         }
         Booking updateBooking = transferDtoToBooking(bookingDto);
@@ -73,7 +72,7 @@ public class BookingService {
     //Delete
     public void deleteBooking(Long id) throws RecordNotFoundException {
         Optional<Booking> optionalBooking = bookingRepository.findById(id);
-        if(optionalBooking.isEmpty()){
+        if (optionalBooking.isEmpty()) {
             throw new RecordNotFoundException("There is no booking found with id " + id);
         }
         bookingRepository.deleteById(id);
@@ -104,10 +103,10 @@ public class BookingService {
 
     //create
     public Booking createBooking(Long userId, List<Long> bookingTreatmentIds, UserDto userDto) {
-        User existingUser = (User) userRepository.findById(userId).orElseGet(()->{
+        User existingUser = (User) userRepository.findById(userId).orElseGet(() -> {
 
-                User newUser = createUserFromDto(userDto);
-                return userRepository.save(newUser);
+            User newUser = createUserFromDto(userDto);
+            return userRepository.save(newUser);
         });
 
         Booking booking = new Booking();
@@ -125,10 +124,10 @@ public class BookingService {
     }
 
     private User createUserFromDto(UserDto userDto) {
-        if (!isEmailValid(userDto.getEmail())){
+        if (!isEmailValid(userDto.getEmail())) {
             return null;
         }
-        if (!isPasswordValid(userDto.getPassword())){
+        if (!isPasswordValid(userDto.getPassword())) {
             return null;
         }
 
@@ -156,15 +155,15 @@ public class BookingService {
 
 
     private boolean isEmailValid(String email) {
-        if(email == null || email.isEmpty()) {
+        if (email == null || email.isEmpty()) {
             return false;
-    }
-        if (!email.contains("@")){
+        }
+        if (!email.contains("@")) {
             return false;
         }
         return true;
 
-}
+    }
 
     //Read
     public List<BookingDto> getBookingsForCustomer(Long customerId) throws RecordNotFoundException {
@@ -214,6 +213,15 @@ public class BookingService {
 
         return transferBookingToDto(booking);
     }
+
+    public void createBookingWithInvoice() {
+        Booking booking = new Booking();
+        bookingRepository.save(booking);
+
+        Invoice invoice = new Invoice();
+        invoiceRepository.save(invoice);
+    }
+
 
 
     public BookingDto transferBookingToDto(Booking booking) {

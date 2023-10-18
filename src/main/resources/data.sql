@@ -12,10 +12,6 @@ VALUES (1, '2023-09-30', 90, 'NEW', 1, 1, 1);
 INSERT INTO bookings (id, date, total_amount, booking_status, treatment_id, customer_id, user_id)
 VALUES (2, '2023-10-15', 120, 'CONFIRMED', 2, 2, 2);*/
 
-INSERT INTO bookings (id, date, total_amount)
-VALUES (1, '2023-11-01', 90),
-       (2, '2023-10-30', 120);
-
 INSERT INTO treatments (id, name, type, description, duration, price)
 VALUES (1, 'Kobido Facial Massage', 'FACIAL_TREATMENT', 'Kobido is a traditional Japanese facial massage that utilizes gentle, rhythmic hand movements and acupressure points to improve blood circulation and rejuvenate the skin. It is known for its relaxing and invigorating effects, helping to reduce tension and promote a radiant complexion.', 60, 100),
        (2, 'Carboxy Treatment', 'FACIAL_TREATMENT', 'A carboxy facial treatment utilizes carbon dioxide gas to boost skin circulation, enhancing collagen production for improved skin texture and tone, offering rejuvenating and renewing benefits.', 45, 80),
@@ -36,10 +32,10 @@ VALUES ('Joelle', 'Pedro', 'user1@test.nl', '1234567890'),
        ('Mischa', 'Peters', 'user3@test.nl', '5678901234'),
        ('Jeanine', 'Jean', 'user4@test.nl', '6789012345');
 
-/*INSERT INTO invoices (amount, invoicedate, booking_id)
-VALUES (90, '2023-11-01', 1),
-       (120, '2023-10-30', 2);
-*/
+/*INSERT INTO invoices (amount, invoicedate, booking_id, customer_id)
+VALUES (90, '2023-11-01', 1, 2),
+       (120, '2023-10-30', 2, 3);*/
+
 
 
 
