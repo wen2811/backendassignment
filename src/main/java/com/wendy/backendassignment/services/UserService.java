@@ -5,6 +5,7 @@ import com.wendy.backendassignment.exception.RecordNotFoundException;
 import com.wendy.backendassignment.exception.UserNameNotFoundException;
 import com.wendy.backendassignment.models.Authority;
 import com.wendy.backendassignment.models.User;
+import com.wendy.backendassignment.models.UserRole;
 import com.wendy.backendassignment.repositories.UserRepository;
 import com.wendy.backendassignment.utils.RandomStringGenerator;
 import org.springframework.stereotype.Service;
@@ -116,6 +117,28 @@ public class UserService {
         return user;
     }
 
+    public User getCustomerById(Long userId) {return (User) userRepository.findById(userId).orElse(null);
+    }
+
+    public User registerUser(UserDto userDto) {
+        User excistingUser = userRepository.findByEmail(userDto.getEmail());
+
+        if (excistingUser != null) {
+            return excistingUser;
+        }
+        else{
+            User newUser = new User();
+            newUser.setUserRole(UserRole.CUSTOMER);
+            newUser.setUsername(userDto.getUsername());
+            newUser.setEmail(userDto.getEmail());
+            newUser.setPassword(userDto.getPassword());
+            newUser.setFirstname(userDto.getFirstname());
+            newUser.setLastname(userDto.getLastname());
+            newUser.setDob(userDto.getDob());
+
+            return userRepository.save(newUser);
+        }
+    }
 }
 
 

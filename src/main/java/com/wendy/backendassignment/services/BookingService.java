@@ -2,13 +2,13 @@ package com.wendy.backendassignment.services;
 
 import com.wendy.backendassignment.dtos.BookingDto;
 import com.wendy.backendassignment.dtos.CustomerDto;
+import com.wendy.backendassignment.dtos.UserDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
-import com.wendy.backendassignment.models.Booking;
-import com.wendy.backendassignment.models.BookingTreatment;
-import com.wendy.backendassignment.models.Customer;
+import com.wendy.backendassignment.models.*;
 import com.wendy.backendassignment.repositories.BookingRepository;
 import com.wendy.backendassignment.repositories.BookingTreatmentRepository;
 import com.wendy.backendassignment.repositories.CustomerRepository;
+import com.wendy.backendassignment.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,11 +20,13 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final BookingTreatmentRepository bookingTreatmentRepository;
     private final CustomerRepository customerRepository;
+    private final UserRepository userRepository;
 
-    public BookingService(BookingRepository bookingRepository, BookingTreatmentRepository bookingTreatmentRepository, CustomerRepository customerRepository) {
+    public BookingService(BookingRepository bookingRepository, BookingTreatmentRepository bookingTreatmentRepository, CustomerRepository customerRepository, UserRepository userRepository) {
         this.bookingRepository = bookingRepository;
         this.bookingTreatmentRepository = bookingTreatmentRepository;
         this.customerRepository = customerRepository;
+        this.userRepository = userRepository;
     }
 
     //Read
@@ -101,29 +103,23 @@ public class BookingService {
     }
 
     //create
-    public Booking createBooking(Long customerId, List<Long> bookingTreatmentIds, CustomerDto customerDto) {
-        Customer existingCustomer = customerRepository.findById(customerId)
-                .orElseGet(() -> {
-                    Customer newCustomer = new Customer() {
-                        @Override
-                        public boolean isPasswordValid(String password) {
-                            return false;
-                        }
-                        @Override
-                        public void changePassword(String newPassword) {
-                        }
-                    };
-                    newCustomer.setEmail(customerDto.getEmail());
-                    newCustomer.setFirstName(customerDto.getFirstName());
-                    newCustomer.setLastName(customerDto.getLastName());
+    public Booking createBooking(Long userId, List<Long> bookingTreatmentIds, UserDto userDto) {
+        User existingUser = (User) userRepository.findById(userId).orElseGet(()->{
 
-                    customerRepository.save(newCustomer);
+                User newUser = new User();
+                newUser.setUserRole(UserRole.CUSTOMER);
+                newUser.setUsername(userDto.getUsername());
+                newUser.setEmail(userDto.getEmail());
+                newUser.setPassword(userDto.getPassword());
+                newUser.setFirstname(userDto.getFirstname());
+                newUser.setLastname(userDto.getLastname());
+                newUser.setDob(userDto.getDob());
 
-                    return newCustomer;
-                });
+                return userRepository.save(newUser);
+        });
 
         Booking booking = new Booking();
-        booking.setCustomer(existingCustomer);
+        booking.setUser(existingUser);
 
         List<BookingTreatment> bookingTreatments = new ArrayList<>();
         for (Long bookingTreatmentId : bookingTreatmentIds) {

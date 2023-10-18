@@ -2,11 +2,13 @@ package com.wendy.backendassignment.controllers;
 
 import com.wendy.backendassignment.dtos.BookingDto;
 import com.wendy.backendassignment.dtos.CustomerDto;
+import com.wendy.backendassignment.dtos.UserDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
 import com.wendy.backendassignment.models.Booking;
-import com.wendy.backendassignment.models.Customer;
+import com.wendy.backendassignment.models.User;
 import com.wendy.backendassignment.services.BookingService;
 import com.wendy.backendassignment.services.CustomerService;
+import com.wendy.backendassignment.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +25,12 @@ import java.util.List;
 public class BookingController {
     private final BookingService bookingService;
     private final CustomerService customerService;
+    private final UserService userService;
 
-    public BookingController(BookingService bookingService, CustomerService customerService) {
+    public BookingController(BookingService bookingService, CustomerService customerService, UserService userService) {
         this.bookingService = bookingService;
         this.customerService = customerService;
+        this.userService = userService;
     }
 
     //Read
@@ -82,14 +86,14 @@ public class BookingController {
     }
 
     @PostMapping("/registerbookings/")
-    public ResponseEntity<Object> createBooking(@RequestParam Long customerId, @RequestParam List<Long> bookingTreatmentIds, @RequestBody CustomerDto customerDto) {
-        Customer existingCustomer = customerService.getCustomerById(customerId);
+    public ResponseEntity<Object> createBooking(@RequestParam Long userId, @RequestParam List<Long> bookingTreatmentIds, @RequestBody UserDto userDto) {
+        User existingUser = userService.getCustomerById(userId);
 
-        if (existingCustomer == null) {
+        if (existingUser == null) {
 
-            existingCustomer = customerService.registerCustomer(customerDto);
+            existingUser = userService.registerUser(userDto);
         }
-        Booking booking = bookingService.createBooking(customerId, bookingTreatmentIds, customerDto);
+        Booking booking = bookingService.createBooking(userId, bookingTreatmentIds, userDto);
 
         if (booking == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
