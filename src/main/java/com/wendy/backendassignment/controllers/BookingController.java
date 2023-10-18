@@ -90,16 +90,14 @@ public class BookingController {
         User existingUser = userService.getCustomerById(userId);
 
         if (existingUser == null) {
-
             existingUser = userService.registerUser(userDto);
         }
         Booking booking = bookingService.createBooking(userId, bookingTreatmentIds, userDto);
 
         if (booking == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
-
-        return new ResponseEntity<>(booking, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(booking);
     }
 
     //Read

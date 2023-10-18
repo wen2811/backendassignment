@@ -106,15 +106,7 @@ public class BookingService {
     public Booking createBooking(Long userId, List<Long> bookingTreatmentIds, UserDto userDto) {
         User existingUser = (User) userRepository.findById(userId).orElseGet(()->{
 
-                User newUser = new User();
-                newUser.setUserRole(UserRole.CUSTOMER);
-                newUser.setUsername(userDto.getUsername());
-                newUser.setEmail(userDto.getEmail());
-                newUser.setPassword(userDto.getPassword());
-                newUser.setFirstname(userDto.getFirstname());
-                newUser.setLastname(userDto.getLastname());
-                newUser.setDob(userDto.getDob());
-
+                User newUser = createUserFromDto(userDto);
                 return userRepository.save(newUser);
         });
 
@@ -131,6 +123,48 @@ public class BookingService {
         bookingRepository.save(booking);
         return booking;
     }
+
+    private User createUserFromDto(UserDto userDto) {
+        if (!isEmailValid(userDto.getEmail())){
+            return null;
+        }
+        if (!isPasswordValid(userDto.getPassword())){
+            return null;
+        }
+
+        User newUser = new User();
+        newUser.setUserRole(UserRole.CUSTOMER);
+        newUser.setUsername(userDto.getUsername());
+        newUser.setEmail(userDto.getEmail());
+        newUser.setFirstname(userDto.getFirstname());
+        newUser.setLastname(userDto.getLastname());
+        newUser.setDob(userDto.getDob());
+
+
+        return newUser;
+    }
+
+    private boolean isPasswordValid(String password) {
+        if (password == null || password.isEmpty()) {
+            return false;
+        }
+        if (password.length() < 8) {
+            return false;
+        }
+        return true;
+    }
+
+
+    private boolean isEmailValid(String email) {
+        if(email == null || email.isEmpty()) {
+            return false;
+    }
+        if (!email.contains("@")){
+            return false;
+        }
+        return true;
+
+}
 
     //Read
     public List<BookingDto> getBookingsForCustomer(Long customerId) throws RecordNotFoundException {
