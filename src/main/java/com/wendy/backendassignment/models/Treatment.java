@@ -35,12 +35,21 @@ public class Treatment {
     @OneToMany
     private List<BookingTreatment> bookingTreatments;
 
-    public Treatment(String name, TreatmentType type, String description, double duration, double price) {
+    public Treatment(long l, String name, TreatmentType type, String description, double duration, double price, java.util.Calendar calendar) {
         this.name = name;
         this.type = type;
         this.description = description;
         this.duration = duration;
         this.price = price;
+    }
+    public Treatment(Long id, String name, TreatmentType type, String description, double duration, double price, Calendar calendar) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.description = description;
+        this.duration = duration;
+        this.price = price;
+        this.calendar = calendar;
     }
 
 }
