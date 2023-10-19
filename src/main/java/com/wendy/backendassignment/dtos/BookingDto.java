@@ -14,9 +14,12 @@ public class BookingDto {
     public LocalDate date;
     public double totalAmount;
     public BookingStatus bookingStatus;
+
     public Invoice invoice;
     public List<BookingTreatment> bookingTreatments;
+
     public Customer customer;
+
     public User user;
 
 }
