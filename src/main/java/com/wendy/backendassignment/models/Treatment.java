@@ -2,13 +2,12 @@ package com.wendy.backendassignment.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
+@Data
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,13 +28,13 @@ public class Treatment {
     private double duration;
     private double price;
 
-    @OneToOne
+    @OneToOne (optional = true)
     private Calendar calendar;
 
     @OneToMany
     private List<BookingTreatment> bookingTreatments;
 
-    public Treatment(long l, String name, TreatmentType type, String description, double duration, double price, java.util.Calendar calendar) {
+    public Treatment(long id, String name, TreatmentType type, String description, double duration, double price, java.util.Calendar calendar) {
         this.name = name;
         this.type = type;
         this.description = description;

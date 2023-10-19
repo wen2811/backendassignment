@@ -4,11 +4,14 @@ import com.wendy.backendassignment.models.BookingTreatment;
 import com.wendy.backendassignment.models.Calendar;
 import com.wendy.backendassignment.models.TreatmentType;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class TreatmentDto {
