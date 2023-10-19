@@ -3,13 +3,17 @@ package com.wendy.backendassignment.dtos;
 import com.wendy.backendassignment.models.Authority;
 import com.wendy.backendassignment.models.Booking;
 import com.wendy.backendassignment.models.UserRole;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class UserDto {

@@ -103,7 +103,7 @@ public class BookingService {
 
     //create
     public Booking createBooking(Long userId, List<Long> bookingTreatmentIds, UserDto userDto) {
-        User existingUser = (User) userRepository.findById(userId).orElseGet(() -> {
+        User existingUser = userRepository.findById(userId).orElseGet(() -> {
 
             User newUser = createUserFromDto(userDto);
             return userRepository.save(newUser);
