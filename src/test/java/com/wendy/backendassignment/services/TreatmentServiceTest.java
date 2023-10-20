@@ -25,6 +25,7 @@ import org.mockito.quality.Strictness;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -194,7 +195,39 @@ class TreatmentServiceTest {
         //assert
         assertEquals(treatmentList.size(), treatmentDtos.size());
 
+        for (int i = 0; i < treatmentList.size(); i++) {
+            Treatment treatment = treatmentList.get(i);
+            TreatmentDto treatmentDto = treatmentDtos.get(i);
+
+            assertEquals(treatment.getId(), treatmentDto.getId());
+            assertEquals(treatment.getName(), treatmentDto.getName());
+            assertEquals(treatment.getDescription(), treatmentDto.getDescription());
+        }
     }
+
+    @Test
+    void getAllTreatments_EmptyRepository() {
+        // Arrange
+        when(treatmentRepository.findAll()).thenReturn(Collections.emptyList());
+
+        // Act
+        List<TreatmentDto> treatmentDtos = treatmentServiceImpl.getAllTreatments();
+
+        // Assert
+        assertTrue(treatmentDtos.isEmpty());
+    }
+
+    @Test
+    void getAllTreatments_ExceptionCase() {
+
+        when(treatmentRepository.findAll()).thenThrow(new RuntimeException("Database error"));
+
+        assertThrows(RuntimeException.class, () -> treatmentServiceImpl.getAllTreatments());
+
+
+    }
+
+
 
     @Test
     void getTreatmentsByType() {
@@ -245,7 +278,8 @@ class TreatmentServiceTest {
     void updateTreatment() {
         //arrange
         long treatmentId = 1L;
-        TreatmentDto treatmentDto = TreatmentDto.builder().description("korting").price(50).build();
+        TreatmentDto treatmentDto = TreatmentDto.builder().description("korting")
+                .price(50).duration(110).name("aanbieding").type(TreatmentType.FACIAL_TREATMENT).build();
 
         Treatment existingTreatment = new Treatment();
         when(treatmentRepository.findById(treatmentId)).thenReturn(Optional.of(existingTreatment));
@@ -260,6 +294,9 @@ class TreatmentServiceTest {
         Treatment updatedTreatment = treatmentArgumentCaptor1.getValue();
         assertEquals("korting", updatedTreatment.getDescription());
         assertEquals(50, updatedTreatment.getPrice());
+        assertEquals(110, updatedTreatment.getDuration());
+        assertEquals("aanbieding", updatedTreatment.getName());
+        assertEquals(TreatmentType.FACIAL_TREATMENT, updatedTreatment.getType());
 
     }
 
@@ -279,11 +316,23 @@ class TreatmentServiceTest {
     }
 
     @Test
+    void deleteTreatment_RecordNotFound() {
+        //arrange
+        long treatmentId = 1L;
+
+        //act
+        when(treatmentRepository.findById(treatmentId)).thenReturn(Optional.empty());
+
+        //assert
+        assertThrows(RecordNotFoundException.class, () -> treatmentServiceImpl.deleteTreatment(treatmentId));
+    }
+
+    @Test
     void updateTreatmentWithCalendar() {
         //arrange
         long treatmentId = 1L;
         TreatmentDto treatmentDto = TreatmentDto.builder().name("updated name")
-                .description("korting").price(50).build();
+                .description("korting").price(50).duration(75).type(TreatmentType.BODY_TREATMENT).build();
 
         CalendarDto calendarDto = CalendarDto.builder().id(4L).date(LocalDate.of(2023, 12, 4))
                 .startTime(LocalTime.of(10, 0)).endTime(LocalTime.of(10, 50)).build();
@@ -308,11 +357,31 @@ class TreatmentServiceTest {
         assertEquals("updated name", updatedTreatment.getName());
         assertEquals("korting", updatedTreatment.getDescription());
         assertEquals(50.0, updatedTreatment.getPrice());
+        assertEquals(75, updatedTreatment.getDuration());
+        assertEquals(TreatmentType.BODY_TREATMENT, updatedTreatment.getType());
 
         assertEquals(calendarDto.getDate(), updatedCalendar.getDate());
         assertEquals(calendarDto.getStartTime(), updatedCalendar.getStartTime());
         assertEquals(calendarDto.getEndTime(), updatedCalendar.getEndTime());
     }
+
+    @Test
+    void updateTreatmentWithCalendar_RecordNotFound() {
+        //arrange
+        long treatmentId = 2L;
+        TreatmentDto treatmentDto = TreatmentDto.builder().name("updated name")
+                .description("korting").price(50).duration(75).type(TreatmentType.BODY_TREATMENT).build();
+
+        CalendarDto calendarDto = CalendarDto.builder().id(4L).date(LocalDate.of(2023, 12, 4))
+                .startTime(LocalTime.of(10, 0)).endTime(LocalTime.of(10, 50)).build();
+
+        //act
+        when(treatmentRepository.findById(treatmentId)).thenReturn(Optional.empty());
+
+        //assert
+        assertThrows(RecordNotFoundException.class, () -> treatmentServiceImpl.updateTreatmentWithCalendar(treatmentId, treatmentDto, calendarDto));
+    }
+
 
     @Test
     void getTreatmentWithCalendar() {

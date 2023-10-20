@@ -2,6 +2,7 @@ package com.wendy.backendassignment.services;
 
 import com.wendy.backendassignment.dtos.UserDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
+import com.wendy.backendassignment.exception.UserNameNotFoundException;
 import com.wendy.backendassignment.models.Authority;
 import com.wendy.backendassignment.models.User;
 import com.wendy.backendassignment.models.UserRole;
@@ -19,7 +20,6 @@ import org.mockito.quality.Strictness;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -106,6 +106,23 @@ class UserServiceTest {
     }
 
     @Test
+    void getUser_UserNameNotFound(){
+        //arrange
+        String username = "gebruikersnaam_die_niet_bestaat";
+
+        //act
+        when(userRepository.findById(username)).thenReturn(Optional.empty());
+
+        //assert
+        assertThrows(UserNameNotFoundException.class, () -> userServiceImpl.getUser(username));
+    }
+
+
+
+
+
+
+    @Test
     void createUser() {
         //Arrange
         UserDto userDto = UserDto.builder().username("jimmy").enabled(true).build();
@@ -133,6 +150,19 @@ class UserServiceTest {
 
         //assert
         assertTrue(userExists);
+    }
+
+    @Test
+    void userExists_UserDoesNotExist() {
+        //arrange
+        String username = "nonExistentUser";
+        when(userRepository.existsById(username)).thenReturn(false);
+
+        //act
+        boolean userExists = userServiceImpl.userExists(username);
+
+        //assert
+        assertFalse(userExists);
     }
 
     @Test
@@ -323,12 +353,35 @@ class UserServiceTest {
         verify(userRepository, never()).save(any(User.class));
     }
 
+    @Test
+    void getCustomerById_UserFound() {
+        //arrange
+        Long userId = 1L;
+        User expectedUser = new User();
 
+        when(userRepository.findById(userId)).thenReturn(Optional.of(expectedUser));
 
+        //act
+        User resultUser = userServiceImpl.getCustomerById(userId);
 
+        //assert
+        assertNotNull(resultUser);
+        assertEquals(expectedUser, resultUser);
+    }
 
+    @Test
+    void getCustomerById_UserNotFound() {
+        //arrange
+        Long userId = 2L;
 
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
+        //act
+        User resultUser = userServiceImpl.getCustomerById(userId);
+
+        //assert
+        assertNull(resultUser);
+    }
 
     @Test
     void registerUser() {
@@ -361,6 +414,48 @@ class UserServiceTest {
         //assert
         assertEquals(newUser, registeredUser);
     }
+
+    @Test
+    void registerUser_existingUser() {
+        // Arrange
+        UserDto userDto = new UserDto();
+        userDto.setUsername("updatedUser");
+        userDto.setEmail("existing@example.com");
+        userDto.setPassword("newPassword");
+        userDto.setFirstname("Updated");
+        userDto.setLastname("User");
+        userDto.setDob(LocalDate.of(1980, 5, 10));
+
+        User existingUser = User.builder()
+                .id(4L)
+                .username("existingUser")
+                .email("existing@example.com")
+                .password("oldPassword")
+                .firstname("Old")
+                .lastname("User")
+                .dob(LocalDate.of(1990, 3, 15))
+                .build();
+
+        when(userRepository.findByEmail("existing@example.com")).thenReturn(null);
+        when(userRepository.findByEmail("existing@example.com")).thenReturn(existingUser);
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // Act
+        User updatedUser = userServiceImpl.registerUser(userDto);
+
+        // Assert
+        verify(userRepository, times(1)).save(any(User.class));
+        assertEquals(userDto.getPassword(), existingUser.getPassword());
+
+        verify(userRepository).save(existingUser);
+
+        }
+
+
+
+
+
+
 }
 
 
