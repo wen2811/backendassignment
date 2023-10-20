@@ -3,7 +3,9 @@ package com.wendy.backendassignment.services;
 import com.wendy.backendassignment.dtos.BookingTreatmentDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
 import com.wendy.backendassignment.models.BookingTreatment;
+import com.wendy.backendassignment.models.Treatment;
 import com.wendy.backendassignment.repositories.BookingTreatmentRepository;
+import com.wendy.backendassignment.repositories.TreatmentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,9 +15,11 @@ import java.util.Optional;
 @Service
 public class BookingTreatmentService {
     private final BookingTreatmentRepository bookingTreatmentRepository;
+    private final TreatmentRepository treatmentRepository;
 
-    public BookingTreatmentService(BookingTreatmentRepository bookingTreatmentRepository) {
+    public BookingTreatmentService(BookingTreatmentRepository bookingTreatmentRepository, TreatmentRepository treatmentRepository) {
         this.bookingTreatmentRepository = bookingTreatmentRepository;
+        this.treatmentRepository = treatmentRepository;
     }
 
     //Read
@@ -53,8 +57,10 @@ public class BookingTreatmentService {
         if(bookingTreatmentOptional.isEmpty()){
             throw new RecordNotFoundException("Bookingtreatment is not found with this id " + id);
         }
-        BookingTreatment updateBookingTreatment = transferDtoToBookingTreatment((bookingTreatmentDto));
-        updateBookingTreatment.setId(id);
+        BookingTreatment updateBookingTreatment = bookingTreatmentOptional.get();
+        updateBookingTreatment.setQuantity(bookingTreatmentDto.getQuantity());
+        updateBookingTreatment.setTreatment(bookingTreatmentDto.getTreatment());
+        updateBookingTreatment.setBooking(bookingTreatmentDto.getBooking());
         bookingTreatmentRepository.save(updateBookingTreatment);
 
         return transferBookingTreatmentToDto(updateBookingTreatment);
@@ -69,16 +75,28 @@ public class BookingTreatmentService {
         bookingTreatmentRepository.deleteById(id);
     }
 
-   /* public BookingTreatment updateCustomerInformation(Long id, String customerName, String customerEmail) {
-        BookingTreatment bookingTreatment = bookingTreatmentRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("BookingTreatment not found with id: " + id));
 
-        bookingTreatment.setCustomerName(customerName);
-        bookingTreatment.setCustomerEmail(customerEmail);
+    //relationships methods
+    public BookingTreatmentDto addTreatmentToBookingTreatment(Long treatmentId, BookingTreatmentDto bookingTreatmentDto) throws RecordNotFoundException {
+        Optional<BookingTreatment> bookingTreatmentOptional = bookingTreatmentRepository.findById(bookingTreatmentDto.getId());
 
-        return bookingTreatmentRepository.save(bookingTreatment);
-    }*/
+        if (bookingTreatmentOptional.isEmpty()) {
+            throw new RecordNotFoundException("BookingTreatment not found with id: " + bookingTreatmentDto.getId());
+        }
 
+        BookingTreatment bookingTreatment = bookingTreatmentOptional.get();
+
+        Optional<Treatment> treatmentOptional = treatmentRepository.findById(treatmentId);
+        if (treatmentOptional.isEmpty()) {
+            throw new RecordNotFoundException("There's no treatment found with this ID: " + treatmentId);
+        }
+
+        Treatment treatment = treatmentOptional.get();
+        bookingTreatment.setTreatment(treatment);
+        bookingTreatmentRepository.save(bookingTreatment);
+
+        return transferBookingTreatmentToDto(bookingTreatment);
+    }
 
 
 

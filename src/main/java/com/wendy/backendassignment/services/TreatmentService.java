@@ -153,51 +153,6 @@ public class TreatmentService {
     }
 
 
-    public BookingTreatmentDto addBookingTreatmentToTreatment(Long treatmentId, BookingTreatmentDto bookingTreatmentDto) {
-        Optional<Treatment> treatmentOptional = treatmentRepository.findById(treatmentId);
-
-        if (treatmentOptional.isEmpty()) {
-            throw new RecordNotFoundException("There's no treatment found with this ID: " + treatmentId);
-        }
-
-        Treatment treatment = treatmentOptional.get();
-        BookingTreatment bookingTreatment = transferDtoToBookingTreatment(bookingTreatmentDto);
-        bookingTreatment.setTreatment(treatment);
-        bookingTreatmentRepository.save(bookingTreatment);
-
-        return transferBookingTreatmentToDto(bookingTreatment);
-    }
-
-    public BookingTreatmentDto updateBookingTreatment(Long id, BookingTreatmentDto bookingTreatmentDto) throws RecordNotFoundException {
-        Optional<BookingTreatment> bookingTreatmentOptional = bookingTreatmentRepository.findById(id);
-
-        if (bookingTreatmentOptional.isEmpty()) {
-            throw new RecordNotFoundException("BookingTreatment not found with id: " + id);
-        }
-        BookingTreatment bookingTreatment = bookingTreatmentOptional.get();
-
-        bookingTreatment.setQuantity(bookingTreatmentDto.getQuantity());
-        bookingTreatment.setTreatment(bookingTreatmentDto.getTreatment());
-        bookingTreatment.setBooking(bookingTreatmentDto.getBooking());
-
-        bookingTreatment = bookingTreatmentRepository.save(bookingTreatment);
-
-        return transferBookingTreatmentToDto(bookingTreatment);
-    }
-
-    public BookingTreatmentDto getBookingTreatmentById(Long id) throws RecordNotFoundException {
-        Optional<BookingTreatment> bookingTreatmentOptional = bookingTreatmentRepository.findById(id);
-
-        if (bookingTreatmentOptional.isEmpty()) {
-            throw new RecordNotFoundException("BookingTreatment not found with ID: " + id);
-        }
-
-        BookingTreatment bookingTreatment = bookingTreatmentOptional.get();
-        return transferBookingTreatmentToDto(bookingTreatment);
-    }
-
-
-
     public TreatmentDto transferTreatmentToDto (Treatment treatment){
         TreatmentDto treatmentDto = new TreatmentDto();
 

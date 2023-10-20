@@ -4,15 +4,20 @@ import com.wendy.backendassignment.dtos.BookingTreatmentDto;
 import com.wendy.backendassignment.dtos.CalendarDto;
 import com.wendy.backendassignment.dtos.TreatmentDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
-import com.wendy.backendassignment.models.*;
-import com.wendy.backendassignment.repositories.BookingTreatmentRepository;
+import com.wendy.backendassignment.models.BookingTreatment;
+import com.wendy.backendassignment.models.Calendar;
+import com.wendy.backendassignment.models.Treatment;
+import com.wendy.backendassignment.models.TreatmentType;
 import com.wendy.backendassignment.repositories.CalendarRepository;
 import com.wendy.backendassignment.repositories.TreatmentRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -34,8 +39,6 @@ class TreatmentServiceTest {
     @Mock
     TreatmentRepository treatmentRepository;
     @Mock
-    BookingTreatmentRepository bookingTreatmentRepository;
-    @Mock
     CalendarRepository calendarRepository;
     @InjectMocks
     TreatmentService treatmentServiceImpl;
@@ -44,8 +47,6 @@ class TreatmentServiceTest {
     ArgumentCaptor<Treatment> treatmentArgumentCaptor;
     @Captor
     ArgumentCaptor<Calendar> calendarCaptor;
-    @Captor
-    ArgumentCaptor<BookingTreatment> bookingTreatmentArgumentCaptor;
 
 
     Treatment treatment1;
@@ -281,15 +282,12 @@ class TreatmentServiceTest {
     void updateTreatmentWithCalendar() {
         //arrange
         long treatmentId = 1L;
-        TreatmentDto treatmentDto = new TreatmentDto();
-        treatmentDto.setName("updated name");
-        treatmentDto.setDescription("korting");
-        treatmentDto.setPrice(50);
+        TreatmentDto treatmentDto = TreatmentDto.builder().name("updated name")
+                .description("korting").price(50).build();
 
-        CalendarDto calendarDto = new CalendarDto();
-        calendarDto.setDate(LocalDate.of(2023, 12, 4));
-        calendarDto.setStartTime(LocalTime.of(10, 0));
-        calendarDto.setEndTime(LocalTime.of(10, 50));
+        CalendarDto calendarDto = CalendarDto.builder().id(4L).date(LocalDate.of(2023, 12, 4))
+                .startTime(LocalTime.of(10, 0)).endTime(LocalTime.of(10, 50)).build();
+
 
         Treatment existingTreatment = new Treatment();
         when(treatmentRepository.findById(treatmentId)).thenReturn(Optional.of(existingTreatment));
@@ -362,24 +360,19 @@ class TreatmentServiceTest {
         assertThrows(RecordNotFoundException.class, () -> treatmentServiceImpl.getTreatmentWithCalendar(treatmentId));
     }
 
-    @Test
+   /* @Test
     void addBookingTreatmentToTreatment() {
         //arrange
         long treatmentId = 2L;
         Treatment existingTreatment = new Treatment();
         existingTreatment.setId(treatmentId);
 
-        BookingTreatmentDto bookingTreatmentDto = new BookingTreatmentDto();
-        bookingTreatmentDto.setQuantity(3);
-        bookingTreatmentDto.setTreatment(treatment2);
-        bookingTreatmentDto.setCustomerName("Nate Cole");
-        bookingTreatmentDto.setCustomerEmail("Nate@example.com");
+        BookingTreatmentDto bookingTreatmentDto  = BookingTreatmentDto.builder().quantity(3)
+                .treatment(treatment2).customerName("Nate Cole").customerEmail("Nate@example.com").build();
 
-        BookingTreatment savedBookingTreatment = new BookingTreatment();
-        savedBookingTreatment.setQuantity(1);
-        savedBookingTreatment.setTreatment(treatment1);
-        savedBookingTreatment.setCustomerName("maria cruz");
-        savedBookingTreatment.setCustomerEmail("maria@example.com");
+        BookingTreatment savedBookingTreatment = BookingTreatment.builder().quantity(3)
+                .treatment(treatment2).customerName("Nate Cole").customerEmail("Nate@example.com").build();
+
 
         when(treatmentRepository.findById(treatmentId)).thenReturn(Optional.of(existingTreatment));
         when(bookingTreatmentRepository.save(any(BookingTreatment.class))).thenReturn(savedBookingTreatment);
@@ -394,13 +387,45 @@ class TreatmentServiceTest {
         verify(treatmentRepository).findById(treatmentId);
         verify(bookingTreatmentRepository).save(any(BookingTreatment.class));
 
-    }
+    }*/
+   /* @Test
+    void addBookingTreatmentToTreatment_ThrowsRecordNotFoundException() {
+        //arrange
+        long treatmentId = 1L;
+        BookingTreatmentDto bookingTreatmentDto = new BookingTreatmentDto();
 
-    @Test
+        //act
+        when(treatmentRepository.findById(treatmentId)).thenReturn(Optional.empty());
+        //arrange
+        assertThrows(RecordNotFoundException.class, () -> {
+            treatmentServiceImpl.addBookingTreatmentToTreatment(treatmentId, bookingTreatmentDto);
+        });
+    }*/
+
+
+    /*@Test
     void updateBookingTreatment() {
-    }
+        long bookingTreatmentId = 1L;
+        BookingTreatmentDto bookingTreatmentDto  = BookingTreatmentDto.builder().quantity(3)
+                .treatment(treatment2).customerName("Nate Cole").customerEmail("Nate@example.com").build();
 
-    @Test
-    void getBookingTreatmentById() {
-    }
+
+
+        BookingTreatment existingBookingTreatment = new BookingTreatment();
+        when(treatmentRepository.findById(treatmentId)).thenReturn(Optional.of(existingTreatment));
+
+        //act
+        treatmentServiceImpl.updateTreatment(treatmentId,treatmentDto);
+
+        //assert
+        ArgumentCaptor<Treatment> treatmentArgumentCaptor1 = ArgumentCaptor.forClass(Treatment.class);
+        verify(treatmentRepository).save(treatmentArgumentCaptor1.capture());
+
+        Treatment updatedTreatment = treatmentArgumentCaptor1.getValue();
+        assertEquals("korting", updatedTreatment.getDescription());
+        assertEquals(50, updatedTreatment.getPrice());
+
+    }*/
+
+
 }
