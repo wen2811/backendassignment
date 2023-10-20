@@ -161,8 +161,8 @@ public class TreatmentService {
         }
 
         Treatment treatment = treatmentOptional.get();
-        BookingTreatment bookingTreatment = transferDtoToBookingTreatment(bookingTreatmentDto); // Gebruik de juiste methode om een BookingTreatment te maken
-        bookingTreatment.setTreatment(treatment); // Koppel de behandeling aan de boeking
+        BookingTreatment bookingTreatment = transferDtoToBookingTreatment(bookingTreatmentDto);
+        bookingTreatment.setTreatment(treatment);
         bookingTreatmentRepository.save(bookingTreatment);
 
         return transferBookingTreatmentToDto(bookingTreatment);

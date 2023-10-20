@@ -1,10 +1,10 @@
 package com.wendy.backendassignment.services;
 
+import com.wendy.backendassignment.dtos.BookingTreatmentDto;
+import com.wendy.backendassignment.dtos.CalendarDto;
 import com.wendy.backendassignment.dtos.TreatmentDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
-import com.wendy.backendassignment.models.BookingTreatment;
-import com.wendy.backendassignment.models.Treatment;
-import com.wendy.backendassignment.models.TreatmentType;
+import com.wendy.backendassignment.models.*;
 import com.wendy.backendassignment.repositories.BookingTreatmentRepository;
 import com.wendy.backendassignment.repositories.CalendarRepository;
 import com.wendy.backendassignment.repositories.TreatmentRepository;
@@ -12,22 +12,21 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -44,6 +43,11 @@ class TreatmentServiceTest {
 
     @Captor
     ArgumentCaptor<Treatment> treatmentArgumentCaptor;
+    @Captor
+    ArgumentCaptor<Calendar> calendarCaptor;
+    @Captor
+    ArgumentCaptor<BookingTreatment> bookingTreatmentArgumentCaptor;
+
 
     Treatment treatment1;
     Treatment treatment2;
@@ -55,7 +59,7 @@ class TreatmentServiceTest {
 
     @BeforeEach
     void setUp() {
-        calendar = Calendar.getInstance();
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
 
         treatment1 = new Treatment(1L, "LED Light Therapy", TreatmentType.FACIAL_TREATMENT, "LED light therapy rejuvenates skin", 30.0, 45.0, calendar);
         treatment2 = new Treatment(2L, "Carboxy Treatment", TreatmentType.BODY_TREATMENT, "A carboxy body treatment", 45.0, 100.0, calendar);
@@ -95,25 +99,25 @@ class TreatmentServiceTest {
         treatmentList.add(treatment2);
         treatmentList.add(treatment3);
 
-        BookingTreatment bookingTreatment1 = new BookingTreatment();
-        bookingTreatment1.setId(1L);
-        bookingTreatment1.setQuantity(2);
-        bookingTreatment1.setTreatment(treatment1);
-        bookingTreatment1.setCustomerName("Iris Maria");
-        bookingTreatment1.setCustomerEmail("Iris@example.com");
+        BookingTreatmentDto bookingTreatmentDto1 = new BookingTreatmentDto();
+        bookingTreatmentDto1.setId(1L);
+        bookingTreatmentDto1.setQuantity(2);
+        bookingTreatmentDto1.setTreatment(treatment1);
+        bookingTreatmentDto1.setCustomerName("Iris Maria");
+        bookingTreatmentDto1.setCustomerEmail("Iris@example.com");
 
-        BookingTreatment bookingTreatment2 = new BookingTreatment();
-        bookingTreatment2.setId(2L);
-        bookingTreatment2.setQuantity(3);
-        bookingTreatment2.setTreatment(treatment2);
-        bookingTreatment2.setCustomerName("Nate Cole");
-        bookingTreatment2.setCustomerEmail("Nate@example.com");
+        BookingTreatmentDto bookingTreatmentDto2 = new BookingTreatmentDto();
+        bookingTreatmentDto2.setId(2L);
+        bookingTreatmentDto2.setQuantity(3);
+        bookingTreatmentDto2.setTreatment(treatment2);
+        bookingTreatmentDto2.setCustomerName("Nate Cole");
+        bookingTreatmentDto2.setCustomerEmail("Nate@example.com");
 
-        List<BookingTreatment> bookingTreatments = new ArrayList<>();
-        bookingTreatments.add(bookingTreatment1);
-        bookingTreatments.add(bookingTreatment2);
+        List<BookingTreatmentDto> bookingTreatments = new ArrayList<>();
+        bookingTreatments.add(bookingTreatmentDto2);
+        bookingTreatments.add(bookingTreatmentDto2);
 
-        treatment1.setBookingTreatments(bookingTreatments);
+        //treatment1.setBookingTreatments(bookingTreatmentArgumentCaptor);
     }
 
     @AfterEach
@@ -268,15 +272,129 @@ class TreatmentServiceTest {
 
     @Test
     void updateTreatmentWithCalendar() {
+        //arrange
+        long treatmentId = 1L;
+        TreatmentDto treatmentDto = new TreatmentDto();
+        treatmentDto.setName("updated name");
+        treatmentDto.setDescription("korting");
+        treatmentDto.setPrice(50);
+
+        CalendarDto calendarDto = new CalendarDto();
+        calendarDto.setDate(LocalDate.of(2023, 12, 4));
+        calendarDto.setStartTime(LocalTime.of(10, 0));
+        calendarDto.setEndTime(LocalTime.of(10, 50));
+
+        Treatment existingTreatment = new Treatment();
+        when(treatmentRepository.findById(treatmentId)).thenReturn(Optional.of(existingTreatment));
+
+        Calendar existingCalendar = new Calendar();
+        existingTreatment.setCalendar(existingCalendar);
+
+        //act
+        treatmentServiceImpl.updateTreatmentWithCalendar(treatmentId,treatmentDto, calendarDto);
+
+        //assert
+        verify(treatmentRepository).save(treatmentArgumentCaptor.capture());
+        verify(calendarRepository).save(calendarCaptor.capture());
+
+        Treatment updatedTreatment = treatmentArgumentCaptor.getValue();
+        Calendar updatedCalendar = calendarCaptor.getValue();
+
+        assertEquals("updated name", updatedTreatment.getName());
+        assertEquals("korting", updatedTreatment.getDescription());
+        assertEquals(50.0, updatedTreatment.getPrice());
+
+        assertEquals(calendarDto.getDate(), updatedCalendar.getDate());
+        assertEquals(calendarDto.getStartTime(), updatedCalendar.getStartTime());
+        assertEquals(calendarDto.getEndTime(), updatedCalendar.getEndTime());
     }
 
     @Test
     void getTreatmentWithCalendar() {
+        //arrange
+        long treatmentId = 3L;
+        Treatment treatment = new Treatment();
+        Calendar calendar = new Calendar();
+        treatment.setCalendar(calendar);
+        when(treatmentRepository.findById(treatmentId)).thenReturn(Optional.of(treatment));
+
+        //act
+        TreatmentDto treatmentDto = treatmentServiceImpl.getTreatmentWithCalendar(treatmentId);
+
+        //assert
+        assertNotNull(treatmentDto);
+        assertEquals(treatment.getName(), treatmentDto.getName());
+        assertEquals(treatment.getDescription(), treatmentDto.getDescription());
+        assertEquals(treatment.getPrice(), treatmentDto.getPrice());
+        assertEquals(treatment.getDuration(), treatmentDto.getDuration());
+    }
+
+    @Test
+    void getTreatmentWithCalendar_TreatmentNotFound() {
+        //arrange
+        long treatmentId = 1L;
+
+        //act
+        when(treatmentRepository.findById(treatmentId)).thenReturn(Optional.empty());
+
+        //assert
+        assertThrows(RecordNotFoundException.class, () -> treatmentServiceImpl.getTreatmentWithCalendar(treatmentId));
+
+    }
+
+    @Test
+    void getTreatmentWithCalendar_NoCalendar() {
+        //arrange
+        long treatmentId = 1L;
+        Treatment treatment = new Treatment();
+
+        //act
+        when(treatmentRepository.findById(treatmentId)).thenReturn(Optional.of(treatment));
+
+        //assert
+        assertThrows(RecordNotFoundException.class, () -> treatmentServiceImpl.getTreatmentWithCalendar(treatmentId));
     }
 
     @Test
     void addBookingTreatmentToTreatment() {
+        //arrange
+        long treatmentId = 2L;
+        Treatment existingTreatment = new Treatment();
+        existingTreatment.setId(treatmentId);
+
+        BookingTreatmentDto bookingTreatmentDto = new BookingTreatmentDto();
+        //bookingTreatment.setId(2L);
+        bookingTreatmentDto.setQuantity(3);
+        bookingTreatmentDto.setTreatment(treatment2);
+        bookingTreatmentDto.setCustomerName("Nate Cole");
+        bookingTreatmentDto.setCustomerEmail("Nate@example.com");
+
+        BookingTreatment savedBookingTreatment = new BookingTreatment();
+        savedBookingTreatment.setQuantity(1);
+        savedBookingTreatment.setTreatment(treatment1);
+        savedBookingTreatment.setCustomerName("maria cruz");
+        savedBookingTreatment.setCustomerEmail("maria@example.com");
+
+        when(treatmentRepository.findById(treatmentId)).thenReturn(Optional.of(existingTreatment));
+        when(bookingTreatmentRepository.save(any(BookingTreatment.class))).thenReturn(savedBookingTreatment);
+
+        //act
+        BookingTreatmentDto result = treatmentServiceImpl.addBookingTreatmentToTreatment(treatmentId, bookingTreatmentDto);
+
+        //assert
+        assertNotNull(result);
+        assertEquals(bookingTreatmentDto.getQuantity(), result.getQuantity());
+
+        verify(treatmentRepository).findById(treatmentId);
+        verify(bookingTreatmentRepository).save(any(BookingTreatment.class));
+
     }
+
+
+
+
+
+
 
     @Test
     void updateBookingTreatment() {
