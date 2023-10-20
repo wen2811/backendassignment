@@ -92,13 +92,6 @@ public class CustomerService {
         return customerRepository.findById(customerId).orElse(null);
     }
 
-   /* public Customer registerCustomer(CustomerDto customerDto) {
-        Customer newCustomer = new Customer();
-        newCustomer.setEmail(customerDto.getEmail());
-        newCustomer.setPassword(customerDto.getPassword());
-
-        return customerRepository.save(newCustomer);
-    }*/
 
     public CustomerDto transferCustomerToDto(Customer customer) {
         CustomerDto customerDto = new CustomerDto();
@@ -114,26 +107,7 @@ public class CustomerService {
     }
 
 
-
     public Customer transferDtoToCustomer(CustomerDto customerDto) {
-       /* Customer customer = new Customer() {
-            @Override
-            public boolean isPasswordValid(String password) {
-                return false;
-            }
-
-            @Override
-            public void changePassword(String newPassword) {
-
-            }
-        };
-        customer.setId(customerDto.id);
-        customer.setFirstName(customerDto.firstName);
-        customer.setLastName(customerDto.lastName);
-        customerDto.setEmail(customerDto.email);
-        customerDto.setPhoneNumber(customerDto.phoneNumber);
-        customerDto.setBookingList(customerDto.bookingList);
-        customerDto.setInvoice(customerDto.invoice);*/
         Customer customer = new Customer();
 
         customer.setId(customerDto.id);
@@ -146,7 +120,5 @@ public class CustomerService {
         return customer;
     }
 
-
-
-    }
+}
 

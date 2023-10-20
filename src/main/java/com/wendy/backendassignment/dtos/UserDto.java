@@ -30,7 +30,6 @@ public class UserDto {
     public Set<Authority> authorities;
     public List<Booking> bookingList;
 
-    //@Enumerated
     private UserRole userRole;
 
 

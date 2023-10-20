@@ -45,7 +45,7 @@ public class User {
     @Column
     private String apikey;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
     @OneToMany(mappedBy = "user")

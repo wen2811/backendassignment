@@ -2,8 +2,10 @@ package com.wendy.backendassignment.services;
 
 import com.wendy.backendassignment.dtos.UserDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
+import com.wendy.backendassignment.models.Authority;
 import com.wendy.backendassignment.models.User;
 import com.wendy.backendassignment.models.UserRole;
+import com.wendy.backendassignment.repositories.BookingRepository;
 import com.wendy.backendassignment.repositories.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -16,12 +18,10 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,6 +30,8 @@ class UserServiceTest {
 
     @Mock
     UserRepository userRepository;
+    @Mock
+    BookingRepository bookingRepository;
 
     @InjectMocks
     UserService userServiceImpl;
@@ -51,7 +53,7 @@ class UserServiceTest {
         user2 = new User(2L, "user2", "Jimmy", "Jim", LocalDate.of(1995,7,7), "jimmy@mail.com","password", true, "testapikey", UserRole.EMPLOYEE, null, null);
         user3 = new User(3L, "user3", "Mary", "Ann", LocalDate.of(2002,4,4), "mary@mail.com","user", true, "testapikey", UserRole.CUSTOMER, null, null);
 
-        UserDto userDto1 = new UserDto();
+        userDto1 = new UserDto();
         userDto1.setUsername("user1");
         userDto1.setFirstname("Jeanine");
         userDto1.setLastname("Jean");
@@ -61,7 +63,7 @@ class UserServiceTest {
         userDto1.setEmail("jeanine@mail.com");
         userDto1.setUserRole(UserRole.ADMIN);
 
-        UserDto userDto2 = new UserDto();
+        userDto2 = new UserDto();
         userDto2.setUsername("user2");
         userDto2.setFirstname("Jimmy");
         userDto2.setLastname("Jim");
@@ -71,7 +73,7 @@ class UserServiceTest {
         userDto2.setEmail("jimmy@mail.com");
         userDto2.setUserRole(UserRole.EMPLOYEE);
 
-        UserDto userDto3 = new UserDto();
+        userDto3 = new UserDto();
         userDto3.setUsername("user3");
         userDto3.setFirstname("Mary");
         userDto3.setLastname("Ann");
@@ -80,6 +82,7 @@ class UserServiceTest {
         userDto3.setApikey("testapikey");
         userDto3.setEmail("mary@mail.com");
         userDto3.setUserRole(UserRole.CUSTOMER);
+
 
     }
 
@@ -90,10 +93,8 @@ class UserServiceTest {
     @Test
     void getUser_Returns_UserDto() {
         //Arrange
-        // wat je verwacht
         UserDto existingUserDto = UserDto.builder().username("jimmy").enabled(true).build();
 
-        // wat je service gaat uitvoeren
         Optional<User> user = Optional.ofNullable(User.builder()
                 .username(existingUserDto.getUsername()).build());
         when(userRepository.findById(Mockito.any(String.class))).thenReturn(user);
@@ -101,19 +102,15 @@ class UserServiceTest {
         //Act
         UserDto userDto = userServiceImpl.getUser(existingUserDto.getUsername());
         //Arrange
-        // kijk je als de username bestaat
         Assertions.assertEquals(existingUserDto.getUsername(), userDto.getUsername());
     }
 
     @Test
     void createUser() {
         //Arrange
-        //dit voer je in
         UserDto userDto = UserDto.builder().username("jimmy").enabled(true).build();
-        // wat je verwacht
         User user = User.builder().username("jimmy").build();
 
-        // je moet dit moet om die user terug te krijgen
         when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
 
         // Act
@@ -135,7 +132,7 @@ class UserServiceTest {
         boolean userExists = userRepository.findById(username).isPresent();
 
         //assert
-        Assertions.assertTrue(userExists);
+        assertTrue(userExists);
     }
 
     @Test
@@ -201,4 +198,172 @@ class UserServiceTest {
 
         assertThrows(RecordNotFoundException.class, () -> userServiceImpl.updateUser(userDto.getUsername(), userDto));
     }
+
+    @Test
+    void getAuthorities_UserExists() {
+        //arrange
+        String username = "testUser";
+        Set<Authority> authorities = new HashSet<>(Collections.singletonList(new Authority("ROLE_USER")));
+        User user = User.builder()
+                .username(username)
+                .authorities(authorities)
+                .build();
+
+        when(userRepository.existsById(username)).thenReturn(true);
+        when(userRepository.findById(username)).thenReturn(Optional.of(user));
+
+        //act
+       Set<Authority> result = userServiceImpl.getAuthorities(username);
+
+        //assert
+        verify(userRepository, times(1)).existsById(username);
+        verify(userRepository, times(1)).findById(username);
+        assertEquals(authorities, result);
+
+    }
+
+    @Test
+    void getAuthorities_UserNotExists() {
+        //arrange
+        String username = "noUser";
+        //act
+        when(userRepository.existsById(username)).thenReturn(false);
+        //assert
+        assertThrows(RecordNotFoundException.class, ()-> userServiceImpl.getAuthorities(username));
+
+        verify(userRepository, times(1)).existsById(username);
+        verify(userRepository, never()).findById(username);
+    }
+
+    @Test
+    void addAuthority() {
+        //arrange
+        String username = "testUser";
+        String authority = "ROLE_USER";
+
+        User user = new User();
+        user.setUsername(username);
+
+        when(userRepository.existsById(username)).thenReturn(true);
+        when(userRepository.findById(username)).thenReturn(Optional.of(user));
+
+        //act
+        userServiceImpl.addAuthority(username, authority);
+
+        //assert
+        verify(userRepository, times(1)).existsById(username);
+        verify(userRepository, times(1)).findById(username);
+        verify(userRepository, times(1)).save(user);
+
+        assertTrue(user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(authority)));
+    }
+
+    @Test
+    void AddAuthority_UserNotFound() {
+        //arrange
+        String username = "nonUser";
+        String authority = "ROLE_USER";
+        //act
+        when(userRepository.existsById(username)).thenReturn(false);
+
+        //assert
+        assertThrows(RecordNotFoundException.class, () -> userServiceImpl.addAuthority(username, authority));
+
+        verify(userRepository, times(1)).existsById(username);
+        verify(userRepository, never()).findById(username);
+        verify(userRepository, never()).save(any(User.class));
+    }
+
+
+
+    @Test
+    void removeAuthority() {
+        //arrange
+        String username = "testUser";
+        String authorityToRemove = "ROLE_USER";
+
+        Authority authority1 = new Authority(username, "ROLE_USER");
+        Authority authority2 = new Authority(username, "ROLE_ADMIN");
+        Set<Authority> authorities = new HashSet<>();
+        authorities.add(authority1);
+        authorities.add(authority2);
+
+        User user = User.builder()
+                .username(username)
+                .authorities(authorities)
+                .build();
+
+        when(userRepository.existsById(username)).thenReturn(true);
+        when(userRepository.findById(username)).thenReturn(Optional.of(user));
+
+        //act
+        userServiceImpl.removeAuthority(username, authorityToRemove);
+
+        //assert
+        verify(userRepository, times(1)).existsById(username);
+        verify(userRepository, times(1)).findById(username);
+        verify(userRepository, times(1)).save(user);
+
+        assertTrue(user.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals(authorityToRemove)));
+    }
+
+    @Test
+    void removeAuthority_UserNotFound() {
+        //arrange
+        String username = "nonUser";
+        String authorityToRemove = "ROLE_USER";
+        //act
+        when(userRepository.existsById(username)).thenReturn(false);
+
+        //assert
+        assertThrows(RecordNotFoundException.class, () -> userServiceImpl.removeAuthority(username, authorityToRemove));
+
+        verify(userRepository, times(1)).existsById(username);
+        verify(userRepository, never()).findById(username);
+        verify(userRepository, never()).save(any(User.class));
+    }
+
+
+
+
+
+
+
+
+    @Test
+    void registerUser() {
+        //arrange
+        UserDto userDto = new UserDto();
+        userDto.setUsername("testuser");
+        userDto.setEmail("test@example.com");
+        userDto.setPassword("password");
+        userDto.setFirstname("John");
+        userDto.setLastname("Doe");
+        userDto.setDob(LocalDate.of(1995,6,12));
+
+        when(userRepository.findByEmail("test@example.com")).thenReturn(null);
+
+        User newUser = new User();
+        newUser.setUserRole(UserRole.CUSTOMER);
+        newUser.setUsername("testuser");
+        newUser.setEmail("test@example.com");
+        newUser.setPassword("password");
+        newUser.setFirstname("John");
+        newUser.setLastname("Doe");
+        newUser.setDob(LocalDate.of(1995,6,12));
+
+        when(userRepository.save(newUser)).thenReturn(newUser);
+
+        //act
+        User registeredUser = userServiceImpl.registerUser(userDto);
+        verify(userRepository).save(newUser);
+
+        //assert
+        assertEquals(newUser, registeredUser);
+    }
 }
+
+
+
+
+

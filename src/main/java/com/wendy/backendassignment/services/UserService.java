@@ -8,6 +8,9 @@ import com.wendy.backendassignment.models.User;
 import com.wendy.backendassignment.models.UserRole;
 import com.wendy.backendassignment.repositories.UserRepository;
 import com.wendy.backendassignment.utils.RandomStringGenerator;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,10 +18,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -120,13 +123,24 @@ public class UserService {
     public User getCustomerById(Long userId) {return (User) userRepository.findById(userId).orElse(null);
     }
 
-    public User registerUser(UserDto userDto) {
-        User excistingUser = userRepository.findByEmail(userDto.getEmail());
+    public User registerUser(@NotNull UserDto userDto) {
+        logger.info("Registering a new user: {}", userDto.getUsername());
 
-        if (excistingUser != null) {
-            return excistingUser;
+        User existingUser = userRepository.findByEmail(userDto.getEmail());
+
+        if (existingUser != null) {
+            logger.info("Updating existing user: {}", existingUser.getUsername());
+            existingUser.setUsername(userDto.getUsername());
+            existingUser.setPassword(userDto.getPassword());
+            existingUser.setFirstname(userDto.getFirstname());
+            existingUser.setLastname(userDto.getLastname());
+            existingUser.setDob(userDto.getDob());
+            logger.info("User update completed: {}", existingUser.getUsername());
+            return userRepository.save(existingUser);
+
         }
         else{
+            logger.info("Creating a new user");
             User newUser = new User();
             newUser.setUserRole(UserRole.CUSTOMER);
             newUser.setUsername(userDto.getUsername());
@@ -136,9 +150,12 @@ public class UserService {
             newUser.setLastname(userDto.getLastname());
             newUser.setDob(userDto.getDob());
 
+            logger.info("User registration completed: {}", newUser.getUsername());
             return userRepository.save(newUser);
         }
     }
+
+
 }
 
 

@@ -140,7 +140,7 @@ class TreatmentServiceTest {
 
     @Test
     void transferDtoToTreatment() {
-        TreatmentDto treatmentDto= TreatmentDto.builder().id(4L).name("name")
+        TreatmentDto treatmentDto = TreatmentDto.builder().id(4L).name("name")
                 .type(TreatmentType.FACIAL_TREATMENT).description("Natural exfoliating")
                 .duration(45).price(90).build();
         //Act
