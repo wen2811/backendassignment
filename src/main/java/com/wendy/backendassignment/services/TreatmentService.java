@@ -236,6 +236,7 @@ public class TreatmentService {
     public BookingTreatment transferDtoToBookingTreatment(BookingTreatmentDto bookingTreatmentDto) {
         BookingTreatment bookingTreatment = new BookingTreatment();
 
+        bookingTreatment.setId(bookingTreatmentDto.getId());
         bookingTreatment.setQuantity(bookingTreatmentDto.getQuantity());
         bookingTreatment.setTreatment(bookingTreatmentDto.getTreatment());
         bookingTreatment.setBooking(bookingTreatmentDto.getBooking());

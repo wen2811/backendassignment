@@ -1,11 +1,14 @@
 package com.wendy.backendassignment.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "bookingtreatments")
 public class BookingTreatment {

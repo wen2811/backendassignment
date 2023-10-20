@@ -24,9 +24,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -53,6 +52,7 @@ class TreatmentServiceTest {
     Treatment treatment2;
     Treatment treatment3;
     List<Treatment> treatmentList = new ArrayList<>();
+    List<BookingTreatmentDto> bookingTreatments;
     Calendar calendar;
 
 
@@ -74,7 +74,7 @@ class TreatmentServiceTest {
         treatmentDto1.setDescription("LED light therapy rejuvenates skin");
         treatmentDto1.setDuration(30);
         treatmentDto1.setPrice(45);
-        //treatmentList.add(treatment1);
+        treatmentList.add(treatment1);
 
         TreatmentDto treatmentDto2 = new TreatmentDto();
         treatmentDto2.setId(2L);
@@ -83,21 +83,18 @@ class TreatmentServiceTest {
         treatmentDto2.setDescription("A oxygen body treatment");
         treatmentDto2.setDuration(45);
         treatmentDto2.setPrice(100);
-        //treatmentList.add(treatment2);
+        treatmentList.add(treatment2);
 
         TreatmentDto treatmentDto3 = new TreatmentDto();
         treatmentDto3.setId(3L);
         treatmentDto3.setName("Massage Treatment");
         treatmentDto3.setType(TreatmentType.BODY_TREATMENT);
-        treatmentDto2.setDescription("Massage for relaxing");
+        treatmentDto3.setDescription("Massage for relaxing");
         treatmentDto3.setDuration(60);
         treatmentDto3.setPrice(85);
-        //treatmentList.add(treatment3);
-
-        treatmentList = new ArrayList<>();
-        treatmentList.add(treatment1);
-        treatmentList.add(treatment2);
         treatmentList.add(treatment3);
+
+        bookingTreatments = new ArrayList<>();
 
         BookingTreatmentDto bookingTreatmentDto1 = new BookingTreatmentDto();
         bookingTreatmentDto1.setId(1L);
@@ -113,15 +110,78 @@ class TreatmentServiceTest {
         bookingTreatmentDto2.setCustomerName("Nate Cole");
         bookingTreatmentDto2.setCustomerEmail("Nate@example.com");
 
-        List<BookingTreatmentDto> bookingTreatments = new ArrayList<>();
+        bookingTreatments.add(bookingTreatmentDto1);
         bookingTreatments.add(bookingTreatmentDto2);
-        bookingTreatments.add(bookingTreatmentDto2);
-
-        //treatment1.setBookingTreatments(bookingTreatmentArgumentCaptor);
     }
+
 
     @AfterEach
     void tearDown() {
+    }
+
+    @Test
+    void transferTreatmentToDto() {
+        //Arrange
+        Treatment treatment= Treatment.builder().id(4L).name("name")
+                .type(TreatmentType.FACIAL_TREATMENT).description("Natural exfoliating")
+                .duration(45).price(90).build();
+        //Act
+        TreatmentDto treatmentDto = treatmentServiceImpl.transferTreatmentToDto(treatment);
+
+        //Assert
+        assertEquals(treatmentDto.name, treatment.getName());
+        assertEquals(treatmentDto.type, treatment.getType());
+        assertEquals(treatmentDto.description, treatment.getDescription());
+        assertEquals(treatmentDto.duration, treatment.getDuration());
+        assertEquals(treatmentDto.price, treatment.getPrice());
+
+    }
+
+    @Test
+    void transferDtoToTreatment() {
+        TreatmentDto treatmentDto= TreatmentDto.builder().id(4L).name("name")
+                .type(TreatmentType.FACIAL_TREATMENT).description("Natural exfoliating")
+                .duration(45).price(90).build();
+        //Act
+        Treatment treatment = treatmentServiceImpl.transferDtoToTreatment(treatmentDto);
+
+        //Assert
+        assertEquals("name", treatmentDto.name);
+        assertEquals(TreatmentType.FACIAL_TREATMENT, treatmentDto.type);
+        assertEquals("Natural exfoliating", treatmentDto.description);
+        assertEquals(45, treatmentDto.duration);
+        assertEquals(90.0, treatmentDto.price);
+    }
+
+    @Test
+    void transferBookingTreatmentToDto() {
+        //Arrange
+        BookingTreatment bookingTreatment= BookingTreatment.builder().id(4L).quantity(3)
+                .customerName("Selena Lopez").customerEmail("selena@testmail.com")
+                .build();
+        //Act
+        BookingTreatmentDto bookingTreatmentDto = treatmentServiceImpl.transferBookingTreatmentToDto(bookingTreatment);
+
+        //Assert
+        assertEquals(3, bookingTreatment.getQuantity());
+        assertEquals("Selena Lopez", bookingTreatment.getCustomerName());
+        assertEquals("selena@testmail.com", bookingTreatment.getCustomerEmail());
+
+    }
+
+    @Test
+    void transferDtoToBookingTreatment() {
+        //Arrange
+        BookingTreatmentDto bookingTreatmentDto= BookingTreatmentDto.builder().id(4L).quantity(3)
+                .customerName("Selena Lopez").customerEmail("selena@testmail.com")
+                .build();
+        //Act
+        BookingTreatment bookingTreatment = treatmentServiceImpl.transferDtoToBookingTreatment(bookingTreatmentDto);
+
+        //Assert
+        assertEquals(3, bookingTreatmentDto.getQuantity());
+        assertEquals("Selena Lopez", bookingTreatmentDto.getCustomerName());
+        assertEquals("selena@testmail.com", bookingTreatmentDto.getCustomerEmail());
     }
 
     @Test
@@ -153,91 +213,38 @@ class TreatmentServiceTest {
      }
 
 
-  /*  @Test
+    @Test
     void addTreatment() {
        //Arrange
-        TreatmentDto treatmentDto4 = new TreatmentDto();
-        treatmentDto4.id = 4L;
-        treatmentDto4.name = "Green sea peeling";
-        treatmentDto4.type = TreatmentType.FACIAL_TREATMENT;
-        treatmentDto4.description = "Natural exfoliating";
-        treatmentDto4.duration = 45;
-        treatmentDto4.price = 90;
+        TreatmentDto treatmentDto = TreatmentDto.builder().id(4L).name("name")
+                .type(TreatmentType.FACIAL_TREATMENT).description("Natural exfoliating")
+                .duration(45).price(90).build();
 
-        Treatment treatment = new Treatment();
-        treatment.setId(treatmentDto4.id);
-        treatment.setName(treatmentDto4.name);
-        treatment.setType(treatmentDto4.type);
-        treatment.setDescription(treatmentDto4.description);
-        treatment.setDuration(treatmentDto4.duration);
-        treatment.setPrice(treatmentDto4.price);
+        Treatment treatment = treatmentServiceImpl.transferDtoToTreatment(treatmentDto);
 
         when(treatmentRepository.save(any(Treatment.class))).thenReturn(treatment);
 
         // Act
-        treatmentServiceImpl.addTreatment(treatmentServiceImpl.transferTreatmentToDto(treatment));
+        TreatmentDto responseTreatmentDto = treatmentServiceImpl.addTreatment(treatmentServiceImpl.transferTreatmentToDto(treatment));
+
         verify(treatmentRepository, times(1)).save(treatmentArgumentCaptor.capture());
+
         Treatment savedTreatment = treatmentArgumentCaptor.getValue();
 
         //Assert
-        assertEquals(treatmentDto4.name, savedTreatment.getName());
-        assertEquals(treatmentDto4.type, savedTreatment.getType());
-        assertEquals(treatmentDto4.description, savedTreatment.getDescription());
-        assertEquals(treatmentDto4.duration, savedTreatment.getDuration());
-        assertEquals(treatmentDto4.price, savedTreatment.getPrice());
-
-    }*/
-
-   /* @Test
-    void addTreatment() {
-        // Arrange
-        TreatmentDto treatmentDto = new TreatmentDto();
-        treatmentDto.id = 4L;
-        treatmentDto.name = "Green sea peeling";
-        treatmentDto.type = TreatmentType.FACIAL_TREATMENT;
-        treatmentDto.description = "Natural exfoliating";
-        treatmentDto.duration = 45;
-        treatmentDto.price = 90;
-
-        Treatment savedTreatment = new Treatment();
-        savedTreatment.setId(treatmentDto.id);
-        savedTreatment.setName(treatmentDto.name);
-        savedTreatment.setType(treatmentDto.type);
-        savedTreatment.setDescription(treatmentDto.description);
-        savedTreatment.setDuration(treatmentDto.duration);
-        savedTreatment.setPrice(treatmentDto.price);
-
-        when(treatmentRepository.save(any(Treatment.class))).thenReturn(savedTreatment);
-
-        // Act
-        TreatmentDto result = treatmentServiceImpl.addTreatment(treatmentDto);
-
-        // Assert
-        verify(treatmentRepository, times(1)).save(treatmentArgumentCaptor.capture());
-        Treatment capturedTreatment = treatmentArgumentCaptor.getValue();
-
-        assertEquals(treatmentDto.name, capturedTreatment.getName());
-        assertEquals(treatmentDto.type, capturedTreatment.getType());
-        assertEquals(treatmentDto.description, capturedTreatment.getDescription());
-        assertEquals(treatmentDto.duration, capturedTreatment.getDuration());
-        assertEquals(treatmentDto.price, capturedTreatment.getPrice());
-
-        assertEquals(treatmentDto.id, result.id);
-        assertEquals(treatmentDto.name, result.name);
-        assertEquals(treatmentDto.type, result.type);
-        assertEquals(treatmentDto.description, result.description);
-        assertEquals(treatmentDto.duration, result.duration);
-        assertEquals(treatmentDto.price, result.price);
-    }*/
+        assertEquals(responseTreatmentDto.name, savedTreatment.getName());
+        assertEquals(responseTreatmentDto.type, savedTreatment.getType());
+        assertEquals(responseTreatmentDto.description, savedTreatment.getDescription());
+        assertEquals(responseTreatmentDto.duration, savedTreatment.getDuration());
+        assertEquals(responseTreatmentDto.price, savedTreatment.getPrice());
+    }
 
 
     @Test
     void updateTreatment() {
         //arrange
         long treatmentId = 1L;
-        TreatmentDto treatmentDto = new TreatmentDto();
-        treatmentDto.setDescription("korting");
-        treatmentDto.setPrice(50);
+        TreatmentDto treatmentDto = TreatmentDto.builder().description("korting").price(50).build();
 
         Treatment existingTreatment = new Treatment();
         when(treatmentRepository.findById(treatmentId)).thenReturn(Optional.of(existingTreatment));
@@ -363,7 +370,6 @@ class TreatmentServiceTest {
         existingTreatment.setId(treatmentId);
 
         BookingTreatmentDto bookingTreatmentDto = new BookingTreatmentDto();
-        //bookingTreatment.setId(2L);
         bookingTreatmentDto.setQuantity(3);
         bookingTreatmentDto.setTreatment(treatment2);
         bookingTreatmentDto.setCustomerName("Nate Cole");
@@ -390,33 +396,11 @@ class TreatmentServiceTest {
 
     }
 
-
-
-
-
-
-
     @Test
     void updateBookingTreatment() {
     }
 
     @Test
     void getBookingTreatmentById() {
-    }
-
-    @Test
-    void transferTreatmentToDto() {
-    }
-
-    @Test
-    void transferDtoToTreatment() {
-    }
-
-    @Test
-    void transferBookingTreatmentToDto() {
-    }
-
-    @Test
-    void transferDtoToBookingTreatment() {
     }
 }

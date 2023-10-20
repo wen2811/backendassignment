@@ -25,6 +25,4 @@ public class TreatmentDto {
     public Calendar calendar;
     public List<BookingTreatment> bookingTreatments;
 
-
-
 }
