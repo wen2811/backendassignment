@@ -28,14 +28,14 @@ public class InvoiceController {
         return ResponseEntity.ok().body(invoiceService.getAllInvoice());
     }
 
-    @GetMapping("/invoices/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<InvoiceDto> getInvoice(@PathVariable Long id) throws RecordNotFoundException {
         InvoiceDto invoiceDto = invoiceService.getInvoice(id);
         return ResponseEntity.ok().body(invoiceDto);
     }
 
     //Create
-    @PostMapping
+    @PostMapping("/new")
     public ResponseEntity<Object> addInvoice(@Valid @RequestBody InvoiceDto invoiceDto, BindingResult br) {
         if (br.hasFieldErrors()) {
             StringBuilder sb = new StringBuilder();

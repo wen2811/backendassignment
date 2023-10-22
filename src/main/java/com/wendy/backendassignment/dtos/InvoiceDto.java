@@ -5,14 +5,14 @@ import com.wendy.backendassignment.models.Customer;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 public class InvoiceDto {
     public Long id;
     public double amount;
-    public Date invoicedate;
+    public LocalDate invoicedate;
 
     public Booking booking;
     public Customer customer;

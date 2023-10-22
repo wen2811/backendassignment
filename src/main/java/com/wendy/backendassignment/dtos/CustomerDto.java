@@ -17,15 +17,9 @@ public class CustomerDto {
     public String phoneNumber;
     public String email;
     public List<Booking> bookingList;
-    //public String password;
-    public List<Invoice> invoice;
+
+    public List<Invoice> invoices;
     public List<File> fileList;
 
-    /*public String getPassword() {
-        return password;
-    }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }*/
 }

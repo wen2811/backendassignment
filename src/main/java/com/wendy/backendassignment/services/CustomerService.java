@@ -102,7 +102,7 @@ public class CustomerService {
         customerDto.email = customer.getEmail();
         customerDto.phoneNumber = customer.getPhoneNumber();
         customerDto.bookingList = customer.getBookingList();
-        customerDto.invoice = customer.getInvoice();
+        customerDto.invoices = customer.getInvoice();
         return customerDto;
     }
 
@@ -116,7 +116,7 @@ public class CustomerService {
         customer.setEmail(customerDto.email);
         customer.setPhoneNumber(customerDto.phoneNumber);
         customer.setBookingList(customerDto.bookingList);
-        customer.setInvoice(customerDto.invoice);
+        customer.setInvoice(customerDto.invoices);
         return customer;
     }
 
