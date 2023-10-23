@@ -86,6 +86,8 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/bookingtreatments").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.PUT, "/bookingtreatments/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.DELETE, "/bookingtreatments/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers(HttpMethod.POST, "//bookingtreatments/add").permitAll()
+
 
                 //Treatments
                 .requestMatchers(HttpMethod.GET, "/treatments").permitAll()
@@ -95,9 +97,7 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/treatments/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.PUT, "/{id}/updatewithcalendar").permitAll()
                 .requestMatchers(HttpMethod.GET, "//treatments/{id}/with-calendar").permitAll()
-                .requestMatchers(HttpMethod.POST, "/treatments/{treatmentId}/bookingtreatments").permitAll()
-                .requestMatchers(HttpMethod.PUT, "/treatments/updateBookingTreatment/{id}").permitAll()
-                .requestMatchers(HttpMethod.GET, "/treatments/bookingtreatment/{id}").permitAll()
+
 
                 //Calendars
                 .requestMatchers(HttpMethod.GET, "/calendars").permitAll()
@@ -117,7 +117,7 @@ public class SpringSecurityConfig {
                 //Invoices
                 .requestMatchers(HttpMethod.GET, "/invoices").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.GET, "/invoices/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
-                .requestMatchers(HttpMethod.POST, "/invoices").hasAnyRole("ADMIN", "EMPLOYEE")
+                .requestMatchers(HttpMethod.POST, "/invoices/new").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.PUT, "/invoices/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.DELETE, "/invoices/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.GET, "/{bookingId}/invoices").hasAnyRole("ADMIN", "EMPLOYEE")

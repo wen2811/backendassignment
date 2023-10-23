@@ -70,7 +70,7 @@ public class BookingTreatmentController {
     }
 
     //Relationships methods
-  @PostMapping("/bookingtreatments")
+  @PostMapping("/bookingtreatments/add")
   public ResponseEntity<BookingTreatmentDto> addTreatmentToBookingTreatment(@RequestParam Long treatmentId, @RequestBody BookingTreatmentDto bookingTreatmentDto) {
       try {
           BookingTreatmentDto addedBookingTreatment = bookingTreatmentService.addTreatmentToBookingTreatment(treatmentId, bookingTreatmentDto);
