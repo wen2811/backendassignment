@@ -156,30 +156,20 @@ class InvoiceControllerIntegrationTest {
                 .andExpect(jsonPath("invoicedate").value("2023-11-01"));
     }
 
-    /*@Test
+    @Test
     void addInvoiceWithFieldErrors() throws Exception{
         mockMvc.perform(post("/invoices/new")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(invalidInvoiceDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0]").value("Het veld 'amount' moet groter zijn dan 0"));
-        //.andExpect(jsonPath ("amount").value(100));
-        //.andExpect(content().string(containsString("invoicedate: moet in het heden of in de toekomst zijn")));
+                .andExpect(status().isBadRequest());
 
-
-
-    }*/
+    }
 
     @Test
     void deleteInvoice() throws Exception {
         mockMvc.perform(delete("/invoices/" + invoice1.getId().toString()))
                 .andExpect(status().isNoContent());
     }
-
-
 
 
     private static String asJsonString(final InvoiceDto obj) {
