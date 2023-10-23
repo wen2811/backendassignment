@@ -59,17 +59,19 @@ public class InvoiceService {
     }
 
     public void updateInvoice(Long id, InvoiceDto invoiceDto) {
-        if (!invoiceRepository.existsById(id)) {
-            throw new RecordNotFoundException("There's no Invoice found");
-        }
-        Invoice updatedInvoice = invoiceRepository.findById(id).orElse(null);
-        updatedInvoice.setId(invoiceDto.getId());
-        updatedInvoice.setAmount(invoiceDto.getAmount());
-        updatedInvoice.setInvoicedate(invoiceDto.getInvoicedate());
-        updatedInvoice.setBooking(invoiceDto.getBooking());
-        updatedInvoice.setCustomer(invoiceDto.getCustomer());
-        invoiceRepository.save(updatedInvoice);
+        Invoice existingInvoice = invoiceRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("There's no Invoice found with id " + id));
+
+        invoiceDto.setId(existingInvoice.getId());
+
+        existingInvoice.setAmount(invoiceDto.getAmount());
+        existingInvoice.setInvoicedate(invoiceDto.getInvoicedate());
+        existingInvoice.setBooking(invoiceDto.getBooking());
+        existingInvoice.setCustomer(invoiceDto.getCustomer());
+
+        invoiceRepository.save(existingInvoice);
     }
+
 
     //Delete
     public void deleteInvoice(Long id) {invoiceRepository.deleteById(id);

@@ -28,8 +28,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -77,6 +76,15 @@ class InvoiceControllerIntegrationTest {
         invoice2 = new Invoice(2L, 100, (LocalDate.of(2023, 11, 15)),null,null);
         invoice3 = new Invoice(3L, 75, (LocalDate.of(2023, 11, 1)),null,null);
 
+        invoiceRepository.save(invoice1);
+        invoiceRepository.save(invoice2);
+        invoiceRepository.save(invoice3);
+
+        invoiceDto1 = new InvoiceDto(invoice1.getId(), 90, LocalDate.of(2023,10,31), null, null);
+        invoiceDto2 = new InvoiceDto(invoice2.getId(), 100, LocalDate.of(2023,11,15), null, null);
+        invoiceDto3 = new InvoiceDto(3L, 75, LocalDate.of(2023,11,1), null, null);
+
+
         invoices.add(invoice1);
         invoices.add(invoice2);
         invoices.add(invoice3);
@@ -85,9 +93,6 @@ class InvoiceControllerIntegrationTest {
         invalidInvoiceDto.setAmount(-50);
         invalidInvoiceDto.setInvoicedate(LocalDate.of(2021, 11, 1));
 
-        invoiceRepository.save(invoice1);
-        invoiceRepository.save(invoice2);
-        invoiceRepository.save(invoice3);
 
         customerDto = new CustomerDto();
         customerDto.setFirstName("Maria");
@@ -100,29 +105,8 @@ class InvoiceControllerIntegrationTest {
         customer.getInvoices().add(invoice2);
         customer.getInvoices().add(invoice3);
 
-        invoiceDto1 = new InvoiceDto();
-        invoiceDto1.setId(1L);
-        invoiceDto1.setAmount(90);
-        invoiceDto1.setInvoicedate(LocalDate.of(2023, 10, 31));
-        invoiceDto1.setBooking(null);
-        invoiceDto1.setCustomer(null);
-        invoiceDto1 = invoiceService.addInvoice(invoiceDto1);
 
-        invoiceDto2 = new InvoiceDto();
-        invoiceDto2.setId(2L);
-        invoiceDto2.setAmount(100);
-        invoiceDto2.setInvoicedate(LocalDate.of(2023, 11, 15));
-        invoiceDto2.setBooking(null);
-        invoiceDto2.setCustomer(null);
-        invoiceDto2 = invoiceService.addInvoice(invoiceDto2);
 
-        invoiceDto3 = new InvoiceDto();
-        invoiceDto3.setId(3L);
-        invoiceDto3.setAmount(75);
-        invoiceDto3.setInvoicedate(LocalDate.of(2023, 11, 1));
-        invoiceDto3.setBooking(null);
-        invoiceDto3.setCustomer(null);
-        invoiceDto3 = invoiceService.addInvoice(invoiceDto3);
 
         LocalDate invoiceDate = invoiceDto1.getInvoicedate();
 
@@ -172,6 +156,29 @@ class InvoiceControllerIntegrationTest {
                 .andExpect(jsonPath("invoicedate").value("2023-11-01"));
     }
 
+    /*@Test
+    void addInvoiceWithFieldErrors() throws Exception{
+        mockMvc.perform(post("/invoices/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(invalidInvoiceDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0]").value("Het veld 'amount' moet groter zijn dan 0"));
+        //.andExpect(jsonPath ("amount").value(100));
+        //.andExpect(content().string(containsString("invoicedate: moet in het heden of in de toekomst zijn")));
+
+
+
+    }*/
+
+    @Test
+    void deleteInvoice() throws Exception {
+        mockMvc.perform(delete("/invoices/" + invoice1.getId().toString()))
+                .andExpect(status().isNoContent());
+    }
+
 
 
 
@@ -187,12 +194,16 @@ class InvoiceControllerIntegrationTest {
     }
 
     @Test
-    void updateInvoice() {
+    void updateInvoice() throws Exception {
+        mockMvc.perform(put("/invoices/" + invoice1.getId().toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(invoiceDto3)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value(invoice1.getId().toString()))
+                .andExpect(jsonPath("amount").value(75))
+                .andExpect(jsonPath("invoicedate").value("2023-11-01"));
     }
 
-    @Test
-    void deleteInvoice() {
-    }
 
     @Test
     void getInvoicesForBooking() {

@@ -54,14 +54,15 @@ public class InvoiceController {
     }
 
     //Update
-    @PutMapping("/invoices/{id}")
-    public ResponseEntity<Object> updateInvoice(@PathVariable("id") Long id, @RequestBody InvoiceDto invoiceDto) {
+    @PutMapping("/{id}")
+    public ResponseEntity<InvoiceDto> updateInvoice(@PathVariable("id") Long id, @RequestBody InvoiceDto invoiceDto) {
         invoiceService.updateInvoice(id, invoiceDto);
         return ResponseEntity.ok(invoiceDto);
     }
 
+
     //Delete
-    @DeleteMapping("/invoices/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Object>deleteInvoice(@PathVariable Long id) {
         invoiceService.deleteInvoice(id);
         return ResponseEntity.noContent().build();
