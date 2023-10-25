@@ -24,7 +24,7 @@ public class FileController {
         this.customerService = customerService;
     }
 
-    @PostMapping("/upload")
+    @PostMapping(value="/upload")
     public ResponseEntity<FileDto> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("customerId") Long customerId) throws IOException {
         Customer customer = (Customer) customerService.getCustomerById(customerId);
         if (customer == null) {
@@ -34,7 +34,7 @@ public class FileController {
         return ResponseEntity.ok(uploadedFile);
     }
 
-    @PostMapping("/store")
+    @PostMapping(value="/store")
     public ResponseEntity<FileDto> storeFile(@RequestParam("file") MultipartFile file) throws IOException {
         FileDto uploadedFile = fileService.storeFile(file);
 

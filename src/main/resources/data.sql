@@ -13,6 +13,7 @@ VALUES ('User1', 'Maria', 'Cruz', '2000-02-02', 'employee@test.nl', '$2a$12$3pyL
        ('User2', 'Donald', 'Duck', '1970-08-08', 'admin@test.nl', '$2a$12$zDHpcCbf3aeHEPL.4ZGiJef21xXPLunBcxcwZhRn1qUD3q3hAZn/2', true),
        ('User3', 'Joelle', 'Pedro', '1976-11-11', 'customer@test.nl', '$2a$12$Y4rPMU2HOmbcxf0es5hlXO6KjHmd/6vrWm3XMyB042Hz2nxGvc7vO', true);
 
+--Insert into userRole values ('')
 
 INSERT INTO bookings (id, date, total_amount, booking_status, customer_id, user_id)
 VALUES (1, '2023-11-01', 90, 'NEW', 2, 1);
@@ -41,9 +42,9 @@ VALUES ('2023-10-10', '10:00:00', '11:00:00', true),
 
 
 INSERT INTO authorities (authority, username)
-VALUES ('ROLE_EMPLOYEE', 'User1'),
-        ('ROLE_ADMIN', 'User2'),
-        ('ROLE_CUSTOMER', 'User3');
+VALUES ('EMPLOYEE', 'User1'),
+        ('ADMIN', 'User2'),
+        ('CUSTOMER', 'User3');
 
 
 

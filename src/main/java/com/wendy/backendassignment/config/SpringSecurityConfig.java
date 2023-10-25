@@ -57,7 +57,7 @@ public class SpringSecurityConfig {
                 .cors().and()
                 .authorizeHttpRequests()
                 // Wanneer je deze uncomments, staat je hele security open. Je hebt dan alleen nog een jwt nodig.
-//                .requestMatchers("/**").permitAll()
+                .requestMatchers("/**").permitAll()
 
                 //User
                 .requestMatchers(HttpMethod.GET, "/users").hasAnyRole("ADMIN","EMPLOYEE")
@@ -86,17 +86,17 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/bookingtreatments").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.PUT, "/bookingtreatments/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.DELETE, "/bookingtreatments/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
-                .requestMatchers(HttpMethod.POST, "//bookingtreatments/add").permitAll()
+                .requestMatchers(HttpMethod.POST, "/bookingtreatments/add").permitAll()
 
 
                 //Treatments
                 .requestMatchers(HttpMethod.GET, "/treatments").permitAll()
-                .requestMatchers(HttpMethod.GET, "/{type}").permitAll()
+                .requestMatchers(HttpMethod.GET, "/treatments/{type}").permitAll()
                 .requestMatchers(HttpMethod.POST, "/treatments").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.PUT, "/treatments/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.DELETE, "/treatments/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.PUT, "/{id}/updatewithcalendar").permitAll()
-                .requestMatchers(HttpMethod.GET, "//treatments/{id}/with-calendar").permitAll()
+                .requestMatchers(HttpMethod.GET, "/treatments/{id}/with-calendar").permitAll()
 
 
                 //Calendars
@@ -108,9 +108,9 @@ public class SpringSecurityConfig {
 
                 //Customers
                 .requestMatchers(HttpMethod.GET, "/customers").hasAnyRole("ADMIN", "EMPLOYEE")
-                .requestMatchers(HttpMethod.GET, "/customers/{id}").hasAnyRole("hasRole('ADMIN') or hasRole('EMPLOYEE') or hasPermission(#id, 'UserCredential')")
+                .requestMatchers(HttpMethod.GET, "/customers/{id}").hasAnyRole("hasRole('ADMIN') or hasRole('EMPLOYEE') or (principal.username == #booking.customer.username)")
                 .requestMatchers(HttpMethod.POST, "/customers").hasAnyRole("ADMIN", "EMPLOYEE")
-                .requestMatchers(HttpMethod.PUT, "/customers/{id}").hasAnyRole("hasRole('ADMIN') or hasRole('EMPLOYEE') or hasPermission(#id, 'UserCredential')")
+                .requestMatchers(HttpMethod.PUT, "/customers/{id}").hasAnyRole("hasRole('ADMIN') or hasRole('EMPLOYEE') or (principal.username == #booking.customer.username)")
                 .requestMatchers(HttpMethod.DELETE, "/customers/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.GET, "/customers/{customerId}/invoices").hasAnyRole("ADMIN", "EMPLOYEE")
 
@@ -128,7 +128,7 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/store").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.GET, "/get/{fileId}").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.POST, "/assign/{fileId}/to-customer/{customerId}").hasAnyRole("ADMIN", "EMPLOYEE")
-                .requestMatchers(HttpMethod.GET, "/download/{fileId}").hasAnyRole("hasRole('ADMIN') or hasRole('EMPLOYEE') or hasPermission(#id, 'UserCredential')")
+                .requestMatchers(HttpMethod.GET, "/download/{fileId}").hasAnyRole("hasRole('ADMIN') or hasRole('EMPLOYEE') or (principal.username == #booking.customer.username)")
                 .requestMatchers(HttpMethod.DELETE, "/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
 
                 .requestMatchers("/authenticated").authenticated()

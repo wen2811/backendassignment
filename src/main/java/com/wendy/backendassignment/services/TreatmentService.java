@@ -41,15 +41,19 @@ public class TreatmentService {
         return treatmentDtos;
     }
 
-    public TreatmentDto getTreatmentsByType(TreatmentType type) throws RecordNotFoundException {
-        Optional<Treatment> treatmentOptional = treatmentRepository.findTreatmentsByType(type);
+    public List<TreatmentDto> getTreatmentsByType(TreatmentType type) throws RecordNotFoundException {
+        List<Treatment> treatments = treatmentRepository.findTreatmentsByType(type);
 
-        if(treatmentOptional.isEmpty()) {
+        if(treatments.isEmpty()) {
             throw new RecordNotFoundException("There's no treatment to find with this type: " + type);
         }
-        Treatment treatment = treatmentOptional.get();
+        List<TreatmentDto> treatmentDtos = new ArrayList<>();
 
-        return transferTreatmentToDto(treatment);
+        treatments.forEach(treatment -> {
+            treatmentDtos.add(transferTreatmentToDto(treatment));
+        });
+
+        return treatmentDtos;
     }
 
     //Create

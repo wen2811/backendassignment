@@ -15,6 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/treatments")
 public class TreatmentController {
@@ -25,18 +26,19 @@ public class TreatmentController {
     }
 
     //Read
-    @GetMapping("/")
+    @GetMapping(value="")
     public ResponseEntity<List<TreatmentDto>> getAllTreatments() {
         return ResponseEntity.ok().body(treatmentService.getAllTreatments());
     }
 
-    @GetMapping("/{type}")
-    public ResponseEntity<TreatmentDto> getTreatmentsByType(@PathVariable TreatmentType type) throws RecordNotFoundException {
-        return ResponseEntity.ok().body(treatmentService.getTreatmentsByType(type));
+    @GetMapping(path="/{type}")
+    public ResponseEntity<List<TreatmentDto>> getTreatmentsByType(@PathVariable("type") String type) throws RecordNotFoundException {
+        System.out.println(TreatmentType.valueOf(type));
+        return ResponseEntity.ok().body(treatmentService.getTreatmentsByType(TreatmentType.valueOf(type)));
     }
 
     //Create
-    @PostMapping("")
+    @PostMapping(value="")
     public ResponseEntity<Object> addTreatment(@Valid @RequestBody TreatmentDto treatmentDto, BindingResult br) {
         if(br.hasFieldErrors()) {
             StringBuilder sb = new StringBuilder();
@@ -54,27 +56,27 @@ public class TreatmentController {
     }
 
     //Update
-    @PutMapping("/{id}")
+    @PutMapping(path="/{id}")
     public ResponseEntity<Object> updateTreatment(@PathVariable("id") Long id, @RequestBody TreatmentDto treatmentDto) {
         treatmentService.updateTreatment(id, treatmentDto);
         return ResponseEntity.ok(treatmentDto);
     }
 
     //Delete
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path="/{id}")
     public ResponseEntity<Object> deleteTreatment(@PathVariable Long id) throws RecordNotFoundException  {
         treatmentService.deleteTreatment(id);
         return ResponseEntity.noContent().build();
     }
 
     //Methods for relation
-    @PutMapping("/{id}/updatewithcalendar")
+    @PutMapping(path="/{id}/updatewithcalendar")
     public ResponseEntity<Object> updateTreatmentWithCalendar(@PathVariable Long id, @RequestBody TreatmentDto treatmentDto, @RequestBody CalendarDto calendarDto) throws RecordNotFoundException {
         treatmentService.updateTreatmentWithCalendar(id, treatmentDto, calendarDto);
         return ResponseEntity.ok("Behandeling met kalendergegevens is succesvol bijgewerkt.");
     }
 
-    @GetMapping("/{id}/with-calendar")
+    @GetMapping(path="/{id}/with-calendar")
     public ResponseEntity<TreatmentDto> getTreatmentWithCalendar(@PathVariable Long id) throws RecordNotFoundException {
         TreatmentDto treatmentDto = treatmentService.getTreatmentWithCalendar(id);
         return ResponseEntity.ok(treatmentDto);

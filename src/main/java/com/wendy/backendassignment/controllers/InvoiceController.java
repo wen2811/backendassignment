@@ -55,9 +55,13 @@ public class InvoiceController {
 
     //Update
     @PutMapping("/{id}")
-    public ResponseEntity<InvoiceDto> updateInvoice(@PathVariable("id") Long id, @RequestBody InvoiceDto invoiceDto) {
-        invoiceService.updateInvoice(id, invoiceDto);
-        return ResponseEntity.ok(invoiceDto);
+    public ResponseEntity<Object> updateInvoice(@PathVariable("id") Long id, @RequestBody InvoiceDto invoiceDto) {
+       try{
+           invoiceService.updateInvoice(id, invoiceDto);
+           return ResponseEntity.ok(invoiceDto);
+       }catch (RecordNotFoundException e){
+           return ResponseEntity.badRequest().body("Invoice not Found");
+       }
     }
 
 

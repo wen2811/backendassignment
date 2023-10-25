@@ -2,8 +2,7 @@ package com.wendy.backendassignment.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -11,6 +10,9 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "customers")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

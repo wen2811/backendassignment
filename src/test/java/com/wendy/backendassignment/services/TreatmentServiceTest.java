@@ -55,8 +55,6 @@ class TreatmentServiceTest {
     Treatment treatment3;
     List<Treatment> treatmentList = new ArrayList<>();
     List<BookingTreatmentDto> bookingTreatments;
-    Calendar calendar;
-
 
 
     @BeforeEach
@@ -232,11 +230,12 @@ class TreatmentServiceTest {
     @Test
     void getTreatmentsByType() {
         //arrange
-        when(treatmentRepository.findTreatmentsByType(TreatmentType.BODY_TREATMENT)).thenReturn(Optional.of(treatmentList.get(0)));
+        treatmentList.remove(0); // remove treatment with type facial
+        when(treatmentRepository.findTreatmentsByType(TreatmentType.BODY_TREATMENT)).thenReturn(treatmentList);
         //act
-        TreatmentDto treatmentDto = treatmentServiceImpl.getTreatmentsByType(TreatmentType.BODY_TREATMENT);
+        List<TreatmentDto> treatmentDtos = treatmentServiceImpl.getTreatmentsByType(TreatmentType.BODY_TREATMENT);
         //assert
-        assertEquals(treatmentList.get(0).getType(), treatmentDto.type);
+        assertEquals(treatmentList.size(), treatmentDtos.size());
 
     }
      @Test

@@ -4,10 +4,7 @@ import com.wendy.backendassignment.models.Booking;
 import com.wendy.backendassignment.models.Customer;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
@@ -16,6 +13,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class InvoiceDto {
     public Long id;
     @NotNull
