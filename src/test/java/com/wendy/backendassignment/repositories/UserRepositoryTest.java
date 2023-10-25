@@ -32,7 +32,7 @@ class UserRepositoryTest {
 
         userRepository.save(user);
         //Act
-        boolean userResponse = userRepository.findById(user.getId()).isPresent();
+        boolean userResponse = userRepository.findById(user.getUsername()).isPresent();
 
         //Assert
         Assertions.assertTrue(userResponse);
@@ -52,7 +52,7 @@ class UserRepositoryTest {
 
         userRepository.save(user);
         //Act
-        boolean userResponse = userRepository.findById(user2.getId()).isPresent();
+        boolean userResponse = userRepository.findById(user2.getUsername()).isPresent();
 
         //Assert
         Assertions.assertFalse(userResponse);

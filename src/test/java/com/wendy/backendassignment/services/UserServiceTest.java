@@ -49,9 +49,9 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        user1 = new User(1L, "user1", "Jeanine", "Jean", LocalDate.of(2000,2,2), "jeanine@mail.com","password", true, "testapikey", UserRole.ADMIN, null, null);
-        user2 = new User(2L, "user2", "Jimmy", "Jim", LocalDate.of(1995,7,7), "jimmy@mail.com","password", true, "testapikey", UserRole.EMPLOYEE, null, null);
-        user3 = new User(3L, "user3", "Mary", "Ann", LocalDate.of(2002,4,4), "mary@mail.com","user", true, "testapikey", UserRole.CUSTOMER, null, null);
+        user1 = new User("user1", "Jeanine", "Jean", LocalDate.of(2000,2,2), "jeanine@mail.com","password", true, "testapikey", UserRole.ADMIN, null, null);
+        user2 = new User("user2", "Jimmy", "Jim", LocalDate.of(1995,7,7), "jimmy@mail.com","password", true, "testapikey", UserRole.EMPLOYEE, null, null);
+        user3 = new User("user3", "Mary", "Ann", LocalDate.of(2002,4,4), "mary@mail.com","user", true, "testapikey", UserRole.CUSTOMER, null, null);
 
         userDto1 = new UserDto();
         userDto1.setUsername("user1");
@@ -356,13 +356,13 @@ class UserServiceTest {
     @Test
     void getCustomerById_UserFound() {
         //arrange
-        Long userId = 1L;
+        String username = "user1";
         User expectedUser = new User();
 
-        when(userRepository.findById(userId)).thenReturn(Optional.of(expectedUser));
+        when(userRepository.findById(username)).thenReturn(Optional.of(expectedUser));
 
         //act
-        User resultUser = userServiceImpl.getCustomerById(userId);
+        User resultUser = userServiceImpl.getCustomerById(username);
 
         //assert
         assertNotNull(resultUser);
@@ -372,12 +372,12 @@ class UserServiceTest {
     @Test
     void getCustomerById_UserNotFound() {
         //arrange
-        Long userId = 2L;
+        String username = "user2";
 
-        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+        when(userRepository.findById(username)).thenReturn(Optional.empty());
 
         //act
-        User resultUser = userServiceImpl.getCustomerById(userId);
+        User resultUser = userServiceImpl.getCustomerById(username);
 
         //assert
         assertNull(resultUser);
@@ -427,7 +427,6 @@ class UserServiceTest {
         userDto.setDob(LocalDate.of(1980, 5, 10));
 
         User existingUser = User.builder()
-                .id(4L)
                 .username("existingUser")
                 .email("existing@example.com")
                 .password("oldPassword")
