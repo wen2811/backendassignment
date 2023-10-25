@@ -86,13 +86,13 @@ public class BookingController {
     }
 
     @PostMapping("/registerbookings/")
-    public ResponseEntity<Object> createBooking(@RequestParam Long userId, @RequestParam List<Long> bookingTreatmentIds, @RequestBody UserDto userDto) {
-        User existingUser = userService.getCustomerById(userId);
+    public ResponseEntity<Object> createBooking(@RequestParam String username, @RequestParam List<Long> bookingTreatmentIds, @RequestBody UserDto userDto) {
+        User existingUser = userService.getCustomerById(username);
 
         if (existingUser == null) {
             existingUser = userService.registerUser(userDto);
         }
-        Booking booking = bookingService.createBooking(userId, bookingTreatmentIds, userDto);
+        Booking booking = bookingService.createBooking(username, bookingTreatmentIds, userDto);
 
         if (booking == null) {
             return ResponseEntity.notFound().build();

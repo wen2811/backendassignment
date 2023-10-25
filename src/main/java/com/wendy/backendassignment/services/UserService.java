@@ -120,7 +120,7 @@ public class UserService {
         return user;
     }
 
-    public User getCustomerById(Long userId) {return (User) userRepository.findById(userId).orElse(null);
+    public User getCustomerById(String username) {return (User) userRepository.findById(username).orElse(null);
     }
 
     public User registerUser(@NotNull UserDto userDto) {

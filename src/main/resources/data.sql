@@ -15,11 +15,11 @@ VALUES ('User1', 'Maria', 'Cruz', '2000-02-02', 'employee@test.nl', '$2a$12$3pyL
 
 --Insert into userRole values ('')
 
-INSERT INTO bookings (id, date, total_amount, booking_status, customer_id, user_id)
-VALUES (1, '2023-11-01', 90, 'NEW', 2, 1);
-INSERT INTO bookings (id, date, total_amount, booking_status, customer_id, user_id)
-VALUES (2, '2023-11-15', 120, 'CONFIRMED', 3, 2),
-       (3, '2023-11-08', 75, 'CONFIRMED', 4, 3);
+INSERT INTO bookings (id, date, total_amount, booking_status, customer_id)
+VALUES (1, '2023-11-01', 90, 'NEW', 2);
+INSERT INTO bookings (id, date, total_amount, booking_status, customer_id)
+VALUES (2, '2023-11-15', 120, 'CONFIRMED', 3),
+       (3, '2023-11-08', 75, 'CONFIRMED', 4);
 
 INSERT INTO invoices (amount, invoicedate, booking_id, customer_id)
 VALUES (90, '2023-11-01', 1, 2),

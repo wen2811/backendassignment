@@ -102,8 +102,8 @@ public class BookingService {
     }
 
     //create
-    public Booking createBooking(Long userId, List<Long> bookingTreatmentIds, UserDto userDto) {
-        User existingUser = userRepository.findById(userId).orElseGet(() -> {
+    public Booking createBooking(String username, List<Long> bookingTreatmentIds, UserDto userDto) {
+        User existingUser = userRepository.findById(username).orElseGet(() -> {
 
             User newUser = createUserFromDto(userDto);
             return userRepository.save(newUser);
