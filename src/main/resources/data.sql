@@ -1,25 +1,29 @@
 INSERT INTO customers (first_name, last_name, email, phone_number)
-VALUES ('Joelle', 'Pedro', 'customer@test.nl', '1234567890'),
-       ('Kim', 'Boss', 'user2@test.nl', '3456789012'),
-       ('Mischa', 'Peters', 'user3@test.nl', '5678901234'),
-       ('Jeanine', 'Jean', 'user4@test.nl', '6789012345');
+VALUES ('Joelle', 'Pedro', 'customer1@test.nl', '1234567890'),
+       ('Kim', 'Boss', 'customer2@test.nl', '3456789012'),
+       ('Mischa', 'Peters', 'customer3@test.nl', '5678901234'),
+       ('Jeanine', 'Jean', 'customer4@test.nl', '6789012345');
 
 
-INSERT INTO users (username, firstname, lastname, dateofbirth, email, password, enabled)
+INSERT INTO users (username, firstname, lastname, dateofbirth, email, password, enabled, user_role)
 --password User1 = hallo
 --password User2 = zondag
 --password User3 = maandag
-VALUES ('User1', 'Maria', 'Cruz', '2000-02-02', 'employee@test.nl', '$2a$12$3pyLBM0VogqgM0XfcbUXTeKnK2FtqndUvVEO4KKV5wkMnbl9Ceq8O', true),
-       ('User2', 'Donald', 'Duck', '1970-08-08', 'admin@test.nl', '$2a$12$zDHpcCbf3aeHEPL.4ZGiJef21xXPLunBcxcwZhRn1qUD3q3hAZn/2', true),
-       ('User3', 'Joelle', 'Pedro', '1976-11-11', 'customer@test.nl', '$2a$12$Y4rPMU2HOmbcxf0es5hlXO6KjHmd/6vrWm3XMyB042Hz2nxGvc7vO', true);
+--password User4 = dinsdag
+--password User5 = woensdag
+VALUES ('User1', 'Maria', 'Cruz', '2000-02-02', 'employee@test.nl', '$2a$12$abGuYkVvI10IJXuR0JKP8emyPpEgJ9hVjzBWe2UusNCpbyfr/1SkG', true, 'EMPLOYEE'),
+       ('User2', 'Donald', 'Duck', '1970-08-08', 'admin@test.nl', '$2a$12$zDHpcCbf3aeHEPL.4ZGiJef21xXPLunBcxcwZhRn1qUD3q3hAZn/2', true, 'ADMIN'),
+       ('User3', 'Joelle', 'Pedro', '1978-05-11', 'customer1@test.nl', '$2a$12$Y4rPMU2HOmbcxf0es5hlXO6KjHmd/6vrWm3XMyB042Hz2nxGvc7vO', true, 'CUSTOMER'),
+       ('User4', 'Kim', 'Boss', '1985-03-20', 'customer2@test.nl', '$2a$12$JQyRUuujOmiciyrMsObYkewDxDrPjGruX5aEFMQ474oR2SO0S/Wey', true, 'CUSTOMER'),
+       ('User5', 'Mischa', 'Peters', '1988-08-18', 'customer3@test.nl', '$2a$12$ehYiMWQl2lCw.s733z7sROPGHEF4rFj5kDIfi.2kFteP902KaAMTa', true, 'CUSTOMER');
 
 --Insert into userRole values ('')
 
-INSERT INTO bookings (id, date, total_amount, booking_status, customer_id)
-VALUES (1, '2023-11-01', 90, 'NEW', 2);
-INSERT INTO bookings (id, date, total_amount, booking_status, customer_id)
-VALUES (2, '2023-11-15', 120, 'CONFIRMED', 3),
-       (3, '2023-11-08', 75, 'CONFIRMED', 4);
+INSERT INTO bookings (id, date, total_amount, booking_status, customer_id, user_username)
+VALUES (1, '2023-11-01', 90, 'NEW', 2, 'User3');
+INSERT INTO bookings (id, date, total_amount, booking_status, customer_id, user_username)
+VALUES (2, '2023-11-15', 120, 'BOOKED', 3, 'User4'),
+       (3, '2023-11-08', 75, 'BOOKED', 4, 'User5');
 
 INSERT INTO invoices (amount, invoicedate, booking_id, customer_id)
 VALUES (90, '2023-11-01', 1, 2),
@@ -44,7 +48,9 @@ VALUES ('2023-10-10', '10:00:00', '11:00:00', true),
 INSERT INTO authorities (authority, username)
 VALUES ('EMPLOYEE', 'User1'),
         ('ADMIN', 'User2'),
-        ('CUSTOMER', 'User3');
+        ('CUSTOMER', 'User3'),
+        ('CUSTOMER','User4'),
+        ('CUSTOMER', 'User5');
 
 
 

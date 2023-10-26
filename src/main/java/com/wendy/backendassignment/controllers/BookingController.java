@@ -20,8 +20,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@CrossOrigin
 @RestController
-@RequestMapping("/bookings")
+@RequestMapping(path = "/bookings")
 public class BookingController {
     private final BookingService bookingService;
     private final CustomerService customerService;
@@ -34,12 +35,12 @@ public class BookingController {
     }
 
     //Read
-    @GetMapping
+    @GetMapping(path = "")
     public ResponseEntity<List<BookingDto>> getAllBooking() {
         return ResponseEntity.ok().body(bookingService.getAllBooking());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}")
     public ResponseEntity<BookingDto> getBooking(@PathVariable Long id) {
         return ResponseEntity.ok().body(bookingService.getBooking(id));
     }
@@ -64,14 +65,14 @@ public class BookingController {
     }
 
     //Update
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}")
     public ResponseEntity<Object> updateBooking(@PathVariable Long id, @RequestBody BookingDto bookingDto) throws RecordNotFoundException {
         BookingDto updateBooking = bookingService.updateBooking(id, bookingDto);
         return ResponseEntity.ok().body(updateBooking);
     }
 
     //Delete
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<Object> deleteBooking(@PathVariable Long id) throws RecordNotFoundException {
         bookingService.deleteBooking(id);
         return ResponseEntity.noContent().build();
@@ -79,13 +80,13 @@ public class BookingController {
 
     //Relationships methods
     //update
-    @PutMapping("/updateTreatments/{id}")
+    @PutMapping(path = "/updateTreatments/{id}")
     public ResponseEntity<BookingDto> updateBookingTreatments(@PathVariable Long id, @RequestBody List<Long> treatmentIds) throws RecordNotFoundException {
         BookingDto updatedBookingDto = bookingService.updateBookingTreatments(id, treatmentIds);
         return new ResponseEntity<>(updatedBookingDto, HttpStatus.OK);
     }
 
-    @PostMapping("/registerbookings/")
+    @PostMapping(value = "/registerbookings/")
     public ResponseEntity<Object> createBooking(@RequestParam String username, @RequestParam List<Long> bookingTreatmentIds, @RequestBody UserDto userDto) {
         User existingUser = userService.getCustomerById(username);
 
@@ -101,20 +102,20 @@ public class BookingController {
     }
 
     //Read
-    @GetMapping("/{customerId}/bookings")
+    @GetMapping(path = "/{customerId}/bookings")
     public ResponseEntity<List<BookingDto>> getBookingsForCustomer(@PathVariable Long customerId) throws RecordNotFoundException {
         List<BookingDto> bookingDtos = bookingService.getBookingsForCustomer(customerId);
         return ResponseEntity.ok().body(bookingDtos);
     }
 
     //create
-    @PostMapping("/createWithoutRegistration")
+    @PostMapping(value = "/createWithoutRegistration")
     public ResponseEntity<BookingDto> createBookingWithoutRegistration(@RequestParam(required = false)String email, @RequestParam List<Long> bookingTreatmentIds,@RequestBody(required = false) CustomerDto customerDto, UserDto userDto) {
         BookingDto createdBooking = bookingService.createBookingWithoutRegistration(email, bookingTreatmentIds, customerDto, userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBooking);
     }
 
-    @PostMapping("/createinvoices")
+    @PostMapping(value = "/createinvoices")
     public ResponseEntity<String> createBookingWithInvoice() {
       try {
           bookingService.createBookingWithInvoice();

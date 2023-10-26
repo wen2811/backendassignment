@@ -32,6 +32,7 @@ public class UserService {
         List<UserDto> collection = new ArrayList<>();
         List<User> list = userRepository.findAll();
         for (User user : list) {
+
             collection.add(fromUser(user));
         }
         return collection;

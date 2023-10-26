@@ -40,8 +40,6 @@ public class AuthenticationController {
         String username = authenticationRequest.getUsername();
         String password = authenticationRequest.getPassword();
 
-        System.out.println(username);
-        System.out.println(password);
 
         try {
             authenticationManager.authenticate(
