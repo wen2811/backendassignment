@@ -1,3 +1,4 @@
+
 INSERT INTO customers (first_name, last_name, email, phone_number)
 VALUES ('Joelle', 'Pedro', 'customer1@test.nl', '1234567890'),
        ('Kim', 'Boss', 'customer2@test.nl', '3456789012'),
@@ -17,13 +18,20 @@ VALUES ('User1', 'Maria', 'Cruz', '2000-02-02', 'employee@test.nl', '$2a$12$abGu
        ('User4', 'Kim', 'Boss', '1985-03-20', 'customer2@test.nl', '$2a$12$JQyRUuujOmiciyrMsObYkewDxDrPjGruX5aEFMQ474oR2SO0S/Wey', true, 'CUSTOMER'),
        ('User5', 'Mischa', 'Peters', '1988-08-18', 'customer3@test.nl', '$2a$12$ehYiMWQl2lCw.s733z7sROPGHEF4rFj5kDIfi.2kFteP902KaAMTa', true, 'CUSTOMER');
 
---Insert into userRole values ('')
+INSERT INTO bookings (date, total_amount, booking_status, customer_id, user_username)
+VALUES ('2023-11-01', 90, 'NEW', 2, 'User3');
+INSERT INTO bookings (date, total_amount, booking_status, customer_id, user_username)
+VALUES ('2023-11-15', 120, 'BOOKED', 3, 'User4'),
+       ('2023-11-08', 75, 'BOOKED', 4, 'User5');
 
-INSERT INTO bookings (id, date, total_amount, booking_status, customer_id, user_username)
-VALUES (1, '2023-11-01', 90, 'NEW', 2, 'User3');
-INSERT INTO bookings (id, date, total_amount, booking_status, customer_id, user_username)
-VALUES (2, '2023-11-15', 120, 'BOOKED', 3, 'User4'),
-       (3, '2023-11-08', 75, 'BOOKED', 4, 'User5');
+
+INSERT INTO bookingtreatments (id, customer_email, customer_name, quantity)
+VALUES (11, 'customer1@test.nl', 'Joelle Pedro', 1),
+       (12,'customer2@test.nl', 'Kim Boss', 1),
+       (13,'customer3@test.nl', 'Mischa Peters', 1),
+       (14, 'customer4@test.nl', 'Jeanine Jean', 1);
+
+
 
 INSERT INTO invoices (amount, invoicedate, booking_id, customer_id)
 VALUES (90, '2023-11-01', 1, 2),
@@ -39,6 +47,8 @@ VALUES (1, 'Kobido Facial Massage', 'FACIAL_TREATMENT', 'Kobido is a traditional
        (6, 'Massage Treatment', 'BODY_TREATMENT', 'A carboxy facial treatment utilizes carbon dioxide gas to boost skin circulation, enhancing collagen production for improved skin texture and tone, offering rejuvenating and renewing benefits.', 60, 85),
        (7, 'Detox Treatment', 'BODY_TREATMENT', 'A carboxy facial treatment utilizes carbon dioxide gas to boost skin circulation, enhancing collagen production for improved skin texture and tone, offering rejuvenating and renewing benefits.', 60, 125),
        (8, 'Body mask Treatment', 'BODY_TREATMENT', 'A carboxy facial treatment utilizes carbon dioxide gas to boost skin circulation, enhancing collagen production for improved skin texture and tone, offering rejuvenating and renewing benefits.', 45, 115);
+
+
 
 INSERT INTO calendars (date, start_time, end_time, available_time)
 VALUES ('2023-10-10', '10:00:00', '11:00:00', true),

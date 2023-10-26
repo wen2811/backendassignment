@@ -102,7 +102,7 @@ public class BookingController {
     }
 
     //Read
-    @GetMapping(path = "/{customerId}/bookings")
+    @GetMapping(path = "/customerbookings/{customerId}")
     public ResponseEntity<List<BookingDto>> getBookingsForCustomer(@PathVariable Long customerId) throws RecordNotFoundException {
         List<BookingDto> bookingDtos = bookingService.getBookingsForCustomer(customerId);
         return ResponseEntity.ok().body(bookingDtos);

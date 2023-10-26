@@ -248,6 +248,11 @@ public class BookingService {
         bookingDto.setInvoice(bookingDto.invoice);
         bookingDto.setBookingTreatments(bookingDto.bookingTreatments);
         bookingDto.setCustomer(bookingDto.customer);
+
+        Customer customer = new Customer();
+        customer.setId(bookingDto.customer.getId());
+        booking.setCustomer(customer);
+
         return booking;
     }
 }
