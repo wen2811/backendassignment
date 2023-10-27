@@ -1,6 +1,6 @@
 package com.wendy.backendassignment.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -47,7 +47,7 @@ public class User {
     private UserRole userRole;
 
     @OneToMany(mappedBy = "user")
-    @JsonIgnore
+    @JsonIgnoreProperties("user")
     private List<Booking> bookingList;
 
     @OneToMany(
@@ -56,6 +56,7 @@ public class User {
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("user")
     private Set<Authority> authorities = new HashSet<>();
 
 

@@ -1,5 +1,7 @@
 package com.wendy.backendassignment.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,15 +26,19 @@ public class Booking {
     private BookingStatus bookingStatus;
 
     @OneToOne(mappedBy = "booking")
+    @JsonIgnoreProperties("booking")
     private Invoice invoice;
 
    @OneToMany(mappedBy = "booking")
+   @JsonIgnoreProperties("booking")
    private List<BookingTreatment> bookingTreatments;
 
     @ManyToOne
+    @JsonIgnore
     private Customer customer;
 
     @ManyToOne
+    @JsonIgnore
     private User user;
 
     public Booking(LocalDate date, double totalAmount ){

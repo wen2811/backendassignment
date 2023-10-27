@@ -13,29 +13,30 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@CrossOrigin
 @RestController
-@RequestMapping("/customers")
+@RequestMapping(value = "/customers")
 public class CustomerController {
     private final CustomerService customerService;
 
     public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
-    }
+            this.customerService = customerService;
+        }
 
     //Read
-    @GetMapping("/customers")
+    @GetMapping(value = "")
     public ResponseEntity<List<CustomerDto>> getAllCustomer() {
-        return ResponseEntity.ok().body(customerService.getAllCustomer());
+         return ResponseEntity.ok().body(customerService.getAllCustomer());
     }
 
-    @GetMapping("/customers/{id}")
+    @GetMapping(path = "/{id}")
     public ResponseEntity<CustomerDto> getACustomerById(@PathVariable Long id) throws RecordNotFoundException {
         CustomerDto customerDto = customerService.getACustomerById(id);
         return ResponseEntity.ok().body(customerDto);
     }
 
     //Create
-    @PostMapping("/customers")
+    @PostMapping(value = "/customers")
     public ResponseEntity<Object> addCustomer(@Valid @RequestBody CustomerDto customerDto, BindingResult br) {
         if(br.hasFieldErrors()) {
             StringBuilder sb = new StringBuilder();
@@ -53,7 +54,7 @@ public class CustomerController {
     }
 
     //Update
-    @PutMapping("/customers/{id}")
+    @PutMapping(path = "/{id}")
     public ResponseEntity<CustomerDto> updateCustomer(@PathVariable("id") Long id, @RequestBody CustomerDto customerDto) {
         customerService.updateCustomer(id, customerDto);
         return ResponseEntity.ok(customerDto);
@@ -61,13 +62,13 @@ public class CustomerController {
 
 
     //Delete
-    @DeleteMapping("/customers/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<Object> deleteCustomer(@PathVariable Long id) throws RecordNotFoundException  {
         customerService.deleteCustomer(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/customers/{customerId}/invoices")
+    @GetMapping(path = "/customers/{customerId}/invoices")
     public ResponseEntity<CustomerDto> getCustomerWithInvoices(@PathVariable Long customerId) throws RecordNotFoundException {
         CustomerDto customerDto = customerService.getCustomerWithInvoices(customerId);
         return ResponseEntity.ok().body(customerDto);

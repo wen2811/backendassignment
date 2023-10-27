@@ -1,5 +1,6 @@
 package com.wendy.backendassignment.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -32,6 +33,7 @@ public class Treatment {
     private Calendar calendar;
 
     @OneToMany
+    @JsonIgnoreProperties("treatment")
     private List<BookingTreatment> bookingTreatments;
 
     public Treatment(long id, String name, TreatmentType type, String description, double duration, double price, java.util.Calendar calendar) {

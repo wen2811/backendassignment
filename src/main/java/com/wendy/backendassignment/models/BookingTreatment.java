@@ -1,5 +1,6 @@
 package com.wendy.backendassignment.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,9 +21,11 @@ public class BookingTreatment {
     private String customerEmail;
 
     @ManyToOne
+    @JsonIgnore
     private Booking booking;
 
     @ManyToOne
+    @JsonIgnore
     private Treatment treatment;
 
    /* public void updateCustomerInformation(String customerName, String customerEmail){

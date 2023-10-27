@@ -194,9 +194,9 @@ public class BookingService {
             excistingCustomer.setLastName(customerDto.lastName);
             excistingCustomer.setPhoneNumber(customerDto.phoneNumber);
 
-            User newUser = new User();
-            newUser.setUserRole(userDto.getUserRole());
-            excistingCustomer.setUser(newUser);
+//            User newUser = new User();
+//            newUser.setUserRole(userDto.getUserRole());
+//            excistingCustomer.setUser(newUser);
 
             customerRepository.save(excistingCustomer);
         }

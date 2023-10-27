@@ -104,7 +104,7 @@ public class InvoiceService {
             return Collections.emptyList();
         }
         Customer customer = customerOptional.get();
-        List<Invoice> invoices = customer.getInvoice();
+        List<Invoice> invoices = customer.getInvoices();
         List<InvoiceDto> invoiceDtos = new ArrayList<>();
         for (Invoice invoice : invoices) {
             InvoiceDto invoiceDto = new InvoiceDto();

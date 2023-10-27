@@ -14,7 +14,7 @@ import java.io.IOException;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/files")
+@RequestMapping(value = "/files")
 public class FileController {
     private final FileService fileService;
     private final CustomerService customerService;
@@ -41,25 +41,25 @@ public class FileController {
         return ResponseEntity.ok(uploadedFile);
     }
 
-    @GetMapping("/get/{fileId}")
+    @GetMapping(path = "/get/{fileId}")
     public ResponseEntity<FileDto> getFile(@PathVariable Long fileId) {
         FileDto fileDto = fileService.getFile(fileId);
         return ResponseEntity.ok(fileDto);
     }
 
-    @PostMapping("/assign/{fileId}/to-customer/{customerId}")
+    @PostMapping(path = "/assign/{fileId}/to-customer/{customerId}")
     public ResponseEntity<FileDto> assignFileToCustomer(@PathVariable Long fileId, @PathVariable Long customerId) {
         FileDto assignedFile = fileService.assignFileToCustomer(fileId, customerId);
         return ResponseEntity.ok(assignedFile);
     }
 
-    @GetMapping("/download/{fileId}")
+    @GetMapping(path = "/download/{fileId}")
     public ResponseEntity<Resource> downloadFile(@PathVariable Long fileId) {
         ResponseEntity<Resource> fileResponse = fileService.downloadFile(fileId);
         return fileResponse;
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<Object> deleteFile(@PathVariable Long id) {
         fileService.deleteFile(id);
         return ResponseEntity.noContent().build();

@@ -15,8 +15,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+
 @RestController
-@RequestMapping("/bookingtreatments")
+@RequestMapping(value = "/bookingtreatments")
 public class BookingTreatmentController {
     private final BookingTreatmentService bookingTreatmentService;
     private final TreatmentService treatmentService;
@@ -27,18 +28,18 @@ public class BookingTreatmentController {
     }
 
     //Read
-    @GetMapping
+    @GetMapping(value = "")
     public ResponseEntity<List<BookingTreatmentDto>> getAllBookingTreatment() {
         return ResponseEntity.ok().body(bookingTreatmentService.getAllBookingTreatment());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}")
     public ResponseEntity<BookingTreatmentDto> getBookingTreatment(@PathVariable Long id) {
         return ResponseEntity.ok().body(bookingTreatmentService.getBookingTreatment(id));
     }
 
     //Create
-    @PostMapping
+    @PostMapping(value = "")
     public ResponseEntity<Object> addBookingTreatment(@Valid @RequestBody BookingTreatmentDto bookingTreatmentDto, BindingResult br) {
         if(br.hasFieldErrors()) {
             StringBuilder sb = new StringBuilder();
@@ -56,22 +57,22 @@ public class BookingTreatmentController {
     }
 
     //Update
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}")
     public ResponseEntity<Object> updateBookingTreatment(@PathVariable Long id, @RequestBody BookingTreatmentDto bookingTreatmentDto) throws RecordNotFoundException {
         BookingTreatmentDto updateBookingTreatment = bookingTreatmentService.updateBookingTreatment(id, bookingTreatmentDto);
         return ResponseEntity.ok().body(updateBookingTreatment);
     }
 
     //Delete
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<Object> deleteBookingTreatment(@PathVariable Long id) throws RecordNotFoundException {
         bookingTreatmentService.deleteBookingTreatment(id);
         return ResponseEntity.noContent().build();
     }
 
     //Relationships methods
-  @PostMapping("/bookingtreatments/add")
-  public ResponseEntity<BookingTreatmentDto> addTreatmentToBookingTreatment(@RequestParam Long treatmentId, @RequestBody BookingTreatmentDto bookingTreatmentDto) {
+  @PostMapping(path = "/add/{treatmentId}")
+  public ResponseEntity<BookingTreatmentDto> addTreatmentToBookingTreatment(@PathVariable Long treatmentId, @RequestBody BookingTreatmentDto bookingTreatmentDto) {
       try {
           BookingTreatmentDto addedBookingTreatment = bookingTreatmentService.addTreatmentToBookingTreatment(treatmentId, bookingTreatmentDto);
           return new ResponseEntity<>(addedBookingTreatment, HttpStatus.CREATED);

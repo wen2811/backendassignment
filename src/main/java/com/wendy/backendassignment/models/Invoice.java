@@ -29,5 +29,6 @@ public class Invoice {
     private Booking booking;
 
     @ManyToOne
+    @JsonIgnore
     private Customer customer;
 }

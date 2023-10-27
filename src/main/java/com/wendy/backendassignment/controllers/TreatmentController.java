@@ -17,7 +17,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/treatments")
+@RequestMapping(value = "/treatments")
 public class TreatmentController {
     private final TreatmentService treatmentService;
 

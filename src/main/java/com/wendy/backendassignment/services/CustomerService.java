@@ -2,6 +2,7 @@ package com.wendy.backendassignment.services;
 
 import com.wendy.backendassignment.dtos.CustomerDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
+import com.wendy.backendassignment.models.Booking;
 import com.wendy.backendassignment.models.Customer;
 import com.wendy.backendassignment.models.Invoice;
 import com.wendy.backendassignment.repositories.CustomerRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
@@ -25,7 +27,11 @@ public class CustomerService {
     //Read
     public List<CustomerDto> getAllCustomer() {
         List<CustomerDto> customerDto = new ArrayList<>();
+
         List<Customer> list = customerRepository.findAll();
+
+        System.out.println(list.get(0));
+
         for (Customer customer : list) {
             customerDto.add(transferCustomerToDto(customer));
         }
@@ -82,7 +88,7 @@ public class CustomerService {
         Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new RecordNotFoundException("Customer not found with ID: " + customerId));
 
         List<Invoice> invoices = invoiceRepository.findByCustomerId(customerId);
-        customer.setInvoice(invoices);
+        customer.setInvoices(invoices);
 
         return transferCustomerToDto(customer);
     }
@@ -101,8 +107,12 @@ public class CustomerService {
         customerDto.lastName = customer.getLastName();
         customerDto.email = customer.getEmail();
         customerDto.phoneNumber = customer.getPhoneNumber();
-        customerDto.bookingList = customer.getBookingList();
-        customerDto.invoices = customer.getInvoice();
+        customerDto.bookingList = customer.getBookingList().stream()
+                .map(Booking::getId)
+                .collect(Collectors.toList());
+        customerDto.invoices = customer.getInvoices().stream()
+                .map(Invoice::getId)
+                .collect(Collectors.toList());
         return customerDto;
     }
 
@@ -115,8 +125,23 @@ public class CustomerService {
         customer.setLastName(customerDto.lastName);
         customer.setEmail(customerDto.email);
         customer.setPhoneNumber(customerDto.phoneNumber);
-        customer.setBookingList(customerDto.bookingList);
-        customer.setInvoice(customerDto.invoices);
+
+        customer.setBookingList(customerDto.bookingList.stream()
+                .map(bookingId -> {
+                    Booking booking = new Booking();
+                    booking.setId(bookingId);
+
+                    return booking;
+                })
+                .collect(Collectors.toList()));
+        customer.setInvoices(customerDto.invoices.stream()
+                .map(invoiceId -> {
+                    Invoice invoice = new Invoice();
+                    invoice.setId(invoiceId);
+
+                    return invoice;
+                })
+                .collect(Collectors.toList()));
         return customer;
     }
 

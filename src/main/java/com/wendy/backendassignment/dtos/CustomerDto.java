@@ -1,13 +1,14 @@
 package com.wendy.backendassignment.dtos;
 
-import com.wendy.backendassignment.models.Booking;
-import com.wendy.backendassignment.models.File;
-import com.wendy.backendassignment.models.Invoice;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
-
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class CustomerDto {
@@ -16,10 +17,17 @@ public class CustomerDto {
     public String lastName;
     public String phoneNumber;
     public String email;
-    public List<Booking> bookingList;
+    public List<Long> bookingList;
 
-    public List<Invoice> invoices;
-    public List<File> fileList;
+    public List<Long> invoices;
+    public List<Long> fileList;
 
+    public class BookingListDto{
+        public Long id;
+        public LocalDate date;
+        public double totalAmount;
+    }
 
 }
+
+

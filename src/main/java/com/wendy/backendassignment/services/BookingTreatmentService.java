@@ -103,23 +103,26 @@ public class BookingTreatmentService {
     public BookingTreatmentDto transferBookingTreatmentToDto(BookingTreatment bookingTreatment) {
         BookingTreatmentDto bookingTreatmentDto = new BookingTreatmentDto();
 
-        bookingTreatmentDto.id = bookingTreatment.getId();
-        bookingTreatmentDto.quantity = bookingTreatment.getQuantity();
-        bookingTreatmentDto.treatment = bookingTreatment.getTreatment();
-        bookingTreatmentDto.booking = bookingTreatment.getBooking();
-        bookingTreatmentDto.customerName = bookingTreatment.getCustomerName();
-        bookingTreatmentDto.customerEmail = bookingTreatment.getCustomerEmail();
+        bookingTreatmentDto.setId(bookingTreatment.getId());
+        bookingTreatmentDto.setQuantity(bookingTreatment.getQuantity());
+        bookingTreatmentDto.setTreatment(bookingTreatment.getTreatment());
+        bookingTreatmentDto.setBooking(bookingTreatment.getBooking());
+        bookingTreatmentDto.setCustomerName(bookingTreatment.getCustomerName());
+        bookingTreatmentDto.setCustomerEmail(bookingTreatment.getCustomerEmail());
+
+
         return bookingTreatmentDto;
     }
     public BookingTreatment transferDtoToBookingTreatment(BookingTreatmentDto bookingTreatmentDto) {
         BookingTreatment bookingTreatment = new BookingTreatment();
 
-        bookingTreatmentDto.setId(bookingTreatmentDto.id);
-        bookingTreatmentDto.setQuantity(bookingTreatmentDto.quantity);
-        bookingTreatmentDto.setTreatment(bookingTreatmentDto.treatment);
-        bookingTreatmentDto.setBooking(bookingTreatmentDto.booking);
-        bookingTreatmentDto.setCustomerName(bookingTreatmentDto.customerName);
-        bookingTreatmentDto.setCustomerEmail(bookingTreatmentDto.customerEmail);
+        bookingTreatment.setId(bookingTreatmentDto.getId());
+        bookingTreatment.setQuantity(bookingTreatmentDto.getQuantity());
+        bookingTreatment.setTreatment(bookingTreatmentDto.getTreatment());
+        bookingTreatment.setBooking(bookingTreatmentDto.getBooking());
+        bookingTreatment.setCustomerName(bookingTreatmentDto.getCustomerName());
+        bookingTreatment.setCustomerEmail(bookingTreatmentDto.getCustomerEmail());
+
         return bookingTreatment;
     }
 }

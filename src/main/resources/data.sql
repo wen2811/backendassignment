@@ -19,10 +19,10 @@ VALUES ('User1', 'Maria', 'Cruz', '2000-02-02', 'employee@test.nl', '$2a$12$abGu
        ('User5', 'Mischa', 'Peters', '1988-08-18', 'customer3@test.nl', '$2a$12$ehYiMWQl2lCw.s733z7sROPGHEF4rFj5kDIfi.2kFteP902KaAMTa', true, 'CUSTOMER');
 
 INSERT INTO bookings (date, total_amount, booking_status, customer_id, user_username)
-VALUES ('2023-11-01', 90, 'NEW', 2, 'User3');
+VALUES ('2023-11-01', 90, 'NEW', 1, 'User3');
 INSERT INTO bookings (date, total_amount, booking_status, customer_id, user_username)
-VALUES ('2023-11-15', 120, 'BOOKED', 3, 'User4'),
-       ('2023-11-08', 75, 'BOOKED', 4, 'User5');
+VALUES ('2023-11-15', 120, 'BOOKED', 2, 'User4'),
+       ('2023-11-08', 75, 'BOOKED', 3, 'User5');
 
 
 INSERT INTO bookingtreatments (id, customer_email, customer_name, quantity)
@@ -35,8 +35,8 @@ VALUES (11, 'customer1@test.nl', 'Joelle Pedro', 1),
 
 INSERT INTO invoices (amount, invoicedate, booking_id, customer_id)
 VALUES (90, '2023-11-01', 1, 2),
-       (120, '2023-11-15', 2, 3),
-       (75, '2023-11-08', 3, 4);
+       (125, '2023-11-15', 2, 3),
+       (80, '2023-11-08', 3, 4);
 
 INSERT INTO treatments (id, name, type, description, duration, price)
 VALUES (1, 'Kobido Facial Massage', 'FACIAL_TREATMENT', 'Kobido is a traditional Japanese facial massage that utilizes gentle, rhythmic hand movements and acupressure points to improve blood circulation and rejuvenate the skin. It is known for its relaxing and invigorating effects, helping to reduce tension and promote a radiant complexion.', 60, 100),

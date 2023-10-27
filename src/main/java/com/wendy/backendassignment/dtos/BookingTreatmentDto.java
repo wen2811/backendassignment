@@ -19,4 +19,7 @@ public class BookingTreatmentDto {
     public Treatment treatment;
 
 
+
+
+
 }
