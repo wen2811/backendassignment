@@ -59,8 +59,7 @@ public class BookingTreatmentService {
         }
         BookingTreatment updateBookingTreatment = bookingTreatmentOptional.get();
         updateBookingTreatment.setQuantity(bookingTreatmentDto.getQuantity());
-        updateBookingTreatment.setTreatment(bookingTreatmentDto.getTreatment());
-        updateBookingTreatment.setBooking(bookingTreatmentDto.getBooking());
+        //updateBookingTreatment.setBooking(bookingTreatmentDto.getBooking());
         bookingTreatmentRepository.save(updateBookingTreatment);
 
         return transferBookingTreatmentToDto(updateBookingTreatment);
@@ -105,23 +104,20 @@ public class BookingTreatmentService {
 
         bookingTreatmentDto.setId(bookingTreatment.getId());
         bookingTreatmentDto.setQuantity(bookingTreatment.getQuantity());
-        bookingTreatmentDto.setTreatment(bookingTreatment.getTreatment());
-        bookingTreatmentDto.setBooking(bookingTreatment.getBooking());
-        bookingTreatmentDto.setCustomerName(bookingTreatment.getCustomerName());
-        bookingTreatmentDto.setCustomerEmail(bookingTreatment.getCustomerEmail());
-
+        Treatment treatment = bookingTreatment.getTreatment();
+        if (treatment != null) {
+            bookingTreatmentDto.setTreatment(treatment.getId());
+        }
 
         return bookingTreatmentDto;
     }
     public BookingTreatment transferDtoToBookingTreatment(BookingTreatmentDto bookingTreatmentDto) {
         BookingTreatment bookingTreatment = new BookingTreatment();
 
-        bookingTreatment.setId(bookingTreatmentDto.getId());
         bookingTreatment.setQuantity(bookingTreatmentDto.getQuantity());
-        bookingTreatment.setTreatment(bookingTreatmentDto.getTreatment());
-        bookingTreatment.setBooking(bookingTreatmentDto.getBooking());
-        bookingTreatment.setCustomerName(bookingTreatmentDto.getCustomerName());
-        bookingTreatment.setCustomerEmail(bookingTreatmentDto.getCustomerEmail());
+        Treatment treatment = new Treatment();
+        treatment.setId(bookingTreatmentDto.getTreatment());
+        bookingTreatment.setTreatment(treatment);
 
         return bookingTreatment;
     }

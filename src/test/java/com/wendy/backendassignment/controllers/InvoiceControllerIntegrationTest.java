@@ -98,9 +98,9 @@ class InvoiceControllerIntegrationTest {
 
         customer.setInvoices(new ArrayList<>());
 
-        customer.getInvoices().add(invoice1);
-        customer.getInvoices().add(invoice2);
-        customer.getInvoices().add(invoice3);
+        customer.getInvoices().add(invoice1.getId());
+        customer.getInvoices().add(invoice2.getId());
+        customer.getInvoices().add(invoice3.getId());
 
 
         LocalDate invoiceDate = invoiceDto1.getInvoicedate();

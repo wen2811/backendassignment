@@ -124,7 +124,7 @@ public class InvoiceService {
         invoiceDto.id = invoice.getId();
         invoiceDto.amount = invoice.getAmount();
         invoiceDto.invoicedate = invoice.getInvoicedate();
-        invoiceDto.booking = invoice.getBooking();
+        invoiceDto.booking= invoice.getBooking();
         invoiceDto.customer = invoice.getCustomer();
         return invoiceDto;
     }

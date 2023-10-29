@@ -1,7 +1,5 @@
 package com.wendy.backendassignment.dtos;
 
-import com.wendy.backendassignment.models.Booking;
-import com.wendy.backendassignment.models.Treatment;
 import lombok.*;
 
 @Getter
@@ -13,13 +11,9 @@ import lombok.*;
 public class BookingTreatmentDto {
     public Long id;
     public int quantity;
-    public String customerName;
-    public String customerEmail;
-    public Booking booking;
-    public Treatment treatment;
 
-
-
+    //public Booking booking;
+    public Long treatment;
 
 
 }

@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,16 +16,11 @@ public class CustomerDto {
     public String lastName;
     public String phoneNumber;
     public String email;
-    public List<Long> bookingList;
+    //public List<Long> bookingList;
 
     public List<Long> invoices;
     public List<Long> fileList;
 
-    public class BookingListDto{
-        public Long id;
-        public LocalDate date;
-        public double totalAmount;
-    }
 
 }
 

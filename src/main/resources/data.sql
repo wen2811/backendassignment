@@ -25,11 +25,11 @@ VALUES ('2023-11-15', 120, 'BOOKED', 2, 'User4'),
        ('2023-11-08', 75, 'BOOKED', 3, 'User5');
 
 
-INSERT INTO bookingtreatments (id, customer_email, customer_name, quantity)
-VALUES (11, 'customer1@test.nl', 'Joelle Pedro', 1),
-       (12,'customer2@test.nl', 'Kim Boss', 1),
-       (13,'customer3@test.nl', 'Mischa Peters', 1),
-       (14, 'customer4@test.nl', 'Jeanine Jean', 1);
+INSERT INTO bookingtreatments (id, treatment_name, treatment_duration, quantity)
+VALUES (11, 'Kobido Facial Massage', 60, 1),
+       (12, 'Carboxy Treatment', 45, 1),
+       (13, 'Hydrafacial Treatment', 60, 1),
+       (14,  'LED Light Therapy', 30, 1);
 
 
 

@@ -34,17 +34,6 @@ public class Customer{
     @JsonIgnoreProperties("customer")
     private List<File> fileList;
 
-   /* public boolean isPasswordValid(String password) {
-        return false;
-    }
-
-    public void changePassword(String newPassword) {
-
-    }
-
-    public void setPassword(String password) {
-    }*/
-
     public List<Invoice> getInvoices() {
         return invoices;
     }

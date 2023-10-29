@@ -186,8 +186,10 @@ public class TreatmentService {
 
         bookingTreatmentDto.setId(bookingTreatment.getId());
         bookingTreatmentDto.setQuantity(bookingTreatment.getQuantity());
-        bookingTreatmentDto.setTreatment(bookingTreatment.getTreatment());
-        bookingTreatmentDto.setBooking(bookingTreatment.getBooking());
+        Treatment treatment = bookingTreatment.getTreatment();
+        if (treatment != null) {
+            bookingTreatmentDto.setTreatment(treatment.getId());
+        }
 
         return bookingTreatmentDto;
     }
@@ -195,10 +197,12 @@ public class TreatmentService {
     public BookingTreatment transferDtoToBookingTreatment(BookingTreatmentDto bookingTreatmentDto) {
         BookingTreatment bookingTreatment = new BookingTreatment();
 
-        bookingTreatment.setId(bookingTreatmentDto.getId());
         bookingTreatment.setQuantity(bookingTreatmentDto.getQuantity());
-        bookingTreatment.setTreatment(bookingTreatmentDto.getTreatment());
-        bookingTreatment.setBooking(bookingTreatmentDto.getBooking());
+        if (bookingTreatmentDto.getTreatment() != null) {
+            Treatment treatment = treatmentRepository.findById(bookingTreatmentDto.getTreatment())
+                    .orElseThrow(() -> new RecordNotFoundException("Treatment not found with ID: " + bookingTreatmentDto.getTreatment()));
+            bookingTreatment.setTreatment(treatment);
+        }
 
         return bookingTreatment;
     }

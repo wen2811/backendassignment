@@ -2,7 +2,6 @@ package com.wendy.backendassignment.services;
 
 import com.wendy.backendassignment.dtos.CustomerDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
-import com.wendy.backendassignment.models.Booking;
 import com.wendy.backendassignment.models.Customer;
 import com.wendy.backendassignment.models.Invoice;
 import com.wendy.backendassignment.repositories.CustomerRepository;
@@ -69,7 +68,7 @@ public class CustomerService {
         updateCustomer.setLastName(customerDto.getLastName());
         updateCustomer.setEmail(customerDto.getEmail());
         updateCustomer.setPhoneNumber(customerDto.getPhoneNumber());
-        updateCustomer.setBookingList(customerDto.getBookingList());
+       // updateCustomer.setBookingList(customerDto.getBookingList());
         customerRepository.save(updateCustomer);
     }
 
@@ -107,9 +106,9 @@ public class CustomerService {
         customerDto.lastName = customer.getLastName();
         customerDto.email = customer.getEmail();
         customerDto.phoneNumber = customer.getPhoneNumber();
-        customerDto.bookingList = customer.getBookingList().stream()
-                .map(Booking::getId)
-                .collect(Collectors.toList());
+//        customerDto.bookingList = customer.getBookingList().stream()
+//                .map(Booking::getId)
+//                .collect(Collectors.toList());
         customerDto.invoices = customer.getInvoices().stream()
                 .map(Invoice::getId)
                 .collect(Collectors.toList());
@@ -126,14 +125,14 @@ public class CustomerService {
         customer.setEmail(customerDto.email);
         customer.setPhoneNumber(customerDto.phoneNumber);
 
-        customer.setBookingList(customerDto.bookingList.stream()
-                .map(bookingId -> {
-                    Booking booking = new Booking();
-                    booking.setId(bookingId);
-
-                    return booking;
-                })
-                .collect(Collectors.toList()));
+//        customer.setBookingList(customerDto.bookingList.stream()
+//                .map(bookingId -> {
+//                    Booking booking = new Booking();
+//                    booking.setId(bookingId);
+//
+//                    return booking;
+//                })
+//                .collect(Collectors.toList()));
         customer.setInvoices(customerDto.invoices.stream()
                 .map(invoiceId -> {
                     Invoice invoice = new Invoice();

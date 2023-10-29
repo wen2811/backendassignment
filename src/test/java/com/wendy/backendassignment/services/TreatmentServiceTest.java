@@ -100,15 +100,15 @@ class TreatmentServiceTest {
         bookingTreatmentDto1.setId(1L);
         bookingTreatmentDto1.setQuantity(2);
         bookingTreatmentDto1.setTreatment(treatment1);
-        bookingTreatmentDto1.setCustomerName("Iris Maria");
-        bookingTreatmentDto1.setCustomerEmail("Iris@example.com");
+        bookingTreatmentDto1.setTreatmentName("Massage");
+        bookingTreatmentDto1.setTreatmentDuration(90);
 
         BookingTreatmentDto bookingTreatmentDto2 = new BookingTreatmentDto();
         bookingTreatmentDto2.setId(2L);
         bookingTreatmentDto2.setQuantity(3);
         bookingTreatmentDto2.setTreatment(treatment2);
-        bookingTreatmentDto2.setCustomerName("Nate Cole");
-        bookingTreatmentDto2.setCustomerEmail("Nate@example.com");
+        bookingTreatmentDto2.setTreatmentName("Peeling facial");
+        bookingTreatmentDto2.setTreatmentDuration(60);
 
         bookingTreatments.add(bookingTreatmentDto1);
         bookingTreatments.add(bookingTreatmentDto2);
@@ -157,15 +157,15 @@ class TreatmentServiceTest {
     void transferBookingTreatmentToDto() {
         //Arrange
         BookingTreatment bookingTreatment= BookingTreatment.builder().id(4L).quantity(3)
-                .customerName("Selena Lopez").customerEmail("selena@testmail.com")
+                .treatmentName("Carboxy").treatmentDuration(90)
                 .build();
         //Act
         BookingTreatmentDto bookingTreatmentDto = treatmentServiceImpl.transferBookingTreatmentToDto(bookingTreatment);
 
         //Assert
         assertEquals(3, bookingTreatment.getQuantity());
-        assertEquals("Selena Lopez", bookingTreatment.getCustomerName());
-        assertEquals("selena@testmail.com", bookingTreatment.getCustomerEmail());
+        assertEquals("Carboxy", bookingTreatment.getTreatmentName());
+        assertEquals(90, bookingTreatment.getTreatmentDuration());
 
     }
 
@@ -173,15 +173,13 @@ class TreatmentServiceTest {
     void transferDtoToBookingTreatment() {
         //Arrange
         BookingTreatmentDto bookingTreatmentDto= BookingTreatmentDto.builder().id(4L).quantity(3)
-                .customerName("Selena Lopez").customerEmail("selena@testmail.com")
                 .build();
         //Act
         BookingTreatment bookingTreatment = treatmentServiceImpl.transferDtoToBookingTreatment(bookingTreatmentDto);
 
         //Assert
         assertEquals(3, bookingTreatmentDto.getQuantity());
-        assertEquals("Selena Lopez", bookingTreatmentDto.getCustomerName());
-        assertEquals("selena@testmail.com", bookingTreatmentDto.getCustomerEmail());
+
     }
 
     @Test
@@ -428,72 +426,7 @@ class TreatmentServiceTest {
         assertThrows(RecordNotFoundException.class, () -> treatmentServiceImpl.getTreatmentWithCalendar(treatmentId));
     }
 
-   /* @Test
-    void addBookingTreatmentToTreatment() {
-        //arrange
-        long treatmentId = 2L;
-        Treatment existingTreatment = new Treatment();
-        existingTreatment.setId(treatmentId);
 
-        BookingTreatmentDto bookingTreatmentDto  = BookingTreatmentDto.builder().quantity(3)
-                .treatment(treatment2).customerName("Nate Cole").customerEmail("Nate@example.com").build();
-
-        BookingTreatment savedBookingTreatment = BookingTreatment.builder().quantity(3)
-                .treatment(treatment2).customerName("Nate Cole").customerEmail("Nate@example.com").build();
-
-
-        when(treatmentRepository.findById(treatmentId)).thenReturn(Optional.of(existingTreatment));
-        when(bookingTreatmentRepository.save(any(BookingTreatment.class))).thenReturn(savedBookingTreatment);
-
-        //act
-        BookingTreatmentDto result = treatmentServiceImpl.addBookingTreatmentToTreatment(treatmentId, bookingTreatmentDto);
-
-        //assert
-        assertNotNull(result);
-        assertEquals(bookingTreatmentDto.getQuantity(), result.getQuantity());
-
-        verify(treatmentRepository).findById(treatmentId);
-        verify(bookingTreatmentRepository).save(any(BookingTreatment.class));
-
-    }*/
-   /* @Test
-    void addBookingTreatmentToTreatment_ThrowsRecordNotFoundException() {
-        //arrange
-        long treatmentId = 1L;
-        BookingTreatmentDto bookingTreatmentDto = new BookingTreatmentDto();
-
-        //act
-        when(treatmentRepository.findById(treatmentId)).thenReturn(Optional.empty());
-        //arrange
-        assertThrows(RecordNotFoundException.class, () -> {
-            treatmentServiceImpl.addBookingTreatmentToTreatment(treatmentId, bookingTreatmentDto);
-        });
-    }*/
-
-
-    /*@Test
-    void updateBookingTreatment() {
-        long bookingTreatmentId = 1L;
-        BookingTreatmentDto bookingTreatmentDto  = BookingTreatmentDto.builder().quantity(3)
-                .treatment(treatment2).customerName("Nate Cole").customerEmail("Nate@example.com").build();
-
-
-
-        BookingTreatment existingBookingTreatment = new BookingTreatment();
-        when(treatmentRepository.findById(treatmentId)).thenReturn(Optional.of(existingTreatment));
-
-        //act
-        treatmentServiceImpl.updateTreatment(treatmentId,treatmentDto);
-
-        //assert
-        ArgumentCaptor<Treatment> treatmentArgumentCaptor1 = ArgumentCaptor.forClass(Treatment.class);
-        verify(treatmentRepository).save(treatmentArgumentCaptor1.capture());
-
-        Treatment updatedTreatment = treatmentArgumentCaptor1.getValue();
-        assertEquals("korting", updatedTreatment.getDescription());
-        assertEquals(50, updatedTreatment.getPrice());
-
-    }*/
 
 
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -231,9 +232,15 @@ public class BookingService {
         bookingDto.date = booking.getDate();
         bookingDto.totalAmount = booking.getTotalAmount();
         bookingDto.bookingStatus = booking.getBookingStatus();
-        bookingDto.invoice = booking.getInvoice();
-        bookingDto.bookingTreatments = booking.getBookingTreatments();
-        bookingDto.customer =booking.getCustomer();
+        bookingDto.invoice = booking.getInvoice().getId();
+        List<Long> bookingTreatmentIds = booking.getBookingTreatments().stream()
+                .map(BookingTreatment::getId)
+                .collect(Collectors.toList());
+
+        bookingDto.setBookingTreatment(bookingTreatmentIds);
+
+        bookingDto.customerid = booking.getCustomer().getId();
+        bookingDto.customer = booking.getCustomer().getEmail();
         return bookingDto;
     }
 
@@ -246,13 +253,22 @@ public class BookingService {
         bookingDto.setTotalAmount(bookingDto.totalAmount);
         bookingDto.setBookingStatus(bookingDto.bookingStatus);
         bookingDto.setInvoice(bookingDto.invoice);
-        bookingDto.setBookingTreatments(bookingDto.bookingTreatments);
+
+//        Invoice invoice = booking.getInvoice();
+//        if (invoice != null) {
+//            bookingDto.invoice = new Invoice();
+//            bookingDto.invoice.setId(invoice.getId());
+//            bookingDto.invoice.setAmount(invoice.getAmount());
+//            bookingDto.invoice.setInvoicedate(invoice.getInvoicedate());
+//        }
+
+        //bookingDto.setBookingTreatments(bookingDto.bookingTreatments);
+        //bookingDto.setCustomer(bookingDto.customer);
+
+        /*Customer customer = new Customer();
+        customer.setFirstName(bookingDto.customer.getFirstName());
+        booking.setCustomer(customer);*/
         bookingDto.setCustomer(bookingDto.customer);
-
-        Customer customer = new Customer();
-        customer.setId(bookingDto.customer.getId());
-        booking.setCustomer(customer);
-
         return booking;
     }
 }
