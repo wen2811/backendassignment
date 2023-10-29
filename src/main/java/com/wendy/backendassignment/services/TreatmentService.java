@@ -1,10 +1,8 @@
 package com.wendy.backendassignment.services;
 
-import com.wendy.backendassignment.dtos.BookingTreatmentDto;
 import com.wendy.backendassignment.dtos.CalendarDto;
 import com.wendy.backendassignment.dtos.TreatmentDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
-import com.wendy.backendassignment.models.BookingTreatment;
 import com.wendy.backendassignment.models.Calendar;
 import com.wendy.backendassignment.models.Treatment;
 import com.wendy.backendassignment.models.TreatmentType;
@@ -181,7 +179,7 @@ public class TreatmentService {
         return treatment;
     }
 
-    public BookingTreatmentDto transferBookingTreatmentToDto(BookingTreatment bookingTreatment) {
+   /* public BookingTreatmentDto transferBookingTreatmentToDto(BookingTreatment bookingTreatment) {
         BookingTreatmentDto bookingTreatmentDto = new BookingTreatmentDto();
 
         bookingTreatmentDto.setId(bookingTreatment.getId());
@@ -205,6 +203,6 @@ public class TreatmentService {
         }
 
         return bookingTreatment;
-    }
+    }*/
 
 }

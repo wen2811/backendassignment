@@ -2,6 +2,7 @@ package com.wendy.backendassignment.services;
 
 import com.wendy.backendassignment.dtos.BookingTreatmentDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
+import com.wendy.backendassignment.models.Booking;
 import com.wendy.backendassignment.models.BookingTreatment;
 import com.wendy.backendassignment.models.Treatment;
 import com.wendy.backendassignment.repositories.BookingTreatmentRepository;
@@ -106,7 +107,8 @@ public class BookingTreatmentService {
         bookingTreatmentDto.setQuantity(bookingTreatment.getQuantity());
         Treatment treatment = bookingTreatment.getTreatment();
         if (treatment != null) {
-            bookingTreatmentDto.setTreatment(treatment.getId());
+            bookingTreatmentDto.setTreatmentId(treatment.getId());
+            bookingTreatmentDto.setBookingId(bookingTreatment.getBooking().getId());
         }
 
         return bookingTreatmentDto;
@@ -115,8 +117,14 @@ public class BookingTreatmentService {
         BookingTreatment bookingTreatment = new BookingTreatment();
 
         bookingTreatment.setQuantity(bookingTreatmentDto.getQuantity());
+
         Treatment treatment = new Treatment();
-        treatment.setId(bookingTreatmentDto.getTreatment());
+        treatment.setId(bookingTreatmentDto.getTreatmentId());
+
+        Booking booking = new Booking();
+        booking.setId(bookingTreatmentDto.getBookingId());
+
+        bookingTreatment.setBooking(booking);
         bookingTreatment.setTreatment(treatment);
 
         return bookingTreatment;

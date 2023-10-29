@@ -32,7 +32,7 @@ public class Treatment {
     @OneToOne (optional = true)
     private Calendar calendar;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JsonIgnoreProperties("treatment")
     private List<BookingTreatment> bookingTreatments;
 

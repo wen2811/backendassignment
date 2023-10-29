@@ -11,9 +11,10 @@ import lombok.*;
 public class BookingTreatmentDto {
     public Long id;
     public int quantity;
+    public Long bookingId;
+    public Long treatmentId;
 
-    //public Booking booking;
-    public Long treatment;
+
 
 
 }

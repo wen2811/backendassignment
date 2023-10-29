@@ -25,8 +25,8 @@ public class BookingTreatment {
     @ManyToOne
     @JsonIgnore
     private Treatment treatment;
-    private String treatmentName;
-    private double treatmentDuration;
+    //private String treatmentName;
+    //private double treatmentDuration;
 
 
 
