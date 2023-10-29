@@ -16,7 +16,7 @@ public class CustomerDto {
     public String lastName;
     public String phoneNumber;
     public String email;
-    //public List<Long> bookingList;
+    public List<Long> bookingList;
 
     public List<Long> invoices;
     public List<Long> fileList;

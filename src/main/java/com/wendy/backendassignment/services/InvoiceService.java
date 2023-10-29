@@ -66,8 +66,13 @@ public class InvoiceService {
 
         existingInvoice.setAmount(invoiceDto.getAmount());
         existingInvoice.setInvoicedate(invoiceDto.getInvoicedate());
-        existingInvoice.setBooking(invoiceDto.getBooking());
-        existingInvoice.setCustomer(invoiceDto.getCustomer());
+        Booking booking = bookingRepository.findById(invoiceDto.getBookingId())
+                .orElseThrow(() -> new RecordNotFoundException("There's no Booking found with id " + invoiceDto.getBookingId()));
+        existingInvoice.setBooking(booking);
+
+        Customer customer = customerRepository.findById(invoiceDto.getCustomerId())
+                .orElseThrow(() -> new RecordNotFoundException("There's no Customer found with id " + invoiceDto.getCustomerId()));
+        existingInvoice.setCustomer(customer);
 
         invoiceRepository.save(existingInvoice);
     }
@@ -124,8 +129,9 @@ public class InvoiceService {
         invoiceDto.id = invoice.getId();
         invoiceDto.amount = invoice.getAmount();
         invoiceDto.invoicedate = invoice.getInvoicedate();
-        invoiceDto.booking= invoice.getBooking();
-        invoiceDto.customer = invoice.getCustomer();
+        invoiceDto.bookingId= invoice.getBooking().getId();
+        invoiceDto.customerId = invoice.getCustomer().getId();
+        invoiceDto.customer = invoice.getCustomer().getEmail();
         return invoiceDto;
     }
 
@@ -135,8 +141,13 @@ public class InvoiceService {
         invoice.setId(invoiceDto.id);
         invoice.setAmount(invoiceDto.amount);
         invoice.setInvoicedate(invoiceDto.invoicedate);
-        invoice.setBooking(invoiceDto.booking);
-        invoice.setCustomer(invoiceDto.customer);
+        Booking booking = bookingRepository.findById(invoiceDto.bookingId)
+                .orElseThrow(() -> new RecordNotFoundException("There's no Booking found with id " + invoiceDto.bookingId));
+        invoice.setBooking(booking);
+
+        Customer customer = customerRepository.findById(invoiceDto.customerId)
+                .orElseThrow(() -> new RecordNotFoundException("There's no Customer found with id " + invoiceDto.customerId));
+        invoice.setCustomer(customer);
         return invoice;
     }
 }

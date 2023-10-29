@@ -1,7 +1,5 @@
 package com.wendy.backendassignment.dtos;
 
-import com.wendy.backendassignment.models.Booking;
-import com.wendy.backendassignment.models.Customer;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
 import lombok.*;
@@ -23,8 +21,9 @@ public class InvoiceDto {
     @FutureOrPresent
     public LocalDate invoicedate;
 
-    public Booking booking;
-    public Customer customer;
+    public Long bookingId;
+    public Long customerId;
+    public String customer;
 
 
 }
