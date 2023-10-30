@@ -16,13 +16,11 @@ public class BookingDto {
     public BookingStatus bookingStatus;
 
     public Long invoice;
+
     public List<Long> bookingTreatment;
 
-    public Long customerid;
-    public String customer;
+    public Long customerId;
 
 
-
-    //public User user;
 
 }

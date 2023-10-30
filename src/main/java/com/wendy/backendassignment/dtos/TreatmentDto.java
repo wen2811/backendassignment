@@ -1,6 +1,5 @@
 package com.wendy.backendassignment.dtos;
 
-import com.wendy.backendassignment.models.BookingTreatment;
 import com.wendy.backendassignment.models.Calendar;
 import com.wendy.backendassignment.models.TreatmentType;
 import jakarta.validation.constraints.NotBlank;
@@ -23,6 +22,6 @@ public class TreatmentDto {
     public double duration;
     public double price;
     public Calendar calendar;
-    public List<BookingTreatment> bookingTreatments;
+    public List<Long> bookingTreatments;
 
 }

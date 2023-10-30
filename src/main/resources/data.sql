@@ -3,7 +3,8 @@ INSERT INTO customers (first_name, last_name, email, phone_number)
 VALUES ('Joelle', 'Pedro', 'customer1@test.nl', '1234567890'),
        ('Kim', 'Boss', 'customer2@test.nl', '3456789012'),
        ('Mischa', 'Peters', 'customer3@test.nl', '5678901234'),
-       ('Jeanine', 'Jean', 'customer4@test.nl', '6789012345');
+       ('Jeanine', 'Jean', 'customer4@test.nl', '6789012345'),
+        ('Iris', 'Maan', 'customer5@test.nl', '7890123456');
 
 
 INSERT INTO users (username, firstname, lastname, dateofbirth, email, password, enabled, user_role)
@@ -45,13 +46,13 @@ INSERT INTO bookingtreatments (id,quantity, booking_id, treatment_id)
 VALUES (11, 1, 21 ,1),
        (12, 1, 22, 2),
        (13, 1, 23, 3);
-      -- (14, 1, 24, 4);
+
 
 
 INSERT INTO invoices (amount, invoicedate, booking_id, customer_id)
-VALUES (90, '2023-11-01', 21, 2),
-       (125, '2023-11-15', 22, 3),
-       (80, '2023-11-08', 23, 4);
+VALUES (90, '2023-11-01', 21, 3),
+       (125, '2023-11-15', 22, 4),
+       (80, '2023-11-08', 23, 5);
 
 
 

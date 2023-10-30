@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -41,8 +43,30 @@ public class Booking {
     @JsonIgnore
     private User user;
 
-    public Booking(LocalDate date, double totalAmount ){
+    public Booking(LocalDate date, double totalAmount, Customer customer ){
         this.date = date;
         this.totalAmount = totalAmount;
+        this.customer = customer;
     }
+
+    public List<Long> getBookingTreatmentIds() {
+        if (bookingTreatments == null) {
+            return Collections.emptyList();
+        }
+        return bookingTreatments.stream()
+                .map(BookingTreatment::getId)
+                .collect(Collectors.toList());
+    }
+
+    public Long getCustomerId() {
+        return (customer != null) ? customer.getId() : null;
+    }
+
+    public Long getInvoiceId() {
+        return (invoice != null) ? invoice.getId() : null;
+    }
+
+
+
+
 }

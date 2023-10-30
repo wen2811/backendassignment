@@ -164,6 +164,7 @@ public class TreatmentService {
         treatmentDto.name = treatment.getName();
         treatmentDto.type = treatment.getType();
         treatmentDto.price = treatment.getPrice();
+        treatmentDto.calendar = treatment.getCalendar();
         return treatmentDto;
     }
 
@@ -176,6 +177,7 @@ public class TreatmentService {
         treatmentDto.setName(treatmentDto.name);
         treatmentDto.setType(treatmentDto.type);
         treatmentDto.setPrice(treatmentDto.price);
+        treatmentDto.setCalendar(treatmentDto.calendar);
         return treatment;
     }
 

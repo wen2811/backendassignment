@@ -38,4 +38,7 @@ public class Invoice {
         this.invoicedate = invoicedate;
         this.amount = Amount;
     }
+
+    public Invoice(Long id) {
+    }
 }

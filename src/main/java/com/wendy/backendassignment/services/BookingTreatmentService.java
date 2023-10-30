@@ -24,11 +24,11 @@ public class BookingTreatmentService {
     }
 
     //Read
-    public List<BookingTreatmentDto> getAllBookingTreatment(){
+    public List<BookingTreatmentDto> getAllBookingTreatment() {
         Iterable<BookingTreatment> bookingTreatments = bookingTreatmentRepository.findAll();
         List<BookingTreatmentDto> bookingTreatmentDtos = new ArrayList<>();
 
-        for (BookingTreatment bt: bookingTreatments){
+        for (BookingTreatment bt : bookingTreatments) {
             bookingTreatmentDtos.add(transferBookingTreatmentToDto(bt));
         }
         return bookingTreatmentDtos;
@@ -37,7 +37,7 @@ public class BookingTreatmentService {
     public BookingTreatmentDto getBookingTreatment(Long id) {
         Optional<BookingTreatment> bookingTreatmentOptional = bookingTreatmentRepository.findById(id);
 
-        if (bookingTreatmentOptional.isEmpty()){
+        if (bookingTreatmentOptional.isEmpty()) {
             throw new RecordNotFoundException("There is no bookingtreatment found with id: " + id);
         }
         BookingTreatment bookingTreatment = bookingTreatmentOptional.get();
@@ -55,7 +55,7 @@ public class BookingTreatmentService {
     //Update
     public BookingTreatmentDto updateBookingTreatment(Long id, BookingTreatmentDto bookingTreatmentDto) throws RecordNotFoundException {
         Optional<BookingTreatment> bookingTreatmentOptional = bookingTreatmentRepository.findById(id);
-        if(bookingTreatmentOptional.isEmpty()){
+        if (bookingTreatmentOptional.isEmpty()) {
             throw new RecordNotFoundException("Bookingtreatment is not found with this id " + id);
         }
         BookingTreatment updateBookingTreatment = bookingTreatmentOptional.get();
@@ -69,7 +69,7 @@ public class BookingTreatmentService {
     //Delete
     public void deleteBookingTreatment(Long id) throws RecordNotFoundException {
         Optional<BookingTreatment> optionalBookingTreatment = bookingTreatmentRepository.findById(id);
-        if(optionalBookingTreatment.isEmpty()){
+        if (optionalBookingTreatment.isEmpty()) {
             throw new RecordNotFoundException("There is no booking found with id " + id);
         }
         bookingTreatmentRepository.deleteById(id);
@@ -99,7 +99,6 @@ public class BookingTreatmentService {
     }
 
 
-
     public BookingTreatmentDto transferBookingTreatmentToDto(BookingTreatment bookingTreatment) {
         BookingTreatmentDto bookingTreatmentDto = new BookingTreatmentDto();
 
@@ -113,6 +112,7 @@ public class BookingTreatmentService {
 
         return bookingTreatmentDto;
     }
+
     public BookingTreatment transferDtoToBookingTreatment(BookingTreatmentDto bookingTreatmentDto) {
         BookingTreatment bookingTreatment = new BookingTreatment();
 

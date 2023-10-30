@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -224,23 +223,17 @@ public class BookingService {
     }
 
 
-
     public BookingDto transferBookingToDto(Booking booking) {
         BookingDto bookingDto = new BookingDto();
-
-        bookingDto.id = booking.getId();
-        bookingDto.date = booking.getDate();
-        bookingDto.totalAmount = booking.getTotalAmount();
-        bookingDto.bookingStatus = booking.getBookingStatus();
-        bookingDto.invoice = booking.getInvoice().getId();
-        List<Long> bookingTreatmentIds = booking.getBookingTreatments().stream()
-                .map(BookingTreatment::getId)
-                .collect(Collectors.toList());
-
-        bookingDto.setBookingTreatment(bookingTreatmentIds);
-
-        bookingDto.customerid = booking.getCustomer().getId();
-        bookingDto.customer = booking.getCustomer().getEmail();
+        if (booking != null) {
+            bookingDto.id = booking.getId();
+            bookingDto.date = booking.getDate();
+            bookingDto.totalAmount = booking.getTotalAmount();
+            bookingDto.bookingStatus = booking.getBookingStatus();
+            bookingDto.invoice = booking.getInvoiceId();
+            bookingDto.bookingTreatment = booking.getBookingTreatmentIds();
+            bookingDto.customerId = booking.getCustomerId();
+        }
         return bookingDto;
     }
 
@@ -248,27 +241,26 @@ public class BookingService {
     public Booking transferDtoToBooking(BookingDto bookingDto) {
         Booking booking = new Booking();
 
-        bookingDto.setId(bookingDto.id);
-        bookingDto.setDate(bookingDto.date);
-        bookingDto.setTotalAmount(bookingDto.totalAmount);
-        bookingDto.setBookingStatus(bookingDto.bookingStatus);
-        bookingDto.setInvoice(bookingDto.invoice);
+        booking.setId(bookingDto.id);
+        booking.setDate(bookingDto.date);
+        booking.setTotalAmount(bookingDto.totalAmount);
+        booking.setBookingStatus(bookingDto.bookingStatus);
 
-//        Invoice invoice = booking.getInvoice();
-//        if (invoice != null) {
-//            bookingDto.invoice = new Invoice();
-//            bookingDto.invoice.setId(invoice.getId());
-//            bookingDto.invoice.setAmount(invoice.getAmount());
-//            bookingDto.invoice.setInvoicedate(invoice.getInvoicedate());
-//        }
+        if (bookingDto.customerId != null) {
+            Customer customer = new Customer();
+            customer.setId(bookingDto.customerId);
+            booking.setCustomer(customer);
+        }
 
-        //bookingDto.setBookingTreatments(bookingDto.bookingTreatments);
-        //bookingDto.setCustomer(bookingDto.customer);
+        if (bookingDto.invoice != null) {
+            Invoice invoice = new Invoice();
+            invoice.setId(bookingDto.invoice);
+           booking.setInvoice(invoice);
+        }
 
-        /*Customer customer = new Customer();
-        customer.setFirstName(bookingDto.customer.getFirstName());
-        booking.setCustomer(customer);*/
-        bookingDto.setCustomer(bookingDto.customer);
         return booking;
     }
+
+
 }
+

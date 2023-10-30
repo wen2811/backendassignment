@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Data
@@ -25,16 +27,7 @@ public class BookingTreatment {
     @ManyToOne
     @JsonIgnore
     private Treatment treatment;
-    //private String treatmentName;
-    //private double treatmentDuration;
 
-
-
-
-
-
-   /* public void updateCustomerInformation(String customerName, String customerEmail){
-        this.customerName = customerName;
-        this.customerEmail = customerEmail;
-    }*/
+    public void add(List<BookingTreatment> bookingTreatments) {
+    }
 }
