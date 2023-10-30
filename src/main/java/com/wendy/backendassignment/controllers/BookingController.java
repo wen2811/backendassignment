@@ -81,19 +81,19 @@ public class BookingController {
     //Relationships methods
     //update
     @PutMapping(path = "/updateTreatments/{id}")
-    public ResponseEntity<BookingDto> updateBookingTreatments(@PathVariable Long id, @RequestBody List<Long> treatmentIds) throws RecordNotFoundException {
-        BookingDto updatedBookingDto = bookingService.updateBookingTreatments(id, treatmentIds);
+    public ResponseEntity<BookingDto> updateBookingTreatments(@PathVariable Long id, @RequestBody List<Long> bookingTreatmentIds) throws RecordNotFoundException {
+        BookingDto updatedBookingDto = bookingService.updateBookingTreatments(id, bookingTreatmentIds);
         return new ResponseEntity<>(updatedBookingDto, HttpStatus.OK);
     }
-
-    @PostMapping(value = "/registerbookings/")
-    public ResponseEntity<Object> createBooking(@RequestParam String username, @RequestParam List<Long> bookingTreatmentIds, @RequestBody UserDto userDto) {
-        User existingUser = userService.getCustomerById(username);
+///Required request body is missing - 404
+    @PostMapping(value = "/registerbookings")
+    public ResponseEntity<Object> createBooking(@RequestBody UserDto userDto, @RequestBody List<Long> bookingTreatmentIds) {
+        User existingUser = userService.getCustomerById(userDto.getUsername());
 
         if (existingUser == null) {
             existingUser = userService.registerUser(userDto);
         }
-        Booking booking = bookingService.createBooking(username, bookingTreatmentIds, userDto);
+        Booking booking = bookingService.createBooking(userDto, bookingTreatmentIds);
 
         if (booking == null) {
             return ResponseEntity.notFound().build();
@@ -109,8 +109,9 @@ public class BookingController {
     }
 
     //create
+    // 400 - JSON parse error: Cannot deserialize value of type `java.util.ArrayList<java.lang.Long>` from Object value (token `JsonToken.START_OBJECT`)
     @PostMapping(value = "/createWithoutRegistration")
-    public ResponseEntity<BookingDto> createBookingWithoutRegistration(@RequestParam(required = false)String email, @RequestParam List<Long> bookingTreatmentIds,@RequestBody(required = false) CustomerDto customerDto, UserDto userDto) {
+    public ResponseEntity<BookingDto> createBookingWithoutRegistration(@RequestParam(required = false)String email, @RequestBody List<Long> bookingTreatmentIds,@RequestBody(required = false) CustomerDto customerDto, UserDto userDto) {
         BookingDto createdBooking = bookingService.createBookingWithoutRegistration(email, bookingTreatmentIds, customerDto, userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBooking);
     }

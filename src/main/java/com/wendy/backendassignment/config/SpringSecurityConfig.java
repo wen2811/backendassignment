@@ -79,6 +79,7 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/registerbookings").permitAll()
                 .requestMatchers(HttpMethod.GET, "/customerbookings/{customerId}").hasAnyRole("ADMIN","EMPLOYEE")
                 .requestMatchers(HttpMethod.POST, "/createWithoutRegistration").permitAll()
+                .requestMatchers(HttpMethod.POST, "/createinvoices").permitAll()
 
                 // BookingTreatments
                 .requestMatchers(HttpMethod.GET, "/bookingtreatments").hasAnyRole("ADMIN", "EMPLOYEE")

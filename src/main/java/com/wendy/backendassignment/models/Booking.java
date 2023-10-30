@@ -67,6 +67,6 @@ public class Booking {
     }
 
 
-
-
+    public void setBookingTreatments(List<Long> bookingTreatment) {
+    }
 }

@@ -22,7 +22,7 @@ public class UserDto {
     public String password;
     public String firstname;
     public String lastname;
-    private LocalDate dob;
+    public LocalDate dob;
     public Boolean enabled;
     public String apikey;
 

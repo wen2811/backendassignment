@@ -6,6 +6,7 @@ import com.wendy.backendassignment.dtos.UserDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
 import com.wendy.backendassignment.models.*;
 import com.wendy.backendassignment.repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class BookingService {
     private final UserRepository userRepository;
     private final InvoiceRepository invoiceRepository;
 
+    @Autowired
     public BookingService(BookingRepository bookingRepository, BookingTreatmentRepository bookingTreatmentRepository, CustomerRepository customerRepository, UserRepository userRepository, InvoiceRepository invoiceRepository) {
         this.bookingRepository = bookingRepository;
         this.bookingTreatmentRepository = bookingTreatmentRepository;
@@ -80,18 +82,18 @@ public class BookingService {
 
     //Relationship methods
     //Update
-    public BookingDto updateBookingTreatments(Long id, List<Long> treatmentIds) throws RecordNotFoundException {
+    public BookingDto updateBookingTreatments(Long id, List<Long> bookingTreatmentIds) throws RecordNotFoundException {
         Optional<Booking> bookingOptional = bookingRepository.findById(id);
         if (bookingOptional.isEmpty()) {
             throw new RecordNotFoundException("Booking not found with this id: " + id);
         }
         Booking existingBooking = bookingOptional.get();
 
-        List<BookingTreatment> newBookingTreatments = new ArrayList<>();
-        for (Long treatmentId : treatmentIds) {
-            BookingTreatment bookingTreatment = bookingTreatmentRepository.findById(treatmentId)
-                    .orElseThrow(() -> new RecordNotFoundException("Treatment not found with id: " + treatmentId));
-            newBookingTreatments.add(bookingTreatment);
+        List<Long> newBookingTreatments = new ArrayList<>();
+        for (Long bookingTreatmentId : bookingTreatmentIds) {
+            BookingTreatment bookingTreatment = bookingTreatmentRepository.findById(bookingTreatmentId)
+                    .orElseThrow(() -> new RecordNotFoundException("BookingTreatment not found with id: " + bookingTreatmentId));
+            newBookingTreatments.add(bookingTreatment.getId());
         }
 
         existingBooking.setBookingTreatments(newBookingTreatments);
@@ -102,8 +104,8 @@ public class BookingService {
     }
 
     //create
-    public Booking createBooking(String username, List<Long> bookingTreatmentIds, UserDto userDto) {
-        User existingUser = userRepository.findById(username).orElseGet(() -> {
+    public Booking createBooking(UserDto userDto, List<Long> bookingTreatmentIds ) {
+        User existingUser = userRepository.findById(userDto.getUsername()).orElseGet(() -> {
 
             User newUser = createUserFromDto(userDto);
             return userRepository.save(newUser);
@@ -112,11 +114,11 @@ public class BookingService {
         Booking booking = new Booking();
         booking.setUser(existingUser);
 
-        List<BookingTreatment> bookingTreatments = new ArrayList<>();
+        List<Long> bookingTreatments = new ArrayList<>();
         for (Long bookingTreatmentId : bookingTreatmentIds) {
             BookingTreatment bookingTreatment = bookingTreatmentRepository.findById(bookingTreatmentId)
                     .orElseThrow(() -> new RecordNotFoundException("BookingTreatment doesn't exist."));
-            bookingTreatments.add(bookingTreatment);
+            bookingTreatments.add(bookingTreatment.getId());
         }
         booking.setBookingTreatments(bookingTreatments);
         bookingRepository.save(booking);
@@ -202,11 +204,11 @@ public class BookingService {
         }
         booking.setCustomer(excistingCustomer);
 
-        List<BookingTreatment> bookingTreatments = new ArrayList<>();
+        List<Long> bookingTreatments = new ArrayList<>();
         for (Long bookingTreatmentId : bookingTreatmentIds) {
             BookingTreatment bookingTreatment = bookingTreatmentRepository.findById(bookingTreatmentId)
                     .orElseThrow(() -> new RecordNotFoundException("BookingTreatment doesn't exist."));
-            bookingTreatments.add(bookingTreatment);
+            bookingTreatments.add(bookingTreatment.getId());
         }
         booking.setBookingTreatments(bookingTreatments);
         bookingRepository.save(booking);
@@ -233,6 +235,8 @@ public class BookingService {
             bookingDto.invoice = booking.getInvoiceId();
             bookingDto.bookingTreatment = booking.getBookingTreatmentIds();
             bookingDto.customerId = booking.getCustomerId();
+            bookingDto.user = booking.getUser();
+
         }
         return bookingDto;
     }
@@ -245,6 +249,8 @@ public class BookingService {
         booking.setDate(bookingDto.date);
         booking.setTotalAmount(bookingDto.totalAmount);
         booking.setBookingStatus(bookingDto.bookingStatus);
+        booking.setUser(bookingDto.user);
+        booking.setBookingTreatments(bookingDto.bookingTreatment);
 
         if (bookingDto.customerId != null) {
             Customer customer = new Customer();

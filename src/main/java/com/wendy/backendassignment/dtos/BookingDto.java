@@ -1,6 +1,7 @@
 package com.wendy.backendassignment.dtos;
 
 import com.wendy.backendassignment.models.BookingStatus;
+import com.wendy.backendassignment.models.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +21,8 @@ public class BookingDto {
     public List<Long> bookingTreatment;
 
     public Long customerId;
+    public User user;
+
 
 
 
