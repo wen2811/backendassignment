@@ -4,8 +4,6 @@ import com.wendy.backendassignment.dtos.BookingDto;
 import com.wendy.backendassignment.dtos.CustomerDto;
 import com.wendy.backendassignment.dtos.UserDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
-import com.wendy.backendassignment.models.Booking;
-import com.wendy.backendassignment.models.User;
 import com.wendy.backendassignment.services.BookingService;
 import com.wendy.backendassignment.services.CustomerService;
 import com.wendy.backendassignment.services.UserService;
@@ -87,18 +85,14 @@ public class BookingController {
     }
 ///Required request body is missing - 404
     @PostMapping(value = "/registerbookings")
-    public ResponseEntity<Object> createBooking(@RequestBody UserDto userDto, @RequestBody List<Long> bookingTreatmentIds) {
-        User existingUser = userService.getCustomerById(userDto.getUsername());
+    public ResponseEntity<Object> createBooking(@RequestBody BookingDto bookingDto) {
 
-        if (existingUser == null) {
-            existingUser = userService.registerUser(userDto);
-        }
-        Booking booking = bookingService.createBooking(userDto, bookingTreatmentIds);
+        BookingDto newBookingDto = bookingService.createBooking(bookingDto);
 
-        if (booking == null) {
+        if (newBookingDto == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(booking);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newBookingDto);
     }
 
     //Read

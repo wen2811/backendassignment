@@ -35,6 +35,10 @@ public class Booking {
    @JsonIgnoreProperties("booking")
    private List<BookingTreatment> bookingTreatments;
 
+    @OneToMany(mappedBy = "booking")
+    @JsonIgnoreProperties("booking")
+    private List<Treatment> treatments;
+
     @ManyToOne
     @JsonIgnore
     private Customer customer;
@@ -43,10 +47,10 @@ public class Booking {
     @JsonIgnore
     private User user;
 
-    public Booking(LocalDate date, double totalAmount, Customer customer ){
+    public Booking(LocalDate date, Customer customer, List<Treatment> treatments ){
         this.date = date;
-        this.totalAmount = totalAmount;
         this.customer = customer;
+        this.treatments = treatments;
     }
 
     public List<Long> getBookingTreatmentIds() {
@@ -57,6 +61,8 @@ public class Booking {
                 .map(BookingTreatment::getId)
                 .collect(Collectors.toList());
     }
+
+
 
     public Long getCustomerId() {
         return (customer != null) ? customer.getId() : null;

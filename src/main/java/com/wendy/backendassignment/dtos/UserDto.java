@@ -16,10 +16,10 @@ import java.util.Set;
 @Setter
 public class UserDto {
 
-
     public String username;
 
     public String password;
+
     public String firstname;
     public String lastname;
     public LocalDate dob;
@@ -30,6 +30,4 @@ public class UserDto {
 
     public Set<Authority> authorities;
     private UserRole userRole;
-
-
 }

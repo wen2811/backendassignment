@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -21,13 +22,16 @@ public class BookingService {
     private final UserRepository userRepository;
     private final InvoiceRepository invoiceRepository;
 
+    private final TreatmentRepository treatmentRepository;
+
     @Autowired
-    public BookingService(BookingRepository bookingRepository, BookingTreatmentRepository bookingTreatmentRepository, CustomerRepository customerRepository, UserRepository userRepository, InvoiceRepository invoiceRepository) {
+    public BookingService(BookingRepository bookingRepository, BookingTreatmentRepository bookingTreatmentRepository, CustomerRepository customerRepository, UserRepository userRepository, InvoiceRepository invoiceRepository, TreatmentRepository treatmentRepository) {
         this.bookingRepository = bookingRepository;
         this.bookingTreatmentRepository = bookingTreatmentRepository;
         this.customerRepository = customerRepository;
         this.userRepository = userRepository;
         this.invoiceRepository = invoiceRepository;
+        this.treatmentRepository = treatmentRepository;
     }
 
     //Read
@@ -104,25 +108,28 @@ public class BookingService {
     }
 
     //create
-    public Booking createBooking(UserDto userDto, List<Long> bookingTreatmentIds ) {
+    public BookingDto createBooking(BookingDto bookingDto) {
+        UserDto userDto = bookingDto.getUser();
+
         User existingUser = userRepository.findById(userDto.getUsername()).orElseGet(() -> {
 
             User newUser = createUserFromDto(userDto);
             return userRepository.save(newUser);
         });
 
-        Booking booking = new Booking();
-        booking.setUser(existingUser);
+        Booking booking = transferDtoToBooking(bookingDto);
+        // create invoice
 
-        List<Long> bookingTreatments = new ArrayList<>();
-        for (Long bookingTreatmentId : bookingTreatmentIds) {
-            BookingTreatment bookingTreatment = bookingTreatmentRepository.findById(bookingTreatmentId)
-                    .orElseThrow(() -> new RecordNotFoundException("BookingTreatment doesn't exist."));
-            bookingTreatments.add(bookingTreatment.getId());
-        }
-        booking.setBookingTreatments(bookingTreatments);
+//        List<Long> bookingTreatments = new ArrayList<>();
+//        for (Long bookingTreatmentId : userDto.getBookingTreatmentIds()) {
+//            BookingTreatment bookingTreatment = bookingTreatmentRepository.findById(bookingTreatmentId)
+//                    .orElseThrow(() -> new RecordNotFoundException("BookingTreatment doesn't exist."));
+//            bookingTreatments.add(bookingTreatment.getId());
+//        }
+//        booking.setBookingTreatments(bookingTreatments);
         bookingRepository.save(booking);
-        return booking;
+
+        return transferBookingToDto(booking);
     }
 
     private User createUserFromDto(UserDto userDto) {
@@ -233,9 +240,16 @@ public class BookingService {
             bookingDto.totalAmount = booking.getTotalAmount();
             bookingDto.bookingStatus = booking.getBookingStatus();
             bookingDto.invoice = booking.getInvoiceId();
-            bookingDto.bookingTreatment = booking.getBookingTreatmentIds();
+//            bookingDto.bookingTreatment = booking.getBookingTreatmentIds();
             bookingDto.customerId = booking.getCustomerId();
-            bookingDto.user = booking.getUser();
+            // ***** user moet userDto worden *******
+//            bookingDto.user = use
+            bookingDto.treatmentIds = booking.getTreatments().stream()
+                    .map(Treatment::getId)
+                    .collect(Collectors.toList());
+
+
+
 
         }
         return bookingDto;
@@ -247,10 +261,12 @@ public class BookingService {
 
         booking.setId(bookingDto.id);
         booking.setDate(bookingDto.date);
-        booking.setTotalAmount(bookingDto.totalAmount);
+        booking.setTotalAmount(calculateTotalAmount(bookingDto.getTreatmentIds()));
         booking.setBookingStatus(bookingDto.bookingStatus);
-        booking.setUser(bookingDto.user);
-        booking.setBookingTreatments(bookingDto.bookingTreatment);
+        booking.setUser(userRepository.findById(bookingDto.user.getUsername()).get());
+//        booking.setBookingTreatments(bookingDto.bookingTreatment);
+        booking.setTreatments(treatmentRepository.findAllById(bookingDto.getTreatmentIds()));
+
 
         if (bookingDto.customerId != null) {
             Customer customer = new Customer();
@@ -267,6 +283,15 @@ public class BookingService {
         return booking;
     }
 
+    public double calculateTotalAmount(List<Long> treatmentIds){
+        double amount = 0;
+        List<Treatment> treatments = treatmentRepository.findAllById(treatmentIds);
+        for (Treatment treatment: treatments){
+            amount += treatment.getPrice();
+        }
+
+        return amount;
+    }
 
 }
 
