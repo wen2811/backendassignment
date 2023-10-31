@@ -2,7 +2,6 @@ package com.wendy.backendassignment.dtos;
 
 import com.wendy.backendassignment.models.Calendar;
 import com.wendy.backendassignment.models.TreatmentType;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.List;
 @Setter
 public class TreatmentDto {
     public Long id;
-    @NotBlank(message = "Treatment name is required")
+    //@NotBlank(message = "Treatment name is required")
     public String name;
     public TreatmentType type;
     public String description;

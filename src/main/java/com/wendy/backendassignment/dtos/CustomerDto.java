@@ -21,7 +21,6 @@ public class CustomerDto {
     public List<Long> invoices;
     public List<Long> fileList;
 
-
 }
 
 

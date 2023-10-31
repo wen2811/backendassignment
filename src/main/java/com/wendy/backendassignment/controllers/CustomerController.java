@@ -36,7 +36,7 @@ public class CustomerController {
     }
 
     //Create
-    @PostMapping(value = "/customers")
+    @PostMapping(value = "")
     public ResponseEntity<Object> addCustomer(@Valid @RequestBody CustomerDto customerDto, BindingResult br) {
         if(br.hasFieldErrors()) {
             StringBuilder sb = new StringBuilder();
@@ -62,6 +62,7 @@ public class CustomerController {
 
 
     //Delete
+    // ik weet niet of een customer wil deleten. Waarom zou je deleten, marketingtechnisch niet verstandig
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Object> deleteCustomer(@PathVariable Long id) throws RecordNotFoundException  {
         customerService.deleteCustomer(id);

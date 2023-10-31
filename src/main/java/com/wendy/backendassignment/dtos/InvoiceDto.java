@@ -1,6 +1,5 @@
 package com.wendy.backendassignment.dtos;
 
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.jetbrains.annotations.NotNull;
@@ -17,13 +16,11 @@ public class InvoiceDto {
     @NotNull
     @Min(value= 1)
     public double amount;
-    @NotNull
-    @FutureOrPresent
+
     public LocalDate invoicedate;
 
     public Long bookingId;
     public Long customerId;
     public String customer;
-
 
 }

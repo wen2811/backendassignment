@@ -23,7 +23,4 @@ public class BookingDto {
     public Long customerId;
     public User user;
 
-
-
-
 }

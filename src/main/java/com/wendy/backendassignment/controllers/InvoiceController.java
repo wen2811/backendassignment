@@ -74,13 +74,13 @@ public class InvoiceController {
     }
 
     //Relationship methods
-    @GetMapping(path = "/{bookingId}/invoices")
+    @GetMapping(path = "/booking/{bookingId}")
     public ResponseEntity<List<InvoiceDto>> getInvoicesForBooking(@PathVariable Long bookingId) {
         List<InvoiceDto> invoiceDtos = invoiceService.getInvoicesForBooking(bookingId);
         return ResponseEntity.ok(invoiceDtos);
     }
 
-    @GetMapping(path = "/{customerId}/invoices")
+    @GetMapping(path = "/customer/{customerId}")
     public ResponseEntity<List<InvoiceDto>> getInvoiceForCustomer(@PathVariable Long customerId) {
         List<InvoiceDto> invoiceDtos = invoiceService.getInvoiceForCustomer(customerId);
         return ResponseEntity.ok(invoiceDtos);

@@ -70,7 +70,7 @@ public class TreatmentController {
     }
 
     //Methods for relation
-    @PutMapping(path="/{id}/updatewithcalendar")
+    @PutMapping(path="/updatewithcalendar/{id}")
     public ResponseEntity<Object> updateTreatmentWithCalendar(@PathVariable Long id, @RequestBody TreatmentDto treatmentDto, @RequestBody CalendarDto calendarDto) throws RecordNotFoundException {
         treatmentService.updateTreatmentWithCalendar(id, treatmentDto, calendarDto);
         return ResponseEntity.ok("Behandeling met kalendergegevens is succesvol bijgewerkt.");

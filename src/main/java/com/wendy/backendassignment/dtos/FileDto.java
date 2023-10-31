@@ -1,6 +1,5 @@
 package com.wendy.backendassignment.dtos;
 
-import com.wendy.backendassignment.models.Customer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,5 +15,5 @@ public class FileDto {
     public byte[] data;
     public String mimeType;
     public String description;
-    public Customer customer;
+    public Long customerId;
 }

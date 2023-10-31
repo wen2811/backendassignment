@@ -14,7 +14,4 @@ public class BookingTreatmentDto {
     public Long bookingId;
     public Long treatmentId;
 
-
-
-
 }

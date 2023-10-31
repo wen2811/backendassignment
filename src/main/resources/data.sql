@@ -31,8 +31,8 @@ VALUES (1, 'Kobido Facial Massage', 'FACIAL_TREATMENT', 'Kobido is a traditional
 
 
 INSERT INTO calendars (date, start_time, end_time, available_time)
-VALUES ('2023-10-10', '10:00:00', '11:00:00', true),
-       ('2021-10-11', '11:30:00', '12:30:00', false);
+VALUES ('2023-11-10', '10:00:00', '11:00:00', true),
+       ('2021-11-11', '11:30:00', '12:30:00', false);
 
 
 INSERT INTO bookings (id, date, total_amount, booking_status, customer_id, user_username)

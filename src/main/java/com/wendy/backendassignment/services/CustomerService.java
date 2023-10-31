@@ -76,7 +76,7 @@ public class CustomerService {
     public void deleteCustomer(Long id) throws RecordNotFoundException {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
         if(optionalCustomer.isEmpty()) {
-            throw new RecordNotFoundException("There is no booking found with id: " + id);
+            throw new RecordNotFoundException("There is no customer found with id: " + id);
         }
         Customer customer = optionalCustomer.get();
         customerRepository.delete(customer);
