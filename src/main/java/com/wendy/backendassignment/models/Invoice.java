@@ -1,31 +1,44 @@
 package com.wendy.backendassignment.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-@Entity
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @Table(name = "invoices")
 public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private double amount;
-    private Date invoicedate;
+
+    private LocalDate invoicedate;
 
     @OneToOne
-    @JsonIgnore
+    @JsonIgnoreProperties("invoice")
     private Booking booking;
 
     @ManyToOne
+    @JsonIgnore
     private Customer customer;
+
+    public Invoice(LocalDate invoicedate, double Amount ){
+        this.invoicedate = invoicedate;
+        this.amount = Amount;
+    }
+
+    public Invoice(Long id) {
+    }
 }

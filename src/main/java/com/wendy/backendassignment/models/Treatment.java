@@ -1,14 +1,15 @@
 package com.wendy.backendassignment.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
+@Data
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,18 +30,32 @@ public class Treatment {
     private double duration;
     private double price;
 
-    @OneToOne
+    @OneToOne (optional = true)
     private Calendar calendar;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("treatment")
     private List<BookingTreatment> bookingTreatments;
 
-    public Treatment(String name, TreatmentType type, String description, double duration, double price) {
+    @ManyToOne
+    @JsonIgnore
+    private Booking booking;
+
+    public Treatment(long id, String name, TreatmentType type, String description, double duration, double price, java.util.Calendar calendar) {
         this.name = name;
         this.type = type;
         this.description = description;
         this.duration = duration;
         this.price = price;
+    }
+    public Treatment(Long id, String name, TreatmentType type, String description, double duration, double price, Calendar calendar) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.description = description;
+        this.duration = duration;
+        this.price = price;
+        this.calendar = calendar;
     }
 
 }

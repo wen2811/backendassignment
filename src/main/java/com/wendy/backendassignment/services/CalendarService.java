@@ -54,7 +54,6 @@ public class CalendarService {
             throw new RecordNotFoundException("There's no Calendar-timeslot found");
         }
         Calendar updatedCalendar = calendarRepository.findById(id).orElse(null);
-        updatedCalendar.setId(calendarDto.getId());
         updatedCalendar.setDate(calendarDto.getDate());
         updatedCalendar.setStartTime(calendarDto.getStartTime());
         updatedCalendar.setEndTime(calendarDto.getEndTime());
@@ -77,6 +76,7 @@ public class CalendarService {
         calendarDto.startTime = calendar.getStartTime();
         calendarDto.endTime = calendar.getEndTime();
         calendarDto.availableTime = calendar.isAvailableTime();
+        calendarDto.treatment = calendar.getTreatment();
         return calendarDto;
     }
 
@@ -86,6 +86,7 @@ public class CalendarService {
         calendar.setStartTime(calendarDto.startTime);
         calendar.setEndTime(calendarDto.endTime);
         calendar.setAvailableTime(calendarDto.availableTime);
+        calendar.setTreatment(calendarDto.treatment);
         return calendar;
     }
 

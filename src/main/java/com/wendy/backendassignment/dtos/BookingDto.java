@@ -1,6 +1,6 @@
 package com.wendy.backendassignment.dtos;
 
-import com.wendy.backendassignment.models.*;
+import com.wendy.backendassignment.models.BookingStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,9 +14,17 @@ public class BookingDto {
     public LocalDate date;
     public double totalAmount;
     public BookingStatus bookingStatus;
-    public Invoice invoice;
-    public List<BookingTreatment> bookingTreatments;
-    public Customer customer;
-    public User user;
+
+    public Long invoice;
+
+    // dit moet weg geen bookingtreatment
+    public List<Long> bookingTreatment;
+
+    public List<Long> treatmentIds;
+
+    public Long customerId;
+
+    // omdat misschien user bestaat niet gebruik ik de data om een nieuwe aan ta maken
+    public UserDto user;
 
 }

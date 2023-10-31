@@ -6,12 +6,6 @@ import com.wendy.backendassignment.models.Customer;
 import com.wendy.backendassignment.models.File;
 import com.wendy.backendassignment.repositories.CustomerRepository;
 import com.wendy.backendassignment.repositories.FileRepository;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -90,18 +84,8 @@ public class FileService {
                 .orElseThrow(() -> new ResourceNotFoundException("File not found with id: " + fileId));
     }
 
-    public ResponseEntity<Resource> downloadFile(Long fileId) {
-        FileDto fileDto = getFile(fileId);
-
-        ByteArrayResource resource = new ByteArrayResource(fileDto.getData());
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType(fileDto.getFiletype()));
-        headers.setContentDisposition(ContentDisposition.builder("attachment").filename(fileDto.getFilename()).build());
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(resource);
+    public FileDto downloadFile(Long fileId) {
+         return getFile(fileId);
     }
 
     public void deleteFile(Long id) {fileRepository.deleteById(id); }
@@ -115,7 +99,7 @@ public class FileService {
         fileDto.setData(file.getData());
         fileDto.setMimeType(file.getMimeType());
         fileDto.setDescription(file.getDescription());
-        fileDto.setCustomer(file.getCustomer());
+        fileDto.setCustomerId(file.getCustomer().getId());
 
         return fileDto;
     }

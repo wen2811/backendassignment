@@ -1,10 +1,8 @@
 package com.wendy.backendassignment.services;
 
-import com.wendy.backendassignment.dtos.BookingTreatmentDto;
 import com.wendy.backendassignment.dtos.CalendarDto;
 import com.wendy.backendassignment.dtos.TreatmentDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
-import com.wendy.backendassignment.models.BookingTreatment;
 import com.wendy.backendassignment.models.Calendar;
 import com.wendy.backendassignment.models.Treatment;
 import com.wendy.backendassignment.models.TreatmentType;
@@ -41,15 +39,19 @@ public class TreatmentService {
         return treatmentDtos;
     }
 
-    public TreatmentDto getTreatmentsByType(TreatmentType type) throws RecordNotFoundException {
-        Optional<Treatment> treatmentOptional = treatmentRepository.findTreatmentsByType(type);
+    public List<TreatmentDto> getTreatmentsByType(TreatmentType type) throws RecordNotFoundException {
+        List<Treatment> treatments = treatmentRepository.findTreatmentsByType(type);
 
-        if(treatmentOptional.isEmpty()) {
+        if(treatments.isEmpty()) {
             throw new RecordNotFoundException("There's no treatment to find with this type: " + type);
         }
-        Treatment treatment = treatmentOptional.get();
+        List<TreatmentDto> treatmentDtos = new ArrayList<>();
 
-        return transferTreatmentToDto(treatment);
+        treatments.forEach(treatment -> {
+            treatmentDtos.add(transferTreatmentToDto(treatment));
+        });
+
+        return treatmentDtos;
     }
 
     //Create
@@ -153,51 +155,6 @@ public class TreatmentService {
     }
 
 
-    public BookingTreatmentDto addBookingTreatmentToTreatment(Long treatmentId, BookingTreatmentDto bookingTreatmentDto) {
-        Optional<Treatment> treatmentOptional = treatmentRepository.findById(treatmentId);
-
-        if (treatmentOptional.isEmpty()) {
-            throw new RecordNotFoundException("There's no treatment found with this ID: " + treatmentId);
-        }
-
-        Treatment treatment = treatmentOptional.get();
-        BookingTreatment bookingTreatment = transferDtoToBookingTreatment(bookingTreatmentDto); // Gebruik de juiste methode om een BookingTreatment te maken
-        bookingTreatment.setTreatment(treatment); // Koppel de behandeling aan de boeking
-        bookingTreatmentRepository.save(bookingTreatment);
-
-        return transferBookingTreatmentToDto(bookingTreatment);
-    }
-
-    public BookingTreatmentDto updateBookingTreatment(Long id, BookingTreatmentDto bookingTreatmentDto) throws RecordNotFoundException {
-        Optional<BookingTreatment> bookingTreatmentOptional = bookingTreatmentRepository.findById(id);
-
-        if (bookingTreatmentOptional.isEmpty()) {
-            throw new RecordNotFoundException("BookingTreatment not found with id: " + id);
-        }
-        BookingTreatment bookingTreatment = bookingTreatmentOptional.get();
-
-        bookingTreatment.setQuantity(bookingTreatmentDto.getQuantity());
-        bookingTreatment.setTreatment(bookingTreatmentDto.getTreatment());
-        bookingTreatment.setBooking(bookingTreatmentDto.getBooking());
-
-        bookingTreatment = bookingTreatmentRepository.save(bookingTreatment);
-
-        return transferBookingTreatmentToDto(bookingTreatment);
-    }
-
-    public BookingTreatmentDto getBookingTreatmentById(Long id) throws RecordNotFoundException {
-        Optional<BookingTreatment> bookingTreatmentOptional = bookingTreatmentRepository.findById(id);
-
-        if (bookingTreatmentOptional.isEmpty()) {
-            throw new RecordNotFoundException("BookingTreatment not found with ID: " + id);
-        }
-
-        BookingTreatment bookingTreatment = bookingTreatmentOptional.get();
-        return transferBookingTreatmentToDto(bookingTreatment);
-    }
-
-
-
     public TreatmentDto transferTreatmentToDto (Treatment treatment){
         TreatmentDto treatmentDto = new TreatmentDto();
 
@@ -207,6 +164,7 @@ public class TreatmentService {
         treatmentDto.name = treatment.getName();
         treatmentDto.type = treatment.getType();
         treatmentDto.price = treatment.getPrice();
+        treatmentDto.calendar = treatment.getCalendar();
         return treatmentDto;
     }
 
@@ -219,16 +177,19 @@ public class TreatmentService {
         treatmentDto.setName(treatmentDto.name);
         treatmentDto.setType(treatmentDto.type);
         treatmentDto.setPrice(treatmentDto.price);
+        treatmentDto.setCalendar(treatmentDto.calendar);
         return treatment;
     }
 
-    public BookingTreatmentDto transferBookingTreatmentToDto(BookingTreatment bookingTreatment) {
+   /* public BookingTreatmentDto transferBookingTreatmentToDto(BookingTreatment bookingTreatment) {
         BookingTreatmentDto bookingTreatmentDto = new BookingTreatmentDto();
 
         bookingTreatmentDto.setId(bookingTreatment.getId());
         bookingTreatmentDto.setQuantity(bookingTreatment.getQuantity());
-        bookingTreatmentDto.setTreatment(bookingTreatment.getTreatment());
-        bookingTreatmentDto.setBooking(bookingTreatment.getBooking());
+        Treatment treatment = bookingTreatment.getTreatment();
+        if (treatment != null) {
+            bookingTreatmentDto.setTreatment(treatment.getId());
+        }
 
         return bookingTreatmentDto;
     }
@@ -237,10 +198,13 @@ public class TreatmentService {
         BookingTreatment bookingTreatment = new BookingTreatment();
 
         bookingTreatment.setQuantity(bookingTreatmentDto.getQuantity());
-        bookingTreatment.setTreatment(bookingTreatmentDto.getTreatment());
-        bookingTreatment.setBooking(bookingTreatmentDto.getBooking());
+        if (bookingTreatmentDto.getTreatment() != null) {
+            Treatment treatment = treatmentRepository.findById(bookingTreatmentDto.getTreatment())
+                    .orElseThrow(() -> new RecordNotFoundException("Treatment not found with ID: " + bookingTreatmentDto.getTreatment()));
+            bookingTreatment.setTreatment(treatment);
+        }
 
         return bookingTreatment;
-    }
+    }*/
 
 }

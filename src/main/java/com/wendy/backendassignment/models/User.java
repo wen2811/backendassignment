@@ -1,9 +1,8 @@
 package com.wendy.backendassignment.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -12,12 +11,14 @@ import java.util.Set;
 
 @Getter
 @Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @Column(name = "username")
     private String username;
 
@@ -42,11 +43,11 @@ public class User {
     @Column
     private String apikey;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
     @OneToMany(mappedBy = "user")
-    @JsonIgnore
+    @JsonIgnoreProperties("user")
     private List<Booking> bookingList;
 
     @OneToMany(
@@ -55,6 +56,7 @@ public class User {
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("user")
     private Set<Authority> authorities = new HashSet<>();
 
 
@@ -76,6 +78,7 @@ public class User {
     public void removeAuthority(Authority authority) {
         this.authorities.remove(authority);
     }
+
 
 
 }

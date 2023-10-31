@@ -13,8 +13,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@CrossOrigin
 @RestController
-@RequestMapping("/invoices")
+@RequestMapping(value = "/invoices")
 public class InvoiceController {
     private final InvoiceService invoiceService;
 
@@ -23,19 +24,19 @@ public class InvoiceController {
     }
 
     //Read
-    @GetMapping
+    @GetMapping(value = "")
     public ResponseEntity<List<InvoiceDto>> getAllInvoice() {
         return ResponseEntity.ok().body(invoiceService.getAllInvoice());
     }
 
-    @GetMapping("/invoices/{id}")
+    @GetMapping(path = "/{id}")
     public ResponseEntity<InvoiceDto> getInvoice(@PathVariable Long id) throws RecordNotFoundException {
         InvoiceDto invoiceDto = invoiceService.getInvoice(id);
         return ResponseEntity.ok().body(invoiceDto);
     }
 
     //Create
-    @PostMapping
+    @PostMapping(value = "/new")
     public ResponseEntity<Object> addInvoice(@Valid @RequestBody InvoiceDto invoiceDto, BindingResult br) {
         if (br.hasFieldErrors()) {
             StringBuilder sb = new StringBuilder();
@@ -54,27 +55,32 @@ public class InvoiceController {
     }
 
     //Update
-    @PutMapping("/invoices/{id}")
+    @PutMapping(path = "/{id}")
     public ResponseEntity<Object> updateInvoice(@PathVariable("id") Long id, @RequestBody InvoiceDto invoiceDto) {
-        invoiceService.updateInvoice(id, invoiceDto);
-        return ResponseEntity.ok(invoiceDto);
+       try{
+           invoiceService.updateInvoice(id, invoiceDto);
+           return ResponseEntity.ok(invoiceDto);
+       }catch (RecordNotFoundException e){
+           return ResponseEntity.badRequest().body("Invoice not Found");
+       }
     }
 
+
     //Delete
-    @DeleteMapping("/invoices/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<Object>deleteInvoice(@PathVariable Long id) {
         invoiceService.deleteInvoice(id);
         return ResponseEntity.noContent().build();
     }
 
     //Relationship methods
-    @GetMapping("/{bookingId}/invoices")
+    @GetMapping(path = "/booking/{bookingId}")
     public ResponseEntity<List<InvoiceDto>> getInvoicesForBooking(@PathVariable Long bookingId) {
         List<InvoiceDto> invoiceDtos = invoiceService.getInvoicesForBooking(bookingId);
         return ResponseEntity.ok(invoiceDtos);
     }
 
-    @GetMapping("/{customerId}/invoices")
+    @GetMapping(path = "/customer/{customerId}")
     public ResponseEntity<List<InvoiceDto>> getInvoiceForCustomer(@PathVariable Long customerId) {
         List<InvoiceDto> invoiceDtos = invoiceService.getInvoiceForCustomer(customerId);
         return ResponseEntity.ok(invoiceDtos);

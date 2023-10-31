@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/calendars")
+@RequestMapping(value = "/calendars")
 public class CalendarController {
     private final CalendarService calendarService;
 
@@ -53,14 +53,14 @@ public class CalendarController {
     }
 
     //Update
-    @PutMapping("/calendars/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<Object> updateCalendar(@PathVariable("id") Long id, @RequestBody CalendarDto calendarDto) {
         calendarService.updateCalendar(id, calendarDto);
         return ResponseEntity.ok(calendarDto);
     }
 
     //Delete
-    @DeleteMapping("/calendars/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<Object>deleteCalendar(@PathVariable Long id) {
         calendarService.deleteCalendar(id);
         return ResponseEntity.noContent().build();

@@ -1,13 +1,13 @@
 package com.wendy.backendassignment.dtos;
 
-import com.wendy.backendassignment.models.Booking;
-import com.wendy.backendassignment.models.File;
-import com.wendy.backendassignment.models.Invoice;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class CustomerDto {
@@ -16,16 +16,11 @@ public class CustomerDto {
     public String lastName;
     public String phoneNumber;
     public String email;
-    public List<Booking> bookingList;
-    //public String password;
-    public List<Invoice> invoice;
-    public List<File> fileList;
+    public List<Long> bookingList;
 
-    /*public String getPassword() {
-        return password;
-    }
+    public List<Long> invoices;
+    public List<Long> fileList;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }*/
 }
+
+

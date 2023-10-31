@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
@@ -25,7 +26,11 @@ public class CustomerService {
     //Read
     public List<CustomerDto> getAllCustomer() {
         List<CustomerDto> customerDto = new ArrayList<>();
+
         List<Customer> list = customerRepository.findAll();
+
+        System.out.println(list.get(0));
+
         for (Customer customer : list) {
             customerDto.add(transferCustomerToDto(customer));
         }
@@ -63,7 +68,7 @@ public class CustomerService {
         updateCustomer.setLastName(customerDto.getLastName());
         updateCustomer.setEmail(customerDto.getEmail());
         updateCustomer.setPhoneNumber(customerDto.getPhoneNumber());
-        updateCustomer.setBookingList(customerDto.getBookingList());
+       // updateCustomer.setBookingList(customerDto.getBookingList());
         customerRepository.save(updateCustomer);
     }
 
@@ -71,7 +76,7 @@ public class CustomerService {
     public void deleteCustomer(Long id) throws RecordNotFoundException {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
         if(optionalCustomer.isEmpty()) {
-            throw new RecordNotFoundException("There is no booking found with id: " + id);
+            throw new RecordNotFoundException("There is no customer found with id: " + id);
         }
         Customer customer = optionalCustomer.get();
         customerRepository.delete(customer);
@@ -82,7 +87,7 @@ public class CustomerService {
         Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new RecordNotFoundException("Customer not found with ID: " + customerId));
 
         List<Invoice> invoices = invoiceRepository.findByCustomerId(customerId);
-        customer.setInvoice(invoices);
+        customer.setInvoices(invoices);
 
         return transferCustomerToDto(customer);
     }
@@ -92,13 +97,6 @@ public class CustomerService {
         return customerRepository.findById(customerId).orElse(null);
     }
 
-   /* public Customer registerCustomer(CustomerDto customerDto) {
-        Customer newCustomer = new Customer();
-        newCustomer.setEmail(customerDto.getEmail());
-        newCustomer.setPassword(customerDto.getPassword());
-
-        return customerRepository.save(newCustomer);
-    }*/
 
     public CustomerDto transferCustomerToDto(Customer customer) {
         CustomerDto customerDto = new CustomerDto();
@@ -108,32 +106,17 @@ public class CustomerService {
         customerDto.lastName = customer.getLastName();
         customerDto.email = customer.getEmail();
         customerDto.phoneNumber = customer.getPhoneNumber();
-        customerDto.bookingList = customer.getBookingList();
-        customerDto.invoice = customer.getInvoice();
+//        customerDto.bookingList = customer.getBookingList().stream()
+//                .map(Booking::getId)
+//                .collect(Collectors.toList());
+        customerDto.invoices = customer.getInvoices().stream()
+                .map(Invoice::getId)
+                .collect(Collectors.toList());
         return customerDto;
     }
 
 
-
     public Customer transferDtoToCustomer(CustomerDto customerDto) {
-       /* Customer customer = new Customer() {
-            @Override
-            public boolean isPasswordValid(String password) {
-                return false;
-            }
-
-            @Override
-            public void changePassword(String newPassword) {
-
-            }
-        };
-        customer.setId(customerDto.id);
-        customer.setFirstName(customerDto.firstName);
-        customer.setLastName(customerDto.lastName);
-        customerDto.setEmail(customerDto.email);
-        customerDto.setPhoneNumber(customerDto.phoneNumber);
-        customerDto.setBookingList(customerDto.bookingList);
-        customerDto.setInvoice(customerDto.invoice);*/
         Customer customer = new Customer();
 
         customer.setId(customerDto.id);
@@ -141,12 +124,25 @@ public class CustomerService {
         customer.setLastName(customerDto.lastName);
         customer.setEmail(customerDto.email);
         customer.setPhoneNumber(customerDto.phoneNumber);
-        customer.setBookingList(customerDto.bookingList);
-        customer.setInvoice(customerDto.invoice);
+
+//        customer.setBookingList(customerDto.bookingList.stream()
+//                .map(bookingId -> {
+//                    Booking booking = new Booking();
+//                    booking.setId(bookingId);
+//
+//                    return booking;
+//                })
+//                .collect(Collectors.toList()));
+        customer.setInvoices(customerDto.invoices.stream()
+                .map(invoiceId -> {
+                    Invoice invoice = new Invoice();
+                    invoice.setId(invoiceId);
+
+                    return invoice;
+                })
+                .collect(Collectors.toList()));
         return customer;
     }
 
-
-
-    }
+}
 

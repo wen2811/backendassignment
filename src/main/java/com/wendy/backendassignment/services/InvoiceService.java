@@ -59,17 +59,24 @@ public class InvoiceService {
     }
 
     public void updateInvoice(Long id, InvoiceDto invoiceDto) {
-        if (!invoiceRepository.existsById(id)) {
-            throw new RecordNotFoundException("There's no Invoice found");
-        }
-        Invoice updatedInvoice = invoiceRepository.findById(id).orElse(null);
-        updatedInvoice.setId(invoiceDto.getId());
-        updatedInvoice.setAmount(invoiceDto.getAmount());
-        updatedInvoice.setInvoicedate(invoiceDto.getInvoicedate());
-        updatedInvoice.setBooking(invoiceDto.getBooking());
-        updatedInvoice.setCustomer(invoiceDto.getCustomer());
-        invoiceRepository.save(updatedInvoice);
+        Invoice existingInvoice = invoiceRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("There's no Invoice found with id " + id));
+
+        invoiceDto.setId(existingInvoice.getId());
+
+        existingInvoice.setAmount(invoiceDto.getAmount());
+        existingInvoice.setInvoicedate(invoiceDto.getInvoicedate());
+        Booking booking = bookingRepository.findById(invoiceDto.getBookingId())
+                .orElseThrow(() -> new RecordNotFoundException("There's no Booking found with id " + invoiceDto.getBookingId()));
+        existingInvoice.setBooking(booking);
+
+        Customer customer = customerRepository.findById(invoiceDto.getCustomerId())
+                .orElseThrow(() -> new RecordNotFoundException("There's no Customer found with id " + invoiceDto.getCustomerId()));
+        existingInvoice.setCustomer(customer);
+
+        invoiceRepository.save(existingInvoice);
     }
+
 
     //Delete
     public void deleteInvoice(Long id) {invoiceRepository.deleteById(id);
@@ -102,7 +109,7 @@ public class InvoiceService {
             return Collections.emptyList();
         }
         Customer customer = customerOptional.get();
-        List<Invoice> invoices = customer.getInvoice();
+        List<Invoice> invoices = customer.getInvoices();
         List<InvoiceDto> invoiceDtos = new ArrayList<>();
         for (Invoice invoice : invoices) {
             InvoiceDto invoiceDto = new InvoiceDto();
@@ -122,8 +129,9 @@ public class InvoiceService {
         invoiceDto.id = invoice.getId();
         invoiceDto.amount = invoice.getAmount();
         invoiceDto.invoicedate = invoice.getInvoicedate();
-        invoiceDto.booking = invoice.getBooking();
-        invoiceDto.customer = invoice.getCustomer();
+        invoiceDto.bookingId= invoice.getBooking().getId();
+        invoiceDto.customerId = invoice.getCustomer().getId();
+        invoiceDto.customer = invoice.getCustomer().getEmail();
         return invoiceDto;
     }
 
@@ -133,8 +141,13 @@ public class InvoiceService {
         invoice.setId(invoiceDto.id);
         invoice.setAmount(invoiceDto.amount);
         invoice.setInvoicedate(invoiceDto.invoicedate);
-        invoice.setBooking(invoiceDto.booking);
-        invoice.setCustomer(invoiceDto.customer);
+        Booking booking = bookingRepository.findById(invoiceDto.bookingId)
+                .orElseThrow(() -> new RecordNotFoundException("There's no Booking found with id " + invoiceDto.bookingId));
+        invoice.setBooking(booking);
+
+        Customer customer = customerRepository.findById(invoiceDto.customerId)
+                .orElseThrow(() -> new RecordNotFoundException("There's no Customer found with id " + invoiceDto.customerId));
+        invoice.setCustomer(customer);
         return invoice;
     }
 }

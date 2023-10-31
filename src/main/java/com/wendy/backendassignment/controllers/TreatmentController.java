@@ -1,13 +1,11 @@
 package com.wendy.backendassignment.controllers;
 
-import com.wendy.backendassignment.dtos.BookingTreatmentDto;
 import com.wendy.backendassignment.dtos.CalendarDto;
 import com.wendy.backendassignment.dtos.TreatmentDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
 import com.wendy.backendassignment.models.TreatmentType;
 import com.wendy.backendassignment.services.TreatmentService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -17,8 +15,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@CrossOrigin
 @RestController
-@RequestMapping("/treatments")
+@RequestMapping(value = "/treatments")
 public class TreatmentController {
     private final TreatmentService treatmentService;
 
@@ -27,18 +26,19 @@ public class TreatmentController {
     }
 
     //Read
-    @GetMapping("/")
+    @GetMapping(value="")
     public ResponseEntity<List<TreatmentDto>> getAllTreatments() {
         return ResponseEntity.ok().body(treatmentService.getAllTreatments());
     }
 
-    @GetMapping("/{type}")
-    public ResponseEntity<TreatmentDto> getTreatmentsByType(@PathVariable TreatmentType type) throws RecordNotFoundException {
-        return ResponseEntity.ok().body(treatmentService.getTreatmentsByType(type));
+    @GetMapping(path="/{type}")
+    public ResponseEntity<List<TreatmentDto>> getTreatmentsByType(@PathVariable("type") String type) throws RecordNotFoundException {
+        System.out.println(TreatmentType.valueOf(type));
+        return ResponseEntity.ok().body(treatmentService.getTreatmentsByType(TreatmentType.valueOf(type)));
     }
 
     //Create
-    @PostMapping("")
+    @PostMapping(value="")
     public ResponseEntity<Object> addTreatment(@Valid @RequestBody TreatmentDto treatmentDto, BindingResult br) {
         if(br.hasFieldErrors()) {
             StringBuilder sb = new StringBuilder();
@@ -56,48 +56,30 @@ public class TreatmentController {
     }
 
     //Update
-    @PutMapping("/{id}")
+    @PutMapping(path="/{id}")
     public ResponseEntity<Object> updateTreatment(@PathVariable("id") Long id, @RequestBody TreatmentDto treatmentDto) {
         treatmentService.updateTreatment(id, treatmentDto);
         return ResponseEntity.ok(treatmentDto);
     }
 
     //Delete
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path="/{id}")
     public ResponseEntity<Object> deleteTreatment(@PathVariable Long id) throws RecordNotFoundException  {
         treatmentService.deleteTreatment(id);
         return ResponseEntity.noContent().build();
     }
 
     //Methods for relation
-    @PutMapping("/{id}/updatewithcalendar")
+    @PutMapping(path="/updatewithcalendar/{id}")
     public ResponseEntity<Object> updateTreatmentWithCalendar(@PathVariable Long id, @RequestBody TreatmentDto treatmentDto, @RequestBody CalendarDto calendarDto) throws RecordNotFoundException {
         treatmentService.updateTreatmentWithCalendar(id, treatmentDto, calendarDto);
         return ResponseEntity.ok("Behandeling met kalendergegevens is succesvol bijgewerkt.");
     }
 
-    @GetMapping("/{id}/with-calendar")
+    @GetMapping(path="/{id}/with-calendar")
     public ResponseEntity<TreatmentDto> getTreatmentWithCalendar(@PathVariable Long id) throws RecordNotFoundException {
         TreatmentDto treatmentDto = treatmentService.getTreatmentWithCalendar(id);
         return ResponseEntity.ok(treatmentDto);
-    }
-
-    @PostMapping("/{treatmentId}/bookingtreatments")
-    public ResponseEntity<BookingTreatmentDto> addBookingTreatmentToTreatment(@PathVariable Long treatmentId, @RequestBody BookingTreatmentDto bookingTreatmentDto) {
-        BookingTreatmentDto addedBookingTreatment = treatmentService.addBookingTreatmentToTreatment(treatmentId, bookingTreatmentDto);
-        return new ResponseEntity<>(addedBookingTreatment, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/update-booking-treatment/{id}")
-    public ResponseEntity<BookingTreatmentDto> updateBookingTreatment(@PathVariable Long id, @RequestBody BookingTreatmentDto bookingTreatmentDto) throws RecordNotFoundException {
-        BookingTreatmentDto updatedBookingTreatment = treatmentService.updateBookingTreatment(id, bookingTreatmentDto);
-        return ResponseEntity.ok(updatedBookingTreatment);
-    }
-
-    @GetMapping("/bookingtreatments/{id}")
-    public ResponseEntity<BookingTreatmentDto> getBookingTreatmentById(@PathVariable Long id) throws RecordNotFoundException {
-        BookingTreatmentDto bookingTreatment = treatmentService.getBookingTreatmentById(id);
-        return ResponseEntity.ok(bookingTreatment);
     }
 
 

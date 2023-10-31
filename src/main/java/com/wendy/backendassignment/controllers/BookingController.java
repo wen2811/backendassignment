@@ -4,8 +4,6 @@ import com.wendy.backendassignment.dtos.BookingDto;
 import com.wendy.backendassignment.dtos.CustomerDto;
 import com.wendy.backendassignment.dtos.UserDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
-import com.wendy.backendassignment.models.Booking;
-import com.wendy.backendassignment.models.User;
 import com.wendy.backendassignment.services.BookingService;
 import com.wendy.backendassignment.services.CustomerService;
 import com.wendy.backendassignment.services.UserService;
@@ -20,8 +18,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@CrossOrigin
 @RestController
-@RequestMapping("/bookings")
+@RequestMapping(path = "/bookings")
 public class BookingController {
     private final BookingService bookingService;
     private final CustomerService customerService;
@@ -34,12 +33,12 @@ public class BookingController {
     }
 
     //Read
-    @GetMapping
+    @GetMapping(path = "")
     public ResponseEntity<List<BookingDto>> getAllBooking() {
         return ResponseEntity.ok().body(bookingService.getAllBooking());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}")
     public ResponseEntity<BookingDto> getBooking(@PathVariable Long id) {
         return ResponseEntity.ok().body(bookingService.getBooking(id));
     }
@@ -64,14 +63,14 @@ public class BookingController {
     }
 
     //Update
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}")
     public ResponseEntity<Object> updateBooking(@PathVariable Long id, @RequestBody BookingDto bookingDto) throws RecordNotFoundException {
         BookingDto updateBooking = bookingService.updateBooking(id, bookingDto);
         return ResponseEntity.ok().body(updateBooking);
     }
 
     //Delete
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<Object> deleteBooking(@PathVariable Long id) throws RecordNotFoundException {
         bookingService.deleteBooking(id);
         return ResponseEntity.noContent().build();
@@ -79,42 +78,39 @@ public class BookingController {
 
     //Relationships methods
     //update
-    @PutMapping("/updateTreatments/{id}")
-    public ResponseEntity<BookingDto> updateBookingTreatments(@PathVariable Long id, @RequestBody List<Long> treatmentIds) throws RecordNotFoundException {
-        BookingDto updatedBookingDto = bookingService.updateBookingTreatments(id, treatmentIds);
+    @PutMapping(path = "/updateTreatments/{id}")
+    public ResponseEntity<BookingDto> updateBookingTreatments(@PathVariable Long id, @RequestBody List<Long> bookingTreatmentIds) throws RecordNotFoundException {
+        BookingDto updatedBookingDto = bookingService.updateBookingTreatments(id, bookingTreatmentIds);
         return new ResponseEntity<>(updatedBookingDto, HttpStatus.OK);
     }
+///Required request body is missing - 404
+    @PostMapping(value = "/registerbookings")
+    public ResponseEntity<Object> createBooking(@RequestBody BookingDto bookingDto) {
 
-    @PostMapping("/registerbookings/")
-    public ResponseEntity<Object> createBooking(@RequestParam Long userId, @RequestParam List<Long> bookingTreatmentIds, @RequestBody UserDto userDto) {
-        User existingUser = userService.getCustomerById(userId);
+        BookingDto newBookingDto = bookingService.createBooking(bookingDto);
 
-        if (existingUser == null) {
-            existingUser = userService.registerUser(userDto);
-        }
-        Booking booking = bookingService.createBooking(userId, bookingTreatmentIds, userDto);
-
-        if (booking == null) {
+        if (newBookingDto == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(booking);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newBookingDto);
     }
 
     //Read
-    @GetMapping("/{customerId}/bookings")
+    @GetMapping(path = "/customerbookings/{customerId}")
     public ResponseEntity<List<BookingDto>> getBookingsForCustomer(@PathVariable Long customerId) throws RecordNotFoundException {
         List<BookingDto> bookingDtos = bookingService.getBookingsForCustomer(customerId);
         return ResponseEntity.ok().body(bookingDtos);
     }
 
     //create
-    @PostMapping("/createWithoutRegistration")
-    public ResponseEntity<BookingDto> createBookingWithoutRegistration(@RequestParam(required = false)String email, @RequestParam List<Long> bookingTreatmentIds,@RequestBody(required = false) CustomerDto customerDto, UserDto userDto) {
+    // 400 - JSON parse error: Cannot deserialize value of type `java.util.ArrayList<java.lang.Long>` from Object value (token `JsonToken.START_OBJECT`)
+    @PostMapping(value = "/createWithoutRegistration")
+    public ResponseEntity<BookingDto> createBookingWithoutRegistration(@RequestParam(required = false)String email, @RequestBody List<Long> bookingTreatmentIds,@RequestBody(required = false) CustomerDto customerDto, UserDto userDto) {
         BookingDto createdBooking = bookingService.createBookingWithoutRegistration(email, bookingTreatmentIds, customerDto, userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBooking);
     }
 
-    @PostMapping("/createinvoices")
+    @PostMapping(value = "/createinvoices")
     public ResponseEntity<String> createBookingWithInvoice() {
       try {
           bookingService.createBookingWithInvoice();

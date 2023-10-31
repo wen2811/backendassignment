@@ -1,20 +1,26 @@
 package com.wendy.backendassignment.dtos;
 
-import com.wendy.backendassignment.models.Booking;
-import com.wendy.backendassignment.models.Customer;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.Min;
+import lombok.*;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class InvoiceDto {
     public Long id;
+    @NotNull
+    @Min(value= 1)
     public double amount;
-    public Date invoicedate;
 
-    public Booking booking;
-    public Customer customer;
+    public LocalDate invoicedate;
+
+    public Long bookingId;
+    public Long customerId;
+    public String customer;
 
 }

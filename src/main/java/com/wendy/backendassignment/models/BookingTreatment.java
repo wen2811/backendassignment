@@ -1,11 +1,17 @@
 package com.wendy.backendassignment.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "bookingtreatments")
 public class BookingTreatment {
@@ -13,17 +19,15 @@ public class BookingTreatment {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
     private int quantity;
-    private String customerName;
-    private String customerEmail;
 
     @ManyToOne
+    @JsonIgnore
     private Booking booking;
 
     @ManyToOne
+    @JsonIgnore
     private Treatment treatment;
 
-   /* public void updateCustomerInformation(String customerName, String customerEmail){
-        this.customerName = customerName;
-        this.customerEmail = customerEmail;
-    }*/
+    public void add(List<BookingTreatment> bookingTreatments) {
+    }
 }
