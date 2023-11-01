@@ -1,12 +1,11 @@
 package com.wendy.backendassignment.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 @Builder
@@ -21,7 +20,6 @@ public class Treatment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Treatment name is required")
     private String name;
     @Enumerated(EnumType.STRING)
     private TreatmentType type;
@@ -29,13 +27,9 @@ public class Treatment {
     private String description;
     private double duration;
     private double price;
-
-    @OneToOne (optional = true)
+    @OneToOne
+    @JsonIgnore
     private Calendar calendar;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("treatment")
-    private List<BookingTreatment> bookingTreatments;
 
     @ManyToOne
     @JsonIgnore
@@ -47,6 +41,11 @@ public class Treatment {
         this.description = description;
         this.duration = duration;
         this.price = price;
+
+        LocalDate date = this.calendar.getDate();
+        LocalTime startTime = this.calendar.getStartTime();
+        LocalTime endTime = this.calendar.getEndTime();
+
     }
     public Treatment(Long id, String name, TreatmentType type, String description, double duration, double price, Calendar calendar) {
         this.id = id;

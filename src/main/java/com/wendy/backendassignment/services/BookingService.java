@@ -1,7 +1,6 @@
 package com.wendy.backendassignment.services;
 
 import com.wendy.backendassignment.dtos.BookingDto;
-import com.wendy.backendassignment.dtos.CustomerDto;
 import com.wendy.backendassignment.dtos.UserDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
 import com.wendy.backendassignment.models.*;
@@ -17,17 +16,14 @@ import java.util.stream.Collectors;
 @Service
 public class BookingService {
     private final BookingRepository bookingRepository;
-    private final BookingTreatmentRepository bookingTreatmentRepository;
     private final CustomerRepository customerRepository;
     private final UserRepository userRepository;
     private final InvoiceRepository invoiceRepository;
-
     private final TreatmentRepository treatmentRepository;
 
     @Autowired
-    public BookingService(BookingRepository bookingRepository, BookingTreatmentRepository bookingTreatmentRepository, CustomerRepository customerRepository, UserRepository userRepository, InvoiceRepository invoiceRepository, TreatmentRepository treatmentRepository) {
+    public BookingService(BookingRepository bookingRepository, CustomerRepository customerRepository, UserRepository userRepository, InvoiceRepository invoiceRepository, TreatmentRepository treatmentRepository) {
         this.bookingRepository = bookingRepository;
-        this.bookingTreatmentRepository = bookingTreatmentRepository;
         this.customerRepository = customerRepository;
         this.userRepository = userRepository;
         this.invoiceRepository = invoiceRepository;
@@ -69,11 +65,15 @@ public class BookingService {
         if (bookingOptional.isEmpty()) {
             throw new RecordNotFoundException("Booking did not find with this id: " + id);
         }
-        Booking updateBooking = transferDtoToBooking(bookingDto);
-        updateBooking.setId(id);
+        Booking updateBooking = bookingOptional.get();
+        updateBooking.setDate(bookingDto.getDate());
+        updateBooking.setTotalAmount(bookingDto.getTotalAmount());
+        updateBooking.setBookingStatus(bookingDto.getBookingStatus());
         bookingRepository.save(updateBooking);
+
         return transferBookingToDto(updateBooking);
     }
+
 
     //Delete
     public void deleteBooking(Long id) throws RecordNotFoundException {
@@ -86,21 +86,21 @@ public class BookingService {
 
     //Relationship methods
     //Update
-    public BookingDto updateBookingTreatments(Long id, List<Long> bookingTreatmentIds) throws RecordNotFoundException {
+    public BookingDto updateBookingTreatments(Long id, List<Long> treatmentIds) throws RecordNotFoundException {
         Optional<Booking> bookingOptional = bookingRepository.findById(id);
         if (bookingOptional.isEmpty()) {
             throw new RecordNotFoundException("Booking not found with this id: " + id);
         }
         Booking existingBooking = bookingOptional.get();
 
-        List<Long> newBookingTreatments = new ArrayList<>();
-        for (Long bookingTreatmentId : bookingTreatmentIds) {
-            BookingTreatment bookingTreatment = bookingTreatmentRepository.findById(bookingTreatmentId)
-                    .orElseThrow(() -> new RecordNotFoundException("BookingTreatment not found with id: " + bookingTreatmentId));
-            newBookingTreatments.add(bookingTreatment.getId());
+        List<Long> newTreatments = new ArrayList<>();
+        for (Long treatmentId : treatmentIds) {
+            Treatment Treatment = treatmentRepository.findById(treatmentId)
+                    .orElseThrow(() -> new RecordNotFoundException("Treatment not found with id: " + treatmentIds));
+            newTreatments.add(treatmentId);
         }
 
-        existingBooking.setBookingTreatments(newBookingTreatments);
+        existingBooking.setTreatments(newTreatments);
 
         bookingRepository.save(existingBooking);
 
@@ -118,15 +118,7 @@ public class BookingService {
         });
 
         Booking booking = transferDtoToBooking(bookingDto);
-        // create invoice
 
-//        List<Long> bookingTreatments = new ArrayList<>();
-//        for (Long bookingTreatmentId : userDto.getBookingTreatmentIds()) {
-//            BookingTreatment bookingTreatment = bookingTreatmentRepository.findById(bookingTreatmentId)
-//                    .orElseThrow(() -> new RecordNotFoundException("BookingTreatment doesn't exist."));
-//            bookingTreatments.add(bookingTreatment.getId());
-//        }
-//        booking.setBookingTreatments(bookingTreatments);
         bookingRepository.save(booking);
 
         return transferBookingToDto(booking);
@@ -148,7 +140,6 @@ public class BookingService {
         newUser.setLastname(userDto.getLastname());
         newUser.setDob(userDto.getDob());
 
-
         return newUser;
     }
 
@@ -161,7 +152,6 @@ public class BookingService {
         }
         return true;
     }
-
 
     private boolean isEmailValid(String email) {
         if (email == null || email.isEmpty()) {
@@ -191,47 +181,6 @@ public class BookingService {
         return bookingDtos;
     }
 
-    //create without registration
-    public BookingDto createBookingWithoutRegistration(String email, List<Long> bookingTreatmentIds, CustomerDto customerDto, UserDto userDto) {
-        Booking booking = new Booking();
-        Customer excistingCustomer = customerRepository.findByEmail(email);
-
-        if (excistingCustomer == null) {
-            excistingCustomer = new Customer();
-            excistingCustomer.setEmail(email);
-            excistingCustomer.setFirstName(customerDto.firstName);
-            excistingCustomer.setLastName(customerDto.lastName);
-            excistingCustomer.setPhoneNumber(customerDto.phoneNumber);
-
-//            User newUser = new User();
-//            newUser.setUserRole(userDto.getUserRole());
-//            excistingCustomer.setUser(newUser);
-
-            customerRepository.save(excistingCustomer);
-        }
-        booking.setCustomer(excistingCustomer);
-
-        List<Long> bookingTreatments = new ArrayList<>();
-        for (Long bookingTreatmentId : bookingTreatmentIds) {
-            BookingTreatment bookingTreatment = bookingTreatmentRepository.findById(bookingTreatmentId)
-                    .orElseThrow(() -> new RecordNotFoundException("BookingTreatment doesn't exist."));
-            bookingTreatments.add(bookingTreatment.getId());
-        }
-        booking.setBookingTreatments(bookingTreatments);
-        bookingRepository.save(booking);
-
-        return transferBookingToDto(booking);
-    }
-
-    public void createBookingWithInvoice() {
-        Booking booking = new Booking();
-        bookingRepository.save(booking);
-
-        Invoice invoice = new Invoice();
-        invoiceRepository.save(invoice);
-    }
-
-
     public BookingDto transferBookingToDto(Booking booking) {
         BookingDto bookingDto = new BookingDto();
         if (booking != null) {
@@ -240,21 +189,20 @@ public class BookingService {
             bookingDto.totalAmount = booking.getTotalAmount();
             bookingDto.bookingStatus = booking.getBookingStatus();
             bookingDto.invoice = booking.getInvoiceId();
-//            bookingDto.bookingTreatment = booking.getBookingTreatmentIds();
             bookingDto.customerId = booking.getCustomerId();
-            // ***** user moet userDto worden *******
-//            bookingDto.user = use
             bookingDto.treatmentIds = booking.getTreatments().stream()
                     .map(Treatment::getId)
                     .collect(Collectors.toList());
-
-
-
-
+            if (booking.getUser() != null) {
+                UserDto userDto = new UserDto();
+                userDto.setUsername(booking.getUser().getUsername());
+                bookingDto.setUser(userDto);
+            } else {
+                bookingDto.setUser(null);
+            }
         }
         return bookingDto;
     }
-
 
     public Booking transferDtoToBooking(BookingDto bookingDto) {
         Booking booking = new Booking();
@@ -263,10 +211,22 @@ public class BookingService {
         booking.setDate(bookingDto.date);
         booking.setTotalAmount(calculateTotalAmount(bookingDto.getTreatmentIds()));
         booking.setBookingStatus(bookingDto.bookingStatus);
-        booking.setUser(userRepository.findById(bookingDto.user.getUsername()).get());
-//        booking.setBookingTreatments(bookingDto.bookingTreatment);
-        booking.setTreatments(treatmentRepository.findAllById(bookingDto.getTreatmentIds()));
 
+        if(bookingDto.getUser() != null) {
+            User user = new User();
+            user.setUsername(bookingDto.getUser().getUsername());
+            user.setFirstname(bookingDto.getUser().getFirstname());
+            user.setLastname(bookingDto.getUser().getLastname());
+            user.setEmail(bookingDto.getUser().getEmail());
+
+            booking.setUser(user);
+        } else {
+            booking.setUser(null);
+        };
+
+        if(booking.getTreatments() != null){
+            booking.setTreatments(bookingDto.getTreatmentIds());
+        }
 
         if (bookingDto.customerId != null) {
             Customer customer = new Customer();
@@ -279,19 +239,21 @@ public class BookingService {
             invoice.setId(bookingDto.invoice);
            booking.setInvoice(invoice);
         }
-
         return booking;
     }
 
-    public double calculateTotalAmount(List<Long> treatmentIds){
+    public double calculateTotalAmount(List<Long> treatmentIds) {
         double amount = 0;
         List<Treatment> treatments = treatmentRepository.findAllById(treatmentIds);
-        for (Treatment treatment: treatments){
-            amount += treatment.getPrice();
+        for (Treatment treatment : treatments) {
+            Double price = treatment.getPrice();
+            if (price != null) {
+                amount += price;
+            }
         }
-
         return amount;
     }
-
 }
+
+
 

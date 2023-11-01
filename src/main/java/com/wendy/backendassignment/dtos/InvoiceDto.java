@@ -18,7 +18,6 @@ public class InvoiceDto {
     public double amount;
 
     public LocalDate invoicedate;
-
     public Long bookingId;
     public Long customerId;
     public String customer;

@@ -35,25 +35,6 @@ public class FileController {
         return ResponseEntity.ok().body(uploadedFile);
     }
 
-    @PostMapping(value="/store")
-    public ResponseEntity<FileDto> storeFile(@RequestParam("file") MultipartFile file) throws IOException {
-        FileDto uploadedFile = fileService.storeFile(file);
-
-        return ResponseEntity.ok(uploadedFile);
-    }
-
-    @GetMapping(path = "/get/{fileId}")
-    public ResponseEntity<FileDto> getFile(@PathVariable Long fileId) {
-        FileDto fileDto = fileService.getFile(fileId);
-        return ResponseEntity.ok(fileDto);
-    }
-
-    @PostMapping(path = "/assign/{fileId}/to-customer/{customerId}")
-    public ResponseEntity<FileDto> assignFileToCustomer(@PathVariable Long fileId, @PathVariable Long customerId) {
-        FileDto assignedFile = fileService.assignFileToCustomer(fileId, customerId);
-        return ResponseEntity.ok(assignedFile);
-    }
-
     @GetMapping(path = "/download/{fileId}")
     public ResponseEntity<Resource> downloadFile(@PathVariable Long fileId) {
         FileDto fileDto = fileService.downloadFile(fileId);

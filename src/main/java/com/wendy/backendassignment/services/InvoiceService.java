@@ -77,7 +77,6 @@ public class InvoiceService {
         invoiceRepository.save(existingInvoice);
     }
 
-
     //Delete
     public void deleteInvoice(Long id) {invoiceRepository.deleteById(id);
     }
@@ -120,8 +119,6 @@ public class InvoiceService {
         }
         return invoiceDtos;
     }
-
-
 
     public InvoiceDto transferInvoiceToDto(Invoice invoice) {
         InvoiceDto invoiceDto = new InvoiceDto();

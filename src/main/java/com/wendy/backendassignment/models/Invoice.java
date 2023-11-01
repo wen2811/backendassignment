@@ -21,9 +21,7 @@ public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private double amount;
-
     private LocalDate invoicedate;
 
     @OneToOne
@@ -38,7 +36,6 @@ public class Invoice {
         this.invoicedate = invoicedate;
         this.amount = Amount;
     }
-
     public Invoice(Long id) {
     }
 }

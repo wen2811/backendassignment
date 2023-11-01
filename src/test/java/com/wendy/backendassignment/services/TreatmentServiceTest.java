@@ -1,10 +1,9 @@
 package com.wendy.backendassignment.services;
 
-import com.wendy.backendassignment.dtos.BookingTreatmentDto;
+
 import com.wendy.backendassignment.dtos.CalendarDto;
 import com.wendy.backendassignment.dtos.TreatmentDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
-import com.wendy.backendassignment.models.BookingTreatment;
 import com.wendy.backendassignment.models.Calendar;
 import com.wendy.backendassignment.models.Treatment;
 import com.wendy.backendassignment.models.TreatmentType;
@@ -49,21 +48,24 @@ class TreatmentServiceTest {
     @Captor
     ArgumentCaptor<Calendar> calendarCaptor;
 
-
-    Treatment treatment1;
-    Treatment treatment2;
-    Treatment treatment3;
     List<Treatment> treatmentList = new ArrayList<>();
-    List<BookingTreatmentDto> bookingTreatments;
+
 
 
     @BeforeEach
     void setUp() {
-        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        LocalDate calendarDate = LocalDate.of(2023, 11, 20);
+        LocalTime startTime = LocalTime.of(9, 0);
+        LocalTime endTime = LocalTime.of(10, 0);
 
-        treatment1 = new Treatment(1L, "LED Light Therapy", TreatmentType.FACIAL_TREATMENT, "LED light therapy rejuvenates skin", 30.0, 45.0, calendar);
-        treatment2 = new Treatment(2L, "Carboxy Treatment", TreatmentType.BODY_TREATMENT, "A carboxy body treatment", 45.0, 100.0, calendar);
-        treatment3 = new Treatment(3L, "Massage Treatment", TreatmentType.BODY_TREATMENT, "Massage for relaxing", 60.0, 85.0, calendar);
+        Calendar calendar = new Calendar();
+        calendar.setDate(calendarDate);
+        calendar.setStartTime(startTime);
+        calendar.setEndTime(endTime);
+
+        Treatment treatment1 = new Treatment(1L, "LED Light Therapy", TreatmentType.FACIAL_TREATMENT, "LED light therapy rejuvenates skin", 30.0, 45.0, calendar);
+        Treatment treatment2 = new Treatment(2L, "Carboxy Treatment", TreatmentType.BODY_TREATMENT, "A carboxy body treatment", 45.0, 100.0, calendar);
+        Treatment treatment3 = new Treatment(3L, "Massage Treatment", TreatmentType.BODY_TREATMENT, "Massage for relaxing", 60.0, 85.0, calendar);
 
         treatmentList = new ArrayList<>();
 
@@ -80,7 +82,7 @@ class TreatmentServiceTest {
         treatmentDto2.setId(2L);
         treatmentDto2.setName("Carboxy Treatment");
         treatmentDto2.setType(TreatmentType.BODY_TREATMENT);
-        treatmentDto2.setDescription("A oxygen body treatment");
+        treatmentDto2.setDescription("A carboxy body treatment");
         treatmentDto2.setDuration(45);
         treatmentDto2.setPrice(100);
         treatmentList.add(treatment2);
@@ -93,27 +95,7 @@ class TreatmentServiceTest {
         treatmentDto3.setDuration(60);
         treatmentDto3.setPrice(85);
         treatmentList.add(treatment3);
-
-        bookingTreatments = new ArrayList<>();
-
-        BookingTreatmentDto bookingTreatmentDto1 = new BookingTreatmentDto();
-        bookingTreatmentDto1.setId(1L);
-        bookingTreatmentDto1.setQuantity(2);
-        bookingTreatmentDto1.setTreatment(treatment1);
-        bookingTreatmentDto1.setTreatmentName("Massage");
-        bookingTreatmentDto1.setTreatmentDuration(90);
-
-        BookingTreatmentDto bookingTreatmentDto2 = new BookingTreatmentDto();
-        bookingTreatmentDto2.setId(2L);
-        bookingTreatmentDto2.setQuantity(3);
-        bookingTreatmentDto2.setTreatment(treatment2);
-        bookingTreatmentDto2.setTreatmentName("Peeling facial");
-        bookingTreatmentDto2.setTreatmentDuration(60);
-
-        bookingTreatments.add(bookingTreatmentDto1);
-        bookingTreatments.add(bookingTreatmentDto2);
     }
-
 
     @AfterEach
     void tearDown() {
@@ -124,7 +106,7 @@ class TreatmentServiceTest {
         //Arrange
         Treatment treatment= Treatment.builder().id(4L).name("name")
                 .type(TreatmentType.FACIAL_TREATMENT).description("Natural exfoliating")
-                .duration(45).price(90).build();
+                .duration(45).price(90).calendar(new Calendar()).build();
         //Act
         TreatmentDto treatmentDto = treatmentServiceImpl.transferTreatmentToDto(treatment);
 
@@ -153,34 +135,6 @@ class TreatmentServiceTest {
         assertEquals(90.0, treatmentDto.price);
     }
 
-    @Test
-    void transferBookingTreatmentToDto() {
-        //Arrange
-        BookingTreatment bookingTreatment= BookingTreatment.builder().id(4L).quantity(3)
-                .treatmentName("Carboxy").treatmentDuration(90)
-                .build();
-        //Act
-        BookingTreatmentDto bookingTreatmentDto = treatmentServiceImpl.transferBookingTreatmentToDto(bookingTreatment);
-
-        //Assert
-        assertEquals(3, bookingTreatment.getQuantity());
-        assertEquals("Carboxy", bookingTreatment.getTreatmentName());
-        assertEquals(90, bookingTreatment.getTreatmentDuration());
-
-    }
-
-    @Test
-    void transferDtoToBookingTreatment() {
-        //Arrange
-        BookingTreatmentDto bookingTreatmentDto= BookingTreatmentDto.builder().id(4L).quantity(3)
-                .build();
-        //Act
-        BookingTreatment bookingTreatment = treatmentServiceImpl.transferDtoToBookingTreatment(bookingTreatmentDto);
-
-        //Assert
-        assertEquals(3, bookingTreatmentDto.getQuantity());
-
-    }
 
     @Test
     void getAllTreatments() {
@@ -220,22 +174,20 @@ class TreatmentServiceTest {
 
         assertThrows(RuntimeException.class, () -> treatmentServiceImpl.getAllTreatments());
 
-
     }
-
 
 
     @Test
     void getTreatmentsByType() {
-        //arrange
-        treatmentList.remove(0); // remove treatment with type facial
-        when(treatmentRepository.findTreatmentsByType(TreatmentType.BODY_TREATMENT)).thenReturn(treatmentList);
-        //act
-        List<TreatmentDto> treatmentDtos = treatmentServiceImpl.getTreatmentsByType(TreatmentType.BODY_TREATMENT);
-        //assert
-        assertEquals(treatmentList.size(), treatmentDtos.size());
+            //arrange
+            when(treatmentRepository.findTreatmentsByType(TreatmentType.BODY_TREATMENT)).thenReturn(List.of(treatmentList.get(0)));
+            //act
+            List<TreatmentDto> treatmentDtos = treatmentServiceImpl.getTreatmentsByType(TreatmentType.BODY_TREATMENT);
+            //assert
+            assertEquals(treatmentList.get(0).getType(), treatmentDtos.get(0).getType());
 
-    }
+        }
+
      @Test
      void getTreatmentsByTypeThrowsExeption(){
         TreatmentDto treatmentDto = new TreatmentDto();
@@ -338,8 +290,6 @@ class TreatmentServiceTest {
         Treatment existingTreatment = new Treatment();
         when(treatmentRepository.findById(treatmentId)).thenReturn(Optional.of(existingTreatment));
 
-        Calendar existingCalendar = new Calendar();
-        existingTreatment.setCalendar(existingCalendar);
 
         //act
         treatmentServiceImpl.updateTreatmentWithCalendar(treatmentId,treatmentDto, calendarDto);
@@ -357,9 +307,12 @@ class TreatmentServiceTest {
         assertEquals(75, updatedTreatment.getDuration());
         assertEquals(TreatmentType.BODY_TREATMENT, updatedTreatment.getType());
 
+        assertNotNull(updatedCalendar);
         assertEquals(calendarDto.getDate(), updatedCalendar.getDate());
         assertEquals(calendarDto.getStartTime(), updatedCalendar.getStartTime());
         assertEquals(calendarDto.getEndTime(), updatedCalendar.getEndTime());
+
+
     }
 
     @Test

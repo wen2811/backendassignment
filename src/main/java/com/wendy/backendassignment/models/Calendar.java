@@ -1,6 +1,7 @@
 
 package com.wendy.backendassignment.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,10 +24,9 @@ public class Calendar {
     private LocalTime startTime;
     private LocalTime endTime;
     private boolean availableTime;
-
     @OneToOne(mappedBy = "calendar")
+    @JsonIgnoreProperties("calendar")
     private Treatment treatment;
-
 
     public boolean isAvailableTime() {
         return availableTime;
@@ -34,6 +34,15 @@ public class Calendar {
 
     public void setAvailableTime(boolean availableTime) {
         this.availableTime = availableTime;
+    }
+
+    public Calendar(LocalDate date, LocalTime startTime, LocalTime endTime) {
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+    public LocalDate getDate() {
+        return date;
     }
 }
 

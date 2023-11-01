@@ -67,7 +67,6 @@ public class CalendarService {
         calendarRepository.deleteById(id);
     }
 
-
     public CalendarDto transferCalenderToDto(Calendar calendar) {
         CalendarDto calendarDto = new CalendarDto();
 

@@ -27,15 +27,11 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
 
-    @OneToOne(mappedBy = "booking")
+    @OneToOne(mappedBy = "booking", orphanRemoval = true)
     @JsonIgnoreProperties("booking")
     private Invoice invoice;
 
-   @OneToMany(mappedBy = "booking")
-   @JsonIgnoreProperties("booking")
-   private List<BookingTreatment> bookingTreatments;
-
-    @OneToMany(mappedBy = "booking")
+    @OneToMany(mappedBy = "booking", orphanRemoval = true)
     @JsonIgnoreProperties("booking")
     private List<Treatment> treatments;
 
@@ -53,16 +49,18 @@ public class Booking {
         this.treatments = treatments;
     }
 
-    public List<Long> getBookingTreatmentIds() {
-        if (bookingTreatments == null) {
-            return Collections.emptyList();
-        }
-        return bookingTreatments.stream()
-                .map(BookingTreatment::getId)
-                .collect(Collectors.toList());
+    public List<Treatment> getTreatments() {
+        return treatments != null ? treatments : Collections.emptyList();
     }
 
-
+    public List<Long> getTreatmentIds() {
+        if (treatments == null) {
+            return Collections.emptyList();
+        }
+        return treatments.stream()
+                .map(Treatment::getId)
+                .collect(Collectors.toList());
+    }
 
     public Long getCustomerId() {
         return (customer != null) ? customer.getId() : null;
@@ -72,7 +70,6 @@ public class Booking {
         return (invoice != null) ? invoice.getId() : null;
     }
 
-
-    public void setBookingTreatments(List<Long> bookingTreatment) {
+    public void setTreatments(List<Long> treatmentIds) {
     }
 }

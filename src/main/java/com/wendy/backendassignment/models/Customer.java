@@ -22,11 +22,11 @@ public class Customer{
     private String phoneNumber;
     private String email;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", orphanRemoval = true)
     @JsonIgnoreProperties("customer")
     private List<Booking> bookingList;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", orphanRemoval = true)
     @JsonIgnoreProperties("customer")
     private List<Invoice> invoices;
 
@@ -48,6 +48,5 @@ public class Customer{
 
     public void setUser(User newUser) {
     }
-
 
 }

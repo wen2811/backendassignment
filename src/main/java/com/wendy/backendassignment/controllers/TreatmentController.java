@@ -1,10 +1,10 @@
 package com.wendy.backendassignment.controllers;
 
-import com.wendy.backendassignment.dtos.CalendarDto;
 import com.wendy.backendassignment.dtos.TreatmentDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
 import com.wendy.backendassignment.models.TreatmentType;
 import com.wendy.backendassignment.services.TreatmentService;
+import com.wendy.backendassignment.utils.UpdateRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -71,12 +71,12 @@ public class TreatmentController {
 
     //Methods for relation
     @PutMapping(path="/updatewithcalendar/{id}")
-    public ResponseEntity<Object> updateTreatmentWithCalendar(@PathVariable Long id, @RequestBody TreatmentDto treatmentDto, @RequestBody CalendarDto calendarDto) throws RecordNotFoundException {
-        treatmentService.updateTreatmentWithCalendar(id, treatmentDto, calendarDto);
+    public ResponseEntity<Object> updateTreatmentWithCalendar(@PathVariable Long id, @RequestBody UpdateRequest request) throws RecordNotFoundException {
+        treatmentService.updateTreatmentWithCalendar(id, request.getTreatmentDto(), request.getCalendarDto());
         return ResponseEntity.ok("Behandeling met kalendergegevens is succesvol bijgewerkt.");
     }
 
-    @GetMapping(path="/{id}/with-calendar")
+    @GetMapping(path="/withcalendar/{id}")
     public ResponseEntity<TreatmentDto> getTreatmentWithCalendar(@PathVariable Long id) throws RecordNotFoundException {
         TreatmentDto treatmentDto = treatmentService.getTreatmentWithCalendar(id);
         return ResponseEntity.ok(treatmentDto);

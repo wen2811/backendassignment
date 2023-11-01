@@ -1,8 +1,6 @@
 package com.wendy.backendassignment.controllers;
 
 import com.wendy.backendassignment.dtos.BookingDto;
-import com.wendy.backendassignment.dtos.CustomerDto;
-import com.wendy.backendassignment.dtos.UserDto;
 import com.wendy.backendassignment.exception.RecordNotFoundException;
 import com.wendy.backendassignment.services.BookingService;
 import com.wendy.backendassignment.services.CustomerService;
@@ -69,6 +67,7 @@ public class BookingController {
         return ResponseEntity.ok().body(updateBooking);
     }
 
+
     //Delete
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Object> deleteBooking(@PathVariable Long id) throws RecordNotFoundException {
@@ -79,11 +78,11 @@ public class BookingController {
     //Relationships methods
     //update
     @PutMapping(path = "/updateTreatments/{id}")
-    public ResponseEntity<BookingDto> updateBookingTreatments(@PathVariable Long id, @RequestBody List<Long> bookingTreatmentIds) throws RecordNotFoundException {
-        BookingDto updatedBookingDto = bookingService.updateBookingTreatments(id, bookingTreatmentIds);
+    public ResponseEntity<BookingDto> updateBookingTreatments(@PathVariable Long id, @RequestBody List<Long> treatmentIds) throws RecordNotFoundException {
+        BookingDto updatedBookingDto = bookingService.updateBookingTreatments(id, treatmentIds);
         return new ResponseEntity<>(updatedBookingDto, HttpStatus.OK);
     }
-///Required request body is missing - 404
+
     @PostMapping(value = "/registerbookings")
     public ResponseEntity<Object> createBooking(@RequestBody BookingDto bookingDto) {
 
@@ -102,23 +101,6 @@ public class BookingController {
         return ResponseEntity.ok().body(bookingDtos);
     }
 
-    //create
-    // 400 - JSON parse error: Cannot deserialize value of type `java.util.ArrayList<java.lang.Long>` from Object value (token `JsonToken.START_OBJECT`)
-    @PostMapping(value = "/createWithoutRegistration")
-    public ResponseEntity<BookingDto> createBookingWithoutRegistration(@RequestParam(required = false)String email, @RequestBody List<Long> bookingTreatmentIds,@RequestBody(required = false) CustomerDto customerDto, UserDto userDto) {
-        BookingDto createdBooking = bookingService.createBookingWithoutRegistration(email, bookingTreatmentIds, customerDto, userDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdBooking);
-    }
-
-    @PostMapping(value = "/createinvoices")
-    public ResponseEntity<String> createBookingWithInvoice() {
-      try {
-          bookingService.createBookingWithInvoice();
-          return new ResponseEntity<>("Booking with invoice is created successfully", HttpStatus.CREATED);
-      } catch (Exception e)  {
-          return new ResponseEntity<>("There's an error with creating the invoice", HttpStatus.INTERNAL_SERVER_ERROR);
-      }
-    }
 }
 
 
