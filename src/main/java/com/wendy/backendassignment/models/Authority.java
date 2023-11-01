@@ -24,6 +24,10 @@ public class Authority implements Serializable {
         this.authority = authority;
     }
 
+    public Authority(String roleUser) {
+    }
+
+
     public String getUsername() {
         return username;
     }

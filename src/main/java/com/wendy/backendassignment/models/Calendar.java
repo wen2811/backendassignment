@@ -1,15 +1,15 @@
-/*
+
 package com.wendy.backendassignment.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@Builder
+@Data
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,19 +24,9 @@ public class Calendar {
     private LocalTime startTime;
     private LocalTime endTime;
     private boolean availableTime;
-
-   */
-/* @ManyToOne
-    public void setId(Long id) {
-        this.id = id;
-    }*//*
-
-
-   */
-/* @OneToOne(mappedBy = "calendar")
-    private Booking booking;
-*//*
-
+    @OneToOne(mappedBy = "calendar")
+    @JsonIgnoreProperties("calendar")
+    private Treatment treatment;
 
     public boolean isAvailableTime() {
         return availableTime;
@@ -45,5 +35,14 @@ public class Calendar {
     public void setAvailableTime(boolean availableTime) {
         this.availableTime = availableTime;
     }
+
+    public Calendar(LocalDate date, LocalTime startTime, LocalTime endTime) {
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+    public LocalDate getDate() {
+        return date;
+    }
 }
-*/
+

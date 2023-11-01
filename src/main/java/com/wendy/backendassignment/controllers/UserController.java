@@ -16,7 +16,6 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
-
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -31,7 +30,7 @@ public class UserController {
         return ResponseEntity.ok().body(userDtos);
     }
 
-    @GetMapping(value = "/{username}")
+    @GetMapping(path = "/{username}")
     public ResponseEntity<UserDto> getUser(@PathVariable("username") String username) throws UserNameNotFoundException {
 
         UserDto optionalUser = userService.getUser(username);
@@ -52,7 +51,7 @@ public class UserController {
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping(value = "/{username}")
+    @PutMapping(path = "/{username}")
     public ResponseEntity<UserDto> updateUser(@PathVariable("username") String username, @RequestBody UserDto userDto) {
 
         userService.updateUser(username, userDto);
@@ -60,13 +59,13 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping(value = "/{username}")
+    @DeleteMapping(path = "/{username}")
     public ResponseEntity<Object> deleteUser(@PathVariable("username") String username) {
         userService.deleteUser(username);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/{username}/authorities")
+    @GetMapping(path = "/{username}/authorities")
     public ResponseEntity<Object> getUserAuthorities(@PathVariable("username") String username) {
         return ResponseEntity.ok().body(userService.getAuthorities(username));
     }
