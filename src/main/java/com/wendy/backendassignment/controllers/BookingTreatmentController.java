@@ -1,3 +1,4 @@
+/*
 package com.wendy.backendassignment.controllers;
 
 import com.wendy.backendassignment.dtos.BookingTreatmentDto;
@@ -83,3 +84,4 @@ public class BookingTreatmentController {
 
 
 }
+*/

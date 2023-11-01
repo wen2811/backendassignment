@@ -97,7 +97,7 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/treatments/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.DELETE, "/treatments/{id}").hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.PUT, "/updatewithcalendar/{id}").permitAll()
-                .requestMatchers(HttpMethod.GET, "/treatments/{id}/with-calendar").permitAll()
+                .requestMatchers(HttpMethod.GET, "/treatments/withcalendar/{id}").permitAll()
 
 
                 //Calendars

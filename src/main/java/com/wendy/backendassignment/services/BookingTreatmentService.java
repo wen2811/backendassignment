@@ -1,3 +1,4 @@
+/*
 package com.wendy.backendassignment.services;
 
 import com.wendy.backendassignment.dtos.BookingTreatmentDto;
@@ -130,3 +131,4 @@ public class BookingTreatmentService {
         return bookingTreatment;
     }
 }
+*/

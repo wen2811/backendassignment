@@ -1,3 +1,4 @@
+/*
 package com.wendy.backendassignment.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,3 +32,4 @@ public class BookingTreatment {
     public void add(List<BookingTreatment> bookingTreatments) {
     }
 }
+*/

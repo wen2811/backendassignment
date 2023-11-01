@@ -35,5 +35,14 @@ public class Calendar {
     public void setAvailableTime(boolean availableTime) {
         this.availableTime = availableTime;
     }
+
+    public Calendar(LocalDate date, LocalTime startTime, LocalTime endTime) {
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+    public LocalDate getDate() {
+        return date;
+    }
 }
 

@@ -16,15 +16,10 @@ public class BookingDto {
     public BookingStatus bookingStatus;
 
     public Long invoice;
-
-    // dit moet weg geen bookingtreatment
-    public List<Long> bookingTreatment;
-
     public List<Long> treatmentIds;
 
     public Long customerId;
 
-    // omdat misschien user bestaat niet gebruik ik de data om een nieuwe aan ta maken
     public UserDto user;
 
 }

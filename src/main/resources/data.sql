@@ -31,21 +31,35 @@ VALUES (1, 'Kobido Facial Massage', 'FACIAL_TREATMENT', 'Kobido is a traditional
 
 
 INSERT INTO calendars (date, start_time, end_time, available_time)
-VALUES ('2023-11-10', '10:00:00', '11:00:00', true),
-       ('2021-11-11', '11:30:00', '12:30:00', false);
+VALUES ('2023-11-11', '10:00:00', '11:00:00', true),
+       ('2021-11-15', '11:30:00', '12:30:00', false),
+       ('2023-11-08', '12:30:00', '13:30:00', true),
+       ('2023-12-01', '11:30:00', '12:30:00', true),
+       ('2023-12-02', '10:30:00', '12:00:00', false),
+       ('2023-12-03', '11:30:00', '12:30:00', true),
+       ('2023-12-04', '10:00:00', '11:00:00', true),
+       ('2023-12-05', '11:30:00', '12:30:00', false);
+
+
 
 
 INSERT INTO bookings (id, date, total_amount, booking_status, customer_id, user_username)
-VALUES (21, '2023-11-01', 100, 'NEW', 1, 'User3'),
+VALUES (21, '2023-11-11', 100, 'NEW', 1, 'User3'),
        (22, '2023-11-15', 80, 'BOOKED', 2, 'User4'),
-       (23, '2023-11-08', 110, 'BOOKED', 3, 'User5');
+       (23, '2023-11-08', 110, 'BOOKED', 3, 'User5'),
+       (24, '2023-12-01', 90, 'NEW', 1, 'User3'),
+       (25, '2023-12-02', 100, 'NEW', 2, 'User4'),
+       (26, '2023-12-03', 80, 'CANCELLED', 2, 'User4'),
+       (27, '2023-12-04', 50, 'BOOKED', 1, 'User3'),
+       (28, '2023-12-05', 75, 'NEW', 3, 'User5');
 
 
 
-INSERT INTO bookingtreatments (id,quantity, booking_id, treatment_id)
+
+/*INSERT INTO bookingtreatments (id,quantity, booking_id, treatment_id)
 VALUES (11, 1, 21 ,1),
        (12, 1, 22, 2),
-       (13, 1, 23, 3);
+       (13, 1, 23, 3);*/
 
 
 

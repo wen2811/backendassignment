@@ -1,4 +1,4 @@
-package com.wendy.backendassignment.dtos;
+/*package com.wendy.backendassignment.dtos;
 
 import lombok.*;
 
@@ -14,4 +14,4 @@ public class BookingTreatmentDto {
     public Long bookingId;
     public Long treatmentId;
 
-}
+}*/
