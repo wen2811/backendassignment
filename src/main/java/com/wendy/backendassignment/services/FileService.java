@@ -4,10 +4,8 @@ import com.wendy.backendassignment.dtos.FileDto;
 import com.wendy.backendassignment.exception.ResourceNotFoundException;
 import com.wendy.backendassignment.models.Customer;
 import com.wendy.backendassignment.models.File;
-import com.wendy.backendassignment.repositories.CustomerRepository;
 import com.wendy.backendassignment.repositories.FileRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -16,11 +14,9 @@ import java.time.LocalDate;
 @Service
 public class FileService {
     private final FileRepository fileRepository;
-    private final CustomerRepository customerRepository;
 
-    public FileService(FileRepository fileRepository, CustomerRepository customerRepository) {
+    public FileService(FileRepository fileRepository) {
         this.fileRepository = fileRepository;
-        this.customerRepository = customerRepository;
     }
     //upload
     public FileDto uploadFile(MultipartFile file, Customer customer) throws IOException {
@@ -40,48 +36,11 @@ public class FileService {
         return transferToFileDto(savedFile);
     }
 
-    public FileDto storeFile(MultipartFile file) throws IOException {
-        if (file.isEmpty()) {
-            throw new IllegalArgumentException("The uploaded file is empty.");
-        }
-
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        File dbFile = new File();
-        dbFile.setFilename(fileName);
-        dbFile.setFiletype(file.getContentType());
-        dbFile.setData(file.getBytes());
-        dbFile.setDate(LocalDate.now());
-
-        File savedFile = fileRepository.save(dbFile);
-
-        return transferToFileDto(savedFile);
-    }
-
     public FileDto getFile(Long fileId) {
         File file = fileRepository.findById(fileId)
                 .orElseThrow(() -> new ResourceNotFoundException("File not found with id " + fileId));
 
         return transferToFileDto(file);
-    }
-
-    public FileDto assignFileToCustomer(Long fileId, Long customerId) {
-        File file = getFileIfExists(fileId);
-        Customer customer = getCustomerIfExists(customerId);
-
-        file.setCustomer(customer);
-        File savedFile = fileRepository.save(file);
-
-        return transferToFileDto(savedFile);
-    }
-
-    private Customer getCustomerIfExists(Long customerId) {
-        return customerRepository.findById(customerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + customerId));
-    }
-
-    private File getFileIfExists(Long fileId) {
-        return fileRepository.findById(fileId)
-                .orElseThrow(() -> new ResourceNotFoundException("File not found with id: " + fileId));
     }
 
     public FileDto downloadFile(Long fileId) {

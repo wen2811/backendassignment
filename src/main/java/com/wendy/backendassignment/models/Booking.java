@@ -53,7 +53,6 @@ public class Booking {
         return treatments != null ? treatments : Collections.emptyList();
     }
 
-
     public List<Long> getTreatmentIds() {
         if (treatments == null) {
             return Collections.emptyList();
@@ -63,9 +62,6 @@ public class Booking {
                 .collect(Collectors.toList());
     }
 
-
-
-
     public Long getCustomerId() {
         return (customer != null) ? customer.getId() : null;
     }
@@ -73,7 +69,6 @@ public class Booking {
     public Long getInvoiceId() {
         return (invoice != null) ? invoice.getId() : null;
     }
-
 
     public void setTreatments(List<Long> treatmentIds) {
     }

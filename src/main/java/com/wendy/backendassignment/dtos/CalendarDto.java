@@ -25,6 +25,5 @@ public class CalendarDto {
     public boolean availableTime;
     public Treatment treatment;
 
-
 }
 

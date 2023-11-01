@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Data
 @Builder
 @Getter
@@ -24,8 +27,8 @@ public class Treatment {
     private String description;
     private double duration;
     private double price;
-
-    @OneToOne (optional = true)
+    @OneToOne
+    @JsonIgnore
     private Calendar calendar;
 
     @ManyToOne
@@ -38,6 +41,11 @@ public class Treatment {
         this.description = description;
         this.duration = duration;
         this.price = price;
+
+        LocalDate date = this.calendar.getDate();
+        LocalTime startTime = this.calendar.getStartTime();
+        LocalTime endTime = this.calendar.getEndTime();
+
     }
     public Treatment(Long id, String name, TreatmentType type, String description, double duration, double price, Calendar calendar) {
         this.id = id;

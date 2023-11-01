@@ -156,7 +156,6 @@ public class TreatmentService {
         return transferTreatmentToDto(treatment);
     }
 
-
     public TreatmentDto transferTreatmentToDto (Treatment treatment){
         TreatmentDto treatmentDto = new TreatmentDto();
 

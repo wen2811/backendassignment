@@ -28,6 +28,7 @@ public class TreatmentDto {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     public Calendar calendar;
+
     public Booking booking;
 
 }

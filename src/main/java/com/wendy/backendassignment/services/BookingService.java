@@ -140,7 +140,6 @@ public class BookingService {
         newUser.setLastname(userDto.getLastname());
         newUser.setDob(userDto.getDob());
 
-
         return newUser;
     }
 
@@ -153,7 +152,6 @@ public class BookingService {
         }
         return true;
     }
-
 
     private boolean isEmailValid(String email) {
         if (email == null || email.isEmpty()) {
@@ -183,7 +181,6 @@ public class BookingService {
         return bookingDtos;
     }
 
-
     public BookingDto transferBookingToDto(Booking booking) {
         BookingDto bookingDto = new BookingDto();
         if (booking != null) {
@@ -206,7 +203,6 @@ public class BookingService {
         }
         return bookingDto;
     }
-
 
     public Booking transferDtoToBooking(BookingDto bookingDto) {
         Booking booking = new Booking();
@@ -238,13 +234,11 @@ public class BookingService {
             booking.setCustomer(customer);
         }
 
-
         if (bookingDto.invoice != null) {
             Invoice invoice = new Invoice();
             invoice.setId(bookingDto.invoice);
            booking.setInvoice(invoice);
         }
-
         return booking;
     }
 

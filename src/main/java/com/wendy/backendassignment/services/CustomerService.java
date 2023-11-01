@@ -34,7 +34,6 @@ public class CustomerService {
         for (Customer customer : list) {
             customerDto.add(transferCustomerToDto(customer));
         }
-
         return customerDto;
     }
 
@@ -52,7 +51,7 @@ public class CustomerService {
     public CustomerDto addCustomer(CustomerDto customerDto) {
         Customer customer = transferDtoToCustomer(customerDto);
         customerRepository.save(customer);
-
+        customerDto.setId(customer.getId());
         return transferCustomerToDto(customer);
     }
 
@@ -68,9 +67,20 @@ public class CustomerService {
         updateCustomer.setLastName(customerDto.getLastName());
         updateCustomer.setEmail(customerDto.getEmail());
         updateCustomer.setPhoneNumber(customerDto.getPhoneNumber());
-       // updateCustomer.setBookingList(customerDto.getBookingList());
+
+        List<Invoice> updatedInvoices = new ArrayList<>();
+        for (Long invoiceId : customerDto.getInvoices()) {
+            Invoice invoice = invoiceRepository.findById(invoiceId).orElse(null);
+            if (invoice != null) {
+                invoice.setCustomer(updateCustomer);
+                updatedInvoices.add(invoice);
+            }
+        }
+        updateCustomer.setInvoices(updatedInvoices);
+
         customerRepository.save(updateCustomer);
     }
+
 
     //Delete
     public void deleteCustomer(Long id) throws RecordNotFoundException {
@@ -92,7 +102,6 @@ public class CustomerService {
         return transferCustomerToDto(customer);
     }
 
-
     public Customer getCustomerById(Long customerId) {
         return customerRepository.findById(customerId).orElse(null);
     }
@@ -106,33 +115,23 @@ public class CustomerService {
         customerDto.lastName = customer.getLastName();
         customerDto.email = customer.getEmail();
         customerDto.phoneNumber = customer.getPhoneNumber();
-//        customerDto.bookingList = customer.getBookingList().stream()
-//                .map(Booking::getId)
-//                .collect(Collectors.toList());
+
         customerDto.invoices = customer.getInvoices().stream()
                 .map(Invoice::getId)
                 .collect(Collectors.toList());
         return customerDto;
     }
 
-
     public Customer transferDtoToCustomer(CustomerDto customerDto) {
         Customer customer = new Customer();
-
-        customer.setId(customerDto.id);
+        if (customerDto.getId() != null) {
+            customer.setId(customerDto.getId());
+        }
         customer.setFirstName(customerDto.firstName);
         customer.setLastName(customerDto.lastName);
         customer.setEmail(customerDto.email);
         customer.setPhoneNumber(customerDto.phoneNumber);
 
-//        customer.setBookingList(customerDto.bookingList.stream()
-//                .map(bookingId -> {
-//                    Booking booking = new Booking();
-//                    booking.setId(bookingId);
-//
-//                    return booking;
-//                })
-//                .collect(Collectors.toList()));
         customer.setInvoices(customerDto.invoices.stream()
                 .map(invoiceId -> {
                     Invoice invoice = new Invoice();
