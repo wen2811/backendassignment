@@ -68,7 +68,7 @@ public class CustomerController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(path = "/customers/{customerId}/invoices")
+    @GetMapping(path = "/{customerId}/invoices")
     public ResponseEntity<CustomerDto> getCustomerWithInvoices(@PathVariable Long customerId) throws RecordNotFoundException {
         CustomerDto customerDto = customerService.getCustomerWithInvoices(customerId);
         return ResponseEntity.ok().body(customerDto);
