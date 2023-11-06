@@ -28,6 +28,7 @@ public class Authority implements Serializable {
     }
 
 
+
     public String getUsername() {
         return username;
     }

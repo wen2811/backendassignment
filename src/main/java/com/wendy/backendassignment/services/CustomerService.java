@@ -62,7 +62,6 @@ public class CustomerService {
             throw new RecordNotFoundException("No customer found with this id " + id);
         }
         Customer updateCustomer = customerRepository.findById(id).orElse(null);
-        updateCustomer.setId(customerDto.getId());
         updateCustomer.setFirstName(customerDto.getFirstName());
         updateCustomer.setLastName(customerDto.getLastName());
         updateCustomer.setEmail(customerDto.getEmail());
