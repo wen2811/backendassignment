@@ -58,11 +58,11 @@ VALUES (90, '2023-11-01', 21, 3),
 
 
 INSERT INTO authorities (authority, username)
-VALUES ('EMPLOYEE', 'User1'),
-        ('ADMIN', 'User2'),
-        ('CUSTOMER', 'User3'),
-        ('CUSTOMER','User4'),
-        ('CUSTOMER', 'User5');
+VALUES ('ROLE_EMPLOYEE', 'User1'),
+        ('ROLE_ADMIN', 'User2'),
+        ('ROLE_CUSTOMER', 'User3'),
+        ('ROLE_CUSTOMER','User4'),
+        ('ROLE_CUSTOMER', 'User5');
 
 
 
